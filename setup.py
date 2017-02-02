@@ -1,4 +1,3 @@
-
 # Copyright (c) 2017, Clemence Frioux <clemence.frioux@inria.fr>
 #
 # This file is part of MeneTools.
@@ -14,7 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with meneco.  If not, see <http://www.gnu.org/licenses/>.
+# along with menetools.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
 from setuptools import setup
 
@@ -23,14 +22,15 @@ setup(
   version          = '1.0.0',
   url              = '',
   license          = 'GPLv3+',
-  description      = 'Metabolic Network Topology Tools. Analyze the topology of metabolic networks '
-                     'Explore producibility, production paths and needed initiation sources',
+  description      = 'Metabolic Network Topology Tools. Analyze the topology \
+                      of metabolic networks. Explore producibility, production \
+                      paths and needed initiation sources',
   long_description = open('README').read(),
   author           = 'Clemence Frioux',
   author_email     = 'clemence.frioux@inria.fr',
   packages         = ['menetools'],
   package_dir      = {'menetools' : 'src'},
   package_data     = {'menetools' : ['encodings/*.lp']},
-  scripts          = ['menecof.py','menescope.py','menepath.py'],
+  scripts          = ['menecof.py','menescope.py','menepath.py','menecheck.py'],
   install_requires = ['pyasp == 1.4.2']
 )

@@ -6,7 +6,7 @@ import sys
 import inspect
 import os
 from pyasp.asp import *
-from src import utils, query, sbml
+from menetools import utils, query, sbml
 
 if __name__ == '__main__':
 

@@ -6,7 +6,7 @@ import sys
 import inspect
 import os
 from pyasp.asp import *
-from src import utils, query, sbml
+from menetools import utils, query, sbml
 
 # TODO handle preferences
 
@@ -79,14 +79,14 @@ if __name__ == '__main__':
 
     print('Reading seeds from ', seeds_sbml, '...', end='')
     sys.stdout.flush()
-    seeds = sbml.readSBMLseeds(seeds_sbml)
+    seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
     #print(seeds)
     print('done.')
     #seeds.to_file("seeds.lp")
 
     print('Reading targets from ', targets_sbml, '...', end='')
     sys.stdout.flush()
-    targets = sbml.readSBMLtargets(targets_sbml)
+    targets = sbml.readSBMLspecies(targets_sbml, 'target')
     #print(targets)
     print('done.')
     #targets.to_file("targets.lp")
@@ -144,8 +144,9 @@ if __name__ == '__main__':
     print('\nChecking draft network for unproducible targets before cofactors selection ...', end='')
     sys.stdout.flush()
     model = query.get_unproducible(draftnet, targets, seeds)
+    unprod = [p.arg(0) for p in model if p.pred() == 'unproducible_target']
     print('done.')
-    print(' ',len(model),'unproducible targets:')
+    print(' ',len(unprod),'unproducible targets:')
     utils.print_met(model.to_list())
 
     print('\nChecking minimal sets of cofactors to produce all targets ...', end='')

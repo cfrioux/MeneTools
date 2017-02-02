@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1" xmlns:html="http://www.w3.org/1999/xhtml">
+<model id="automaticalyReconstructed" name="automaticalyReconstructed">
+<listOfUnitDefinitions>
+<unitDefinition id="mmol_per_gDW_per_hr">
+<listOfUnits>
+<unit kind="mole" scale="-3" multiplier="1" offset="0" />
+<unit kind="gram" exponent="-1" multiplier="1" offset="0" />
+<unit kind="second" exponent="-1" multiplier="0.00027777" offset="0" />
+</listOfUnits>
+</unitDefinition>
+</listOfUnitDefinitions>
+<listOfCompartments>
+<compartment id="C_c" name="C_c"/>
+<compartment id="C_c" name="C_b"/>
+</listOfCompartments>
+<listOfSpecies>
+  <species id="M_T2_c" name="M_T2_c" compartment="C_c"/>
+  <species id="M_T1_c" name="M_T1_c" compartment="C_c"/>
+  <species id="M_T3_c" name="M_T3_c" compartment="C_c"/>
+</listOfSpecies>
+<listOfReactions>
+</listOfReactions>
+</model>
+</sbml>

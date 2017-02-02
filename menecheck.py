@@ -3,7 +3,7 @@
 import argparse
 import sys
 from pyasp.asp import *
-from src import query, utils, sbml
+from menetools import query, utils, sbml
 
 if __name__ == '__main__':
 
