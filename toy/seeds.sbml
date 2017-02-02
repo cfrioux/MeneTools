@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1" xmlns:html="http://www.w3.org/1999/xhtml">
+<model id="MODELID_1461534" name="E. coli iJR904">
+<listOfUnitDefinitions>
+<unitDefinition id="mmol_per_gDW_per_hr">
+<listOfUnits>
+<unit kind="mole" scale="-3" multiplier="1" offset="0" />
+<unit kind="gram" exponent="-1" multiplier="1" offset="0" />
+<unit kind="second" exponent="-1" multiplier="0.00027777" offset="0" />
+</listOfUnits>
+</unitDefinition>
+</listOfUnitDefinitions>
+<listOfCompartments>
+<compartment id="C_e" name="Extraorganism"/>
+<compartment id="C_c" name="Cytosol"/>
+</listOfCompartments>
+<listOfSpecies>
+<species id="ADP" name="ADP" compartment="C_b" boundaryCondition="true"/>
+<species id="CPD-69_CCO-BOUNDARY" name="CPD-69_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="AMP_CCO-BOUNDARY" name="AMP_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="RHAMNOSE_CCO-BOUNDARY" name="RHAMNOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLN_CCO-BOUNDARY" name="GLN_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLYCOLLATE_CCO-BOUNDARY" name="GLYCOLLATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="TREHALOSE_CCO-BOUNDARY" name="TREHALOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="AMMONIUM_CCO-BOUNDARY" name="AMMONIUM_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="DEOXYADENOSINE_CCO-BOUNDARY" name="DEOXYADENOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CARNITINE_CCO-BOUNDARY" name="CARNITINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="N-ACETYL-D-GLUCOSAMINE_CCO-BOUNDARY" name="N-ACETYL-D-GLUCOSAMINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="S2O3_CCO-BOUNDARY" name="S2O3_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-ALANINE_CCO-BOUNDARY" name="D-ALANINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-GALACTONATE_CCO-BOUNDARY" name="D-GALACTONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="RIBOSE_CCO-BOUNDARY" name="RIBOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="DEOXYCYTIDINE_CCO-BOUNDARY" name="DEOXYCYTIDINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="Glucose-6-phosphate_CCO-BOUNDARY" name="Glucose-6-phosphate_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-Galactose_CCO-BOUNDARY" name="D-Galactose_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GALACTITOL_CCO-BOUNDARY" name="GALACTITOL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="OXYGEN-MOLECULE_CCO-BOUNDARY" name="OXYGEN-MOLECULE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="SUC_CCO-BOUNDARY" name="SUC_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="BETAINE_CCO-BOUNDARY" name="BETAINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ACETALD_CCO-BOUNDARY" name="ACETALD_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="NICOTINAMIDE_NUCLEOTIDE_CCO-BOUNDARY" name="NICOTINAMIDE_NUCLEOTIDE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLYCERALD_CCO-BOUNDARY" name="GLYCERALD_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="THYMIDINE_CCO-BOUNDARY" name="THYMIDINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="LEU_CCO-BOUNDARY" name="LEU_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GUANINE_CCO-BOUNDARY" name="GUANINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="URACIL_CCO-BOUNDARY" name="URACIL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="TARTRATE_CCO-BOUNDARY" name="TARTRATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="L-ASPARTATE_CCO-BOUNDARY" name="L-ASPARTATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ILE_CCO-BOUNDARY" name="ILE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="2-KETOGLUTARATE_CCO-BOUNDARY" name="2-KETOGLUTARATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="TYR_CCO-BOUNDARY" name="TYR_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="Alpha-lactose_CCO-BOUNDARY" name="Alpha-lactose_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-SERINE_CCO-BOUNDARY" name="D-SERINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CARBON-DIOXIDE_CCO-BOUNDARY" name="CARBON-DIOXIDE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="XANTHINE_CCO-BOUNDARY" name="XANTHINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ARG_CCO-BOUNDARY" name="ARG_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CADAVERINE_CCO-BOUNDARY" name="CADAVERINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PUTRESCINE_CCO-BOUNDARY" name="PUTRESCINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="SULFATE_CCO-BOUNDARY" name="SULFATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="3-KETOBUTYRATE_CCO-BOUNDARY" name="3-KETOBUTYRATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-GALACTARATE_CCO-BOUNDARY" name="D-GALACTARATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MALTOSE_CCO-BOUNDARY" name="MALTOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MALTOTETRAOSE_CCO-BOUNDARY" name="MALTOTETRAOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GUANOSINE_CCO-BOUNDARY" name="GUANOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="TRP_CCO-BOUNDARY" name="TRP_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="TRIMETHYLAMINE_CCO-BOUNDARY" name="TRIMETHYLAMINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLUCOSAMINE_CCO-BOUNDARY" name="GLUCOSAMINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="L-LACTATE_CCO-BOUNDARY" name="L-LACTATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CYTIDINE_CCO-BOUNDARY" name="CYTIDINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="SUCROSE_CCO-BOUNDARY" name="SUCROSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CYTOSINE_CCO-BOUNDARY" name="CYTOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-LACTATE_CCO-BOUNDARY" name="D-LACTATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MET_CCO-BOUNDARY" name="MET_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CYS_CCO-BOUNDARY" name="CYS_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="COB-I-ALAMIN_CCO-BOUNDARY" name="COB-I-ALAMIN_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="HYPOXANTHINE_CCO-BOUNDARY" name="HYPOXANTHINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="3-HYDROXYPHENYL-PROPIONATE_CCO-BOUNDARY" name="3-HYDROXYPHENYL-PROPIONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PALMITATE_CCO-BOUNDARY" name="PALMITATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MANNITOL_CCO-BOUNDARY" name="MANNITOL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="NITRITE_CCO-BOUNDARY" name="NITRITE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GAMMA-BUTYROBETAINE_CCO-BOUNDARY" name="GAMMA-BUTYROBETAINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ETOH_CCO-BOUNDARY" name="ETOH_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-GLUCARATE_CCO-BOUNDARY" name="D-GLUCARATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CHOLINE_CCO-BOUNDARY" name="CHOLINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PROPANE-1-2-DIOL_CCO-BOUNDARY" name="PROPANE-1-2-DIOL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="3-PHENYLPROPIONATE_CCO-BOUNDARY" name="3-PHENYLPROPIONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="NA+_CCO-BOUNDARY" name="NA+_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MANNOSE_CCO-BOUNDARY" name="MANNOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="TRIMENTHLAMINE-N-O_CCO-BOUNDARY" name="TRIMENTHLAMINE-N-O_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MALTOPENTAOSE_CCO-BOUNDARY" name="MALTOPENTAOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="Pi_CCO-BOUNDARY" name="Pi_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLY_CCO-BOUNDARY" name="GLY_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="NAD_CCO-BOUNDARY" name="NAD_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="L-IDONATE_CCO-BOUNDARY" name="L-IDONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CPD-218_CCO-BOUNDARY" name="CPD-218_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="DEOXYURIDINE_CCO-BOUNDARY" name="DEOXYURIDINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ACET_CCO-BOUNDARY" name="ACET_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLT_CCO-BOUNDARY" name="GLT_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="FRU_CCO-BOUNDARY" name="FRU_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLUCONATE_CCO-BOUNDARY" name="GLUCONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MALTOHEXAOSE_CCO-BOUNDARY" name="MALTOHEXAOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLUCURONATE_CCO-BOUNDARY" name="GLUCURONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PYRUVATE_CCO-BOUNDARY" name="PYRUVATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="Mannose-6-phosphate_CCO-BOUNDARY" name="Mannose-6-phosphate_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLYCEROL_CCO-BOUNDARY" name="GLYCEROL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="INDOLE_CCO-BOUNDARY" name="INDOLE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="D-GALACTURONATE_CCO-BOUNDARY" name="D-GALACTURONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="NITRATE_CCO-BOUNDARY" name="NITRATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ADENOSINE_CCO-BOUNDARY" name="ADENOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="FUM_CCO-BOUNDARY" name="FUM_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="LYS_CCO-BOUNDARY" name="LYS_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PHE_CCO-BOUNDARY" name="PHE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MELIBIOSE_CCO-BOUNDARY" name="MELIBIOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="THR_CCO-BOUNDARY" name="THR_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="DIHYDROXYACETONE_CCO-BOUNDARY" name="DIHYDROXYACETONE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="DMSO_CCO-BOUNDARY" name="DMSO_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="SER_CCO-BOUNDARY" name="SER_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ASN_CCO-BOUNDARY" name="ASN_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="WATER_CCO-BOUNDARY" name="WATER_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ALLANTOIN_CCO-BOUNDARY" name="ALLANTOIN_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="N-ACETYLNEURAMINATE_CCO-BOUNDARY" name="N-ACETYLNEURAMINATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PANTOTHENATE_CCO-BOUNDARY" name="PANTOTHENATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CPD-10797_CCO-BOUNDARY" name="CPD-10797_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="XANTHOSINE_CCO-BOUNDARY" name="XANTHOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ADENINE_CCO-BOUNDARY" name="ADENINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="THIAMINE_CCO-BOUNDARY" name="THIAMINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="URIDINE_CCO-BOUNDARY" name="URIDINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="FORMATE_CCO-BOUNDARY" name="FORMATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="BUTYRIC_ACID_CCO-BOUNDARY" name="BUTYRIC_ACID_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="L-ALPHA-ALANINE_CCO-BOUNDARY" name="L-ALPHA-ALANINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CPD-488_CCO-BOUNDARY" name="CPD-488_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="DEOXYGUANOSINE_CCO-BOUNDARY" name="DEOXYGUANOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="2-DEHYDRO-3-DEOXY-D-GLUCONATE_CCO-BOUNDARY" name="2-DEHYDRO-3-DEOXY-D-GLUCONATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="GLYCEROL-3P_CCO-BOUNDARY" name="GLYCEROL-3P_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CPD-7836_CCO-BOUNDARY" name="CPD-7836_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="FE+2_CCO-BOUNDARY" name="FE+2_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="SORBITOL_CCO-BOUNDARY" name="SORBITOL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="INOSINE_CCO-BOUNDARY" name="INOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MALTOTRIOSE_CCO-BOUNDARY" name="MALTOTRIOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="HIS_CCO-BOUNDARY" name="HIS_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PROTON_CCO-BOUNDARY" name="PROTON_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="N-ACETYL-D-MANNOSAMINE_CCO-BOUNDARY" name="N-ACETYL-D-MANNOSAMINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="STEARIC_ACID_CCO-BOUNDARY" name="STEARIC_ACID_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MAL_CCO-BOUNDARY" name="MAL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="XYLOSE_CCO-BOUNDARY" name="XYLOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="4-AMINO-BUTYRATE_CCO-BOUNDARY" name="4-AMINO-BUTYRATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CPD-7670_CCO-BOUNDARY" name="CPD-7670_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="L-ORNITHINE_CCO-BOUNDARY" name="L-ORNITHINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="CIT_CCO-BOUNDARY" name="CIT_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="DEOXYINOSINE_CCO-BOUNDARY" name="DEOXYINOSINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="VAL_CCO-BOUNDARY" name="VAL_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="ALPHA-GLUCOSE_CCO-BOUNDARY" name="ALPHA-GLUCOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="NIACINE_CCO-BOUNDARY" name="NIACINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="MESO-DIAMINOPIMELATE_CCO-BOUNDARY" name="MESO-DIAMINOPIMELATE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="SPERMIDINE_CCO-BOUNDARY" name="SPERMIDINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="UREA_CCO-BOUNDARY" name="UREA_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="TAURINE_CCO-BOUNDARY" name="TAURINE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="L-ARABINOSE_CCO-BOUNDARY" name="L-ARABINOSE_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="L-fucoses_CCO-BOUNDARY" name="L-fucoses_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="PRO_CCO-BOUNDARY" name="PRO_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+<species id="K+_CCO-BOUNDARY" name="K+_CCO-BOUNDARY" compartment="C_b" boundaryCondition="true"/>
+</listOfSpecies>
+<listOfReactions>
+</listOfReactions>
+</model>
+</sbml>

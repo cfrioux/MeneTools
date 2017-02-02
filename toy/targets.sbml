@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1" xmlns:html="http://www.w3.org/1999/xhtml">
+  <model id="MODELID_1461534" name="E. coli iJR904">
+  <listOfUnitDefinitions>
+  <unitDefinition id="mmol_per_gDW_per_hr">
+  <listOfUnits>
+  <unit kind="mole" scale="-3" multiplier="1" offset="0" />
+  <unit kind="gram" exponent="-1" multiplier="1" offset="0" />
+  <unit kind="second" exponent="-1" multiplier="0.00027777" offset="0" />
+  </listOfUnits>
+  </unitDefinition>
+  </listOfUnitDefinitions>
+  <listOfCompartments>
+  <compartment id="C_c" name="Extraorganism"/>
+  <compartment id="C_c" name="Cytosol"/>
+  </listOfCompartments>
+  <listOfSpecies>
+<species id="L-ASPARTATE" name="L-ASPARTATE" compartment="C_c" boundaryCondition="false"/>
+<species id="PRO" name="PRO" compartment="C_c" boundaryCondition="false"/>
+<species id="NADP" name="NADP" compartment="C_c" boundaryCondition="false"/>
+<species id="LYS" name="LYS" compartment="C_c" boundaryCondition="false"/>
+<species id="AMP" name="AMP" compartment="C_c" boundaryCondition="false"/>
+<species id="ATP" name="ATP" compartment="C_c" boundaryCondition="false"/>
+<species id="TRP" name="TRP" compartment="C_c" boundaryCondition="false"/>
+<species id="CYS" name="CYS" compartment="C_c" boundaryCondition="false"/>
+<species id="CTP" name="CTP" compartment="C_c" boundaryCondition="false"/>
+<species id="GLN" name="GLN" compartment="C_c" boundaryCondition="false"/>
+<species id="5-METHYL-THF" name="5-METHYL-THF" compartment="C_c" boundaryCondition="false"/>
+<species id="SER" name="SER" compartment="C_c" boundaryCondition="false"/>
+<species id="NADPH" name="NADPH" compartment="C_c" boundaryCondition="false"/>
+<species id="NAD" name="NAD" compartment="C_c" boundaryCondition="false"/>
+<species id="GLT" name="GLT" compartment="C_c" boundaryCondition="false"/>
+<species id="L-ALPHA-ALANINE" name="L-ALPHA-ALANINE" compartment="C_c" boundaryCondition="false"/>
+<species id="ASN" name="ASN" compartment="C_c" boundaryCondition="false"/>
+<species id="VAL" name="VAL" compartment="C_c" boundaryCondition="false"/>
+<species id="LEU" name="LEU" compartment="C_c" boundaryCondition="false"/>
+<species id="PUTRESCINE" name="PUTRESCINE" compartment="C_c" boundaryCondition="false"/>
+<species id="ARG" name="ARG" compartment="C_c" boundaryCondition="false"/>
+<species id="CPD-12575" name="CPD-12575" compartment="C_c" boundaryCondition="false"/>
+<species id="SPERMIDINE" name="SPERMIDINE" compartment="C_c" boundaryCondition="false"/>
+<species id="THR" name="THR" compartment="C_c" boundaryCondition="false"/>
+<species id="WATER" name="WATER" compartment="C_c" boundaryCondition="false"/>
+<species id="TTP" name="TTP" compartment="C_c" boundaryCondition="false"/>
+<species id="HIS" name="HIS" compartment="C_c" boundaryCondition="false"/>
+<species id="Peptidoglycans" name="Peptidoglycans" compartment="C_c" boundaryCondition="false"/>
+<species id="UTP" name="UTP" compartment="C_c" boundaryCondition="false"/>
+</listOfSpecies>
+<listOfReactions>
+</listOfReactions>
+</model>
+</sbml>
