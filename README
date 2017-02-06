@@ -1,13 +1,17 @@
 MENETOOLS
 
 MeneTools are Python3 tools to explore the topology of metabolic network to:
-- assess whether targets are topologically producible (Menechek)
+- assess whether targets are topologically producible (Menecheck)
 - get all compounds that are topologically producible (Menescope)
 - get production paths of specific compounds (Menepath)
 - obtain compounds that if added to the seeds, would ensure the topological
 producibility of targets (Menecof)
 
 Required package: pyasp (pip install pyasp)
+
+Install:
+
+python setup.py install
 
 ———————————————————————————————————————————————————————————————————————————————
 ———————————————————————————————————————————————————————————————————————————————
