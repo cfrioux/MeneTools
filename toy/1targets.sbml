@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1" xmlns:html="http://www.w3.org/1999/xhtml">
+  <model id="MODELID_1461534" name="E. coli iJR904">
+  <listOfUnitDefinitions>
+  <unitDefinition id="mmol_per_gDW_per_hr">
+  <listOfUnits>
+  <unit kind="mole" scale="-3" multiplier="1" offset="0" />
+  <unit kind="gram" exponent="-1" multiplier="1" offset="0" />
+  <unit kind="second" exponent="-1" multiplier="0.00027777" offset="0" />
+  </listOfUnits>
+  </unitDefinition>
+  </listOfUnitDefinitions>
+  <listOfCompartments>
+  <compartment id="C_c" name="Extraorganism"/>
+  <compartment id="C_c" name="Cytosol"/>
+  </listOfCompartments>
+  <listOfSpecies>
+<species id="UTP" name="UTP" compartment="C_c" boundaryCondition="false"/>
+</listOfSpecies>
+<listOfReactions>
+</listOfReactions>
+</model>
+</sbml>
