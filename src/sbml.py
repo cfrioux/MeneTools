@@ -118,6 +118,37 @@ def readSBMLnetwork(filename, name) :
     #print(lpfacts)
     return lpfacts
 
+def make_weighted_list_of_species(network):
+    """
+    Read a SBML network and return its list of species with weights
+    corresponding to their number of occurrences in reactions
+    """
+    tree = etree.parse(network)
+    sbml = tree.getroot()
+    model = get_model(sbml)
+
+    listOfSpecies = get_listOfSpecies(model)
+
+    species = {}
+
+    for e in listOfSpecies:
+        if e.tag[0] == "{":
+            uri, tag = e.tag[1:].split("}")
+        else: tag = e.tag
+        if tag == "species":
+            species_id = e.attrib.get("id")
+            species[species_id] = {0}
+
+    with open(network,'r') as f:
+        contents = f.read()
+        for compound in species:
+            pattern = 'speciesReference species="{}"'.format(compound)
+            #print(pattern)
+            species[compound] = contents.count(pattern)
+            #print(compound, str(species[compound]))
+    return(species)
+
+
 # read the seeds
 
 def readSBMLspecies(filename, speciestype) :
