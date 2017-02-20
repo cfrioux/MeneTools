@@ -23,9 +23,9 @@ setup(
     url              = 'https://github.com/cfrioux/MeneTools',
     download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.0',
     license          = 'GPLv3+',
-    description      = 'Metabolic Network Topology Tools. Analyze the topology \
-                        of metabolic networks. Explore producibility, production \
-                        paths and needed initiation sources',
+    description      = 'Python 3 Metabolic Network Topology Tools. Analyze the \
+                        topology of metabolic networks. Explore producibility, \
+                        production paths and needed initiation sources',
     #long_description = open('README.md').read(),
     author           = 'Clemence Frioux',
     author_email     = 'clemence.frioux@gmail.com',
