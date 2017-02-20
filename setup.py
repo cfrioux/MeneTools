@@ -26,7 +26,7 @@ setup(
     description      = 'Metabolic Network Topology Tools. Analyze the topology \
                         of metabolic networks. Explore producibility, production \
                         paths and needed initiation sources',
-    long_description = open('README.md').read(),
+    #long_description = open('README.md').read(),
     author           = 'Clemence Frioux',
     author_email     = 'clemence.frioux@gmail.com',
     packages         = ['menetools'],
