@@ -19,14 +19,14 @@ from setuptools import setup
 
 setup(
     name             = 'MeneTools',
-    version          = '1.0.1',
+    version          = '1.0.2',
     url              = 'https://github.com/cfrioux/MeneTools',
     download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.0',
     license          = 'GPLv3+',
-    description      = 'Python 3 Metabolic Network Topology Tools. Analyze the \
-                        topology of metabolic networks. Explore producibility, \
-                        production paths and needed initiation sources',
-    #long_description = open('README.md').read(),
+    description      = 'Metabolic Network Topology Analysis Tools',
+    long_description = 'Python 3 Metabolic Network Topology Tools. Analyze the \
+topology of metabolic networks. Explore producibility, production paths and \
+needed initiation sources',
     author           = 'Clemence Frioux',
     author_email     = 'clemence.frioux@gmail.com',
     packages         = ['menetools'],
