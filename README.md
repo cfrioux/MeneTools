@@ -7,7 +7,7 @@ MeneTools are Python3 tools to explore the topology of metabolic network to:
 * obtain compounds that if added to the seeds, would ensure the topological producibility of targets (Menecof)
 
 Required package:
-* ``pyasp`` (``pip install pyasp``)
+* ``pyasp`` (``pip install pyasp`` or ``pip install pyasp --no-cache-dir`` in case of ASP solvers installation issues)
 
 ## Install
 
