@@ -5,6 +5,7 @@ import argparse
 import sys
 import inspect
 import os
+from pyasp.term import *
 from pyasp.asp import *
 from menetools import utils, query, sbml
 
@@ -83,6 +84,7 @@ if __name__ == '__main__':
 
     #print(producible_targets)
     for t in producible_targets:
+        print('\n')
         print(t)
         single_target = TermSet()
         single_target.add(t)

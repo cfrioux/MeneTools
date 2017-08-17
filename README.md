@@ -15,6 +15,17 @@ Required package:
 python setup.py install
 ```
 
+**There are some known issues with the pyasp package. If obtaining such an error when running a Menetool:**
+
+``OSError: Grounder '/Users/cfrioux/wd/asp/mohycom/venv/lib/python2.7/site-packages/pyasp/bin/gringo4' not found``
+
+It means that the binaries were not correctly installed for pyasp.
+These two command lines should be an efficient workaround:
+1. uninstall pyasp
+``pip uninstall pyasp``
+2. reinstall pyasp without cache
+``pip install pyasp --no-cache-dir``
+
 ## MENECHECK
 
 Menecheck is a python3 tool to get the topologically producibility status of target compounds

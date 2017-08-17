@@ -19,7 +19,7 @@ from setuptools import setup
 
 setup(
     name             = 'MeneTools',
-    version          = '1.0.2',
+    version          = '1.0.3',
     url              = 'https://github.com/cfrioux/MeneTools',
     download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.2',
     license          = 'GPLv3+',
@@ -32,6 +32,6 @@ needed initiation sources',
     packages         = ['menetools'],
     package_dir      = {'menetools' : 'src'},
     package_data     = {'menetools' : ['encodings/*.lp']},
-    scripts          = ['menecof.py','menescope.py','menepath.py','menecheck.py'],
-    install_requires = ['pyasp == 1.4.2']
+    scripts          = ['menecof.py','menescope.py','menepath.py','menecheck.py', 'meneseed.py', 'mene2asp.py'],
+    install_requires = ['pyasp == 1.4.3']
 )
