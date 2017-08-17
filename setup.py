@@ -26,7 +26,8 @@ setup(
     description      = 'Metabolic Network Topology Analysis Tools',
     long_description = 'Python 3 Metabolic Network Topology Tools. Analyze the \
 topology of metabolic networks. Explore producibility, production paths and \
-needed initiation sources',
+needed initiation sources\
+More information on usage and troubleshooting on Github: https://github.com/cfrioux/MeneTools',
     author           = 'Clemence Frioux',
     author_email     = 'clemence.frioux@gmail.com',
     packages         = ['menetools'],
