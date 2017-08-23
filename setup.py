@@ -21,7 +21,7 @@ setup(
     name             = 'MeneTools',
     version          = '1.0.4',
     url              = 'https://github.com/cfrioux/MeneTools',
-    download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.3',
+    download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.4',
     license          = 'GPLv3+',
     description      = 'Metabolic Network Topology Analysis Tools',
     long_description = 'Python 3 Metabolic Network Topology Tools. Analyze the \
