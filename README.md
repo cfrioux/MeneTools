@@ -17,7 +17,7 @@ python setup.py install
 
 **There are some known issues with the pyasp package. If obtaining such an error when running a Menetool:**
 
-``OSError: Grounder '/Users/cfrioux/wd/asp/mohycom/venv/lib/python2.7/site-packages/pyasp/bin/gringo4' not found``
+``OSError: Grounder '/.../lib/python3.4/site-packages/pyasp/bin/gringo4' not found``
 
 It means that the binaries were not correctly installed for pyasp.
 These two command lines should be an efficient workaround:
