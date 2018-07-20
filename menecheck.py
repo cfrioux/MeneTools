@@ -5,9 +5,8 @@ import sys
 from pyasp.asp import *
 from menetools import query, utils, sbml
 
-if __name__ == '__main__':
 
-
+def run():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -23,6 +22,9 @@ if __name__ == '__main__':
     seeds_sbml = args.seeds
     targets_sbml =  args.targets
 
+    run_menecheck(draft_sbml,seeds_sbml,targets_sbml)
+
+def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
     print('Reading draft network from ',draft_sbml,'...',end=' ')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
@@ -59,4 +61,7 @@ if __name__ == '__main__':
 
 
     utils.clean_up()
-    quit()
+    return model
+
+if __name__ == '__main__':
+    run()

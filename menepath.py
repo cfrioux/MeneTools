@@ -9,9 +9,8 @@ from pyasp.term import *
 from pyasp.asp import *
 from menetools import utils, query, sbml
 
-if __name__ == '__main__':
 
-
+def run():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -39,6 +38,9 @@ if __name__ == '__main__':
     min_size = args.min
     enumeration = args.enumerate
 
+    run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size,enumeration)
+
+def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=None):
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
@@ -136,4 +138,7 @@ if __name__ == '__main__':
 
 
     utils.clean_up()
-    quit()
+    return model
+
+if __name__ == '__main__':
+    run()

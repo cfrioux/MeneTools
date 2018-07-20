@@ -26,9 +26,8 @@ def ascii_replace(match):
     return chr(int(match.group(1)))
 
 
-if __name__ == '__main__':
 
-
+def run():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -71,6 +70,9 @@ if __name__ == '__main__':
     suffix = args.suffix
     enumerate = args.enumerate
 
+    run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt,weights,suffix,enumerate)
+
+def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumerate=None):
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
@@ -261,4 +263,7 @@ if __name__ == '__main__':
                     print(cofactor[0] + ' (' + cofactor[1] + ')')
 
     utils.clean_up()
-    quit()
+    return solumodel
+
+if __name__ == '__main__':
+    run()
