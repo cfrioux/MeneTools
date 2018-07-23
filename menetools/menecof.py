@@ -70,11 +70,11 @@ def cmd_menecof():
     cofactors_txt = args.cofactors
     weights = args.weight
     suffix = args.suffix
-    enumerate = args.enumerate
+    enumeration = args.enumerate
 
-    run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt,weights,suffix,enumerate)
+    run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt,weights,suffix,enumeration)
 
-def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumerate=None):
+def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumeration=None):
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
@@ -240,7 +240,7 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
         else:
             print(cofactor[0] + ' (' + cofactor[1] + ')')
 
-    if enumerate:
+    if enumeration:
         print('\nComputing all completions with size ',optimum)
         models =  query.get_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
         count = 1
@@ -263,9 +263,11 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                     print(cofactor[0])
                 else:
                     print(cofactor[0] + ' (' + cofactor[1] + ')')
+        utils.clean_up()
+        return models
 
     utils.clean_up()
-    return solumodel
+    return model
 
 if __name__ == '__main__':
     cmd_menecof()

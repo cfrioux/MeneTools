@@ -136,6 +136,8 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
                 print('\nSolution '+str(count) + ' of size :' + str(len(model)) + ' reactions:')
                 count+=1
                 utils.print_met(model.to_list())
+            utils.clean_up()
+            return all_models
 
 
     utils.clean_up()
