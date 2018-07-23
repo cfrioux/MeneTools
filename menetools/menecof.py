@@ -5,8 +5,10 @@ import argparse
 import sys
 import inspect
 import os
-from pyasp.asp import *
+
 from menetools import utils, query, sbml
+from pyasp.asp import *
+
 
 # TODO handle preferences
 
@@ -27,7 +29,7 @@ def ascii_replace(match):
 
 
 
-def run():
+def cmd_menecof():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -266,4 +268,4 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     return solumodel
 
 if __name__ == '__main__':
-    run()
+    cmd_menecof()

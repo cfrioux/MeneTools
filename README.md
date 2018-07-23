@@ -47,7 +47,7 @@ optional arguments:
 
 
 ```python
-from menecheck import run_menecheck
+from menetools import run_menecheck
 
 model = run_menecheck(draft_sbml,seeds_sbml,targets_sbml)
 ```
@@ -71,7 +71,7 @@ optional arguments:
 ```
 
 ```python
-from menescope import run_menescope
+from menetools import run_menescope
 
 model = run_menescope(draft_sbml,seeds_sbml)
 ```
@@ -97,7 +97,7 @@ optional arguments:
 ```
 
 ```python
-from menepath import run_menescope
+from menetools import run_menescope
 
 model = run_menepath(draft_sbml,seeds_sbml,targets_sbml)
 ```
@@ -146,7 +146,7 @@ optional arguments: --suffix --weight --enumerate -h/--help
 ```
 
 ```python
-from menecof import run_menecof
+from menetools import run_menecof
 
 model = run_menecof(draft_sbml,seeds_sbml,targets_sbml)
 ```

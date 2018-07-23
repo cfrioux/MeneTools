@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 import argparse
 import sys
+
+from menetools import utils, query, sbml
 from pyasp.asp import *
-from menetools import query, utils, sbml
 
 
-def run():
+
+def cmd_menecheck():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -61,7 +63,7 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
 
 
     utils.clean_up()
-    return model
+    return model, unprod, prod
 
 if __name__ == '__main__':
-    run()
+    cmd_menecheck()

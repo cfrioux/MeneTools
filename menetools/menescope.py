@@ -5,12 +5,13 @@ import argparse
 import sys
 import inspect
 import os
-from pyasp.asp import *
+
 from menetools import utils, query, sbml
+from pyasp.asp import *
 
 
 
-def run():
+def cmd_menescope():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -49,4 +50,4 @@ def run_menescope(draft_sbml,seeds_sbml):
     return model
 
 if __name__ == '__main__':
-    run()
+    cmd_menescope()
