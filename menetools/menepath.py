@@ -137,11 +137,11 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
                 count+=1
                 utils.print_met(model.to_list())
             utils.clean_up()
-            return all_models
+            return all_models, unproducible_targets, one_model, union, intersection
 
 
     utils.clean_up()
-    return model
+    return model, unproducible_targets, one_model, union, intersection
 
 if __name__ == '__main__':
     cmd_menepath()

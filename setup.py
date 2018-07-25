@@ -18,7 +18,7 @@
 from setuptools import setup
 
 setup(
-    name             = 'menetools',
+    name             = 'MeneTools',
     version          = '1.0.4',
     url              = 'https://github.com/cfrioux/MeneTools',
     download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.4',

@@ -203,9 +203,9 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
 
 
     print('\nIntersection of solutions') # with size', optimum, '
-    model = query.get_intersection_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
-    solumodel = model.to_list()
-    icofactors = []
+    intersection_model = query.get_intersection_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+    solumodel = intersection_model.to_list()
+    intersection_icofactors = []
     for p in solumodel:
         if p.pred() == "needed_cof":
             cof = p.arg(0)
@@ -213,18 +213,18 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                 weight = p.arg(1)
             except:
                 weight = None
-            icofactors.append((cof,weight))
+            intersection_icofactors.append((cof,weight))
         #print('\nSelected cofactors:')
-    for cofactor in icofactors:
+    for cofactor in intersection_icofactors:
         if cofactor[1] == None:
             print(cofactor[0])
         else:
             print(cofactor[0] + ' (' + cofactor[1] + ')')
 
     print('\nUnion of solutions') # with size', optimum, '
-    model = query.get_union_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
-    solumodel = model.to_list()
-    icofactors = []
+    union_model = query.get_union_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+    solumodel = union_model.to_list()
+    union_icofactors = []
     for p in solumodel:
         if p.pred() == "needed_cof":
             cof = p.arg(0)
@@ -232,9 +232,9 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                 weight = p.arg(1)
             except:
                 weight = None
-            icofactors.append((cof,weight))
+            union_icofactors.append((cof,weight))
         #print('\nSelected cofactors:')
-    for cofactor in icofactors:
+    for cofactor in union_icofactors:
         if cofactor[1] == None:
             print(cofactor[0])
         else:
@@ -264,10 +264,10 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                 else:
                     print(cofactor[0] + ' (' + cofactor[1] + ')')
         utils.clean_up()
-        return models
+        return models, optimum, union_icofactors, intersection_icofactors, chosen_cofactors, unprod, newly_producible_targets
 
     utils.clean_up()
-    return model
+    return model, optimum, union_icofactors, intersection_icofactors, chosen_cofactors, unprod, newly_producible_targets
 
 if __name__ == '__main__':
     cmd_menecof()
