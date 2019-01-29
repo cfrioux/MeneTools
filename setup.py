@@ -31,8 +31,10 @@ More information on usage and troubleshooting on Github: https://github.com/cfri
     author           = 'Clemence Frioux',
     author_email     = 'clemence.frioux@gmail.com',
     packages         = ['menetools'],
-    package_dir      = {'menetools' : 'src'},
+    package_dir      = {'menetools' : 'menetools'},
     package_data     = {'menetools' : ['encodings/*.lp']},
-    scripts          = ['menecof.py','menescope.py','menepath.py','menecheck.py'],
+    scripts          = ['menetools/menecof.py','menetools/menescope.py','menetools/menepath.py','menetools/menecheck.py'],
+    entry_points     = {'console_scripts': ['menecheck = menetools.__main__:main_menecheck', 'menecof = menetools.__main__:main_menecof',
+                                            'menepath = menetools.__main__:main_menepath', 'menescope = menetools.__main__:main_menescope']},
     install_requires = ['pyasp == 1.4.3']
 )

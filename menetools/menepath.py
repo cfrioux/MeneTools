@@ -5,13 +5,13 @@ import argparse
 import sys
 import inspect
 import os
-from pyasp.term import *
-from pyasp.asp import *
+
 from menetools import utils, query, sbml
+from pyasp.asp import *
+from pyasp.term import *
 
-if __name__ == '__main__':
 
-
+def cmd_menepath():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -39,6 +39,9 @@ if __name__ == '__main__':
     min_size = args.min
     enumeration = args.enumerate
 
+    run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size,enumeration)
+
+def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=None):
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
@@ -133,7 +136,12 @@ if __name__ == '__main__':
                 print('\nSolution '+str(count) + ' of size :' + str(len(model)) + ' reactions:')
                 count+=1
                 utils.print_met(model.to_list())
+            utils.clean_up()
+            return all_models, unproducible_targets, one_model, union, intersection
 
 
     utils.clean_up()
-    quit()
+    return model, unproducible_targets, one_model, union, intersection
+
+if __name__ == '__main__':
+    cmd_menepath()

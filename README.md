@@ -45,6 +45,13 @@ optional arguments:
                         targets in SBML format
 ```
 
+
+```python
+from menetools import run_menecheck
+
+model = run_menecheck(draft_sbml='required',seeds_sbml='required',targets_sbml='required')
+```
+
 ## MENESCOPE
 
 Menescope is a python3 tool to get the topologically reachable compounds from
@@ -61,6 +68,12 @@ optional arguments:
                         metabolic network in SBML format
   -s SEEDS, --seeds SEEDS
                         seeds in SBML format
+```
+
+```python
+from menetools import run_menescope
+
+model = run_menescope(draft_sbml='required',seeds_sbml='required')
 ```
 
 ## MENEPATH
@@ -81,6 +94,12 @@ optional arguments:
                         seeds in SBML format
   -t TARGETS, --targets TARGETS
                         targets in SBML format
+```
+
+```python
+from menetools import run_menescope
+
+model = run_menepath(draft_sbml='required',seeds_sbml='required',targets_sbml='required',min_size='optional',enumeration='optional')
 ```
 
 ### MENECOF
@@ -124,4 +143,10 @@ optional arguments: --suffix --weight --enumerate -h/--help
                         compound' 'occurrence
 
   --enumerate           enumerates all cofactors solutions
+```
+
+```python
+from menetools import run_menecof
+
+model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='required',cofactors_txt='optional',weights='optional',suffix='optional',enumeration='optional')
 ```
