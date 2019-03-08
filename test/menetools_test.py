@@ -24,19 +24,18 @@ def test_menecof():
 
 def test_menescope():
     scope = 8
-    compounds = ['"M_e_c"', '"M_g_c"', '"M_S_c"', '"M_f_c"', '"M_S_b"', '"M_i_c"', '"M_d_c"', '"M_T3_c"']
+    compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c']
     results = run_menescope('../toy/tiny_toy/draft.xml', '../toy/tiny_toy/seeds.xml')
-    result_compounds = [term.args()[0] for term in results.to_list()]
 
-    assert set(result_compounds) == set(compounds)
-    assert len(result_compounds) == scope
+    assert set(results) == set(compounds)
+    assert len(results) == scope
 
 def test_menecheck():
-    producible_targets = ['"M_T3_c"']
-    unproducible_targets = ['"M_T2_c"', '"M_T1_c"']
+    producible_targets = ['M_T3_c']
+    unproducible_targets = ['M_T2_c', 'M_T1_c']
     results = run_menecheck('../toy/tiny_toy/draft.xml', '../toy/tiny_toy/seeds.xml', '../toy/tiny_toy/targets.xml')
-    unproducible_results = results[1] 
-    producible_results = results[2]
+    unproducible_results = results[0] 
+    producible_results = results[1]
 
     assert set(producible_results) == set(producible_targets)
     assert len(producible_results) == len(producible_targets)
@@ -63,3 +62,7 @@ def test_menepath():
 
 
 test_menepath()
+test_menecheck
+test_menecof
+test_menescope
+print('Done testing.')

@@ -12,6 +12,8 @@ from pyasp.asp import *
 
 
 def cmd_menescope():
+    """run menescope from shell
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
@@ -21,23 +23,28 @@ def cmd_menescope():
     args = parser.parse_args()
 
     draft_sbml = args.draftnet
-    #repair_sbml = args.repairnetwork
     seeds_sbml = args.seeds
     run_menescope(draft_sbml,seeds_sbml)
 
 def run_menescope(draft_sbml,seeds_sbml):
+    """get producible metabolites in a metabolic network, starting from seeds
+    
+    Args:
+        draft_sbml (str): SBML 2 metabolic network file
+        seeds_sbml (str): SBML 2 seeds file
+    
+    Returns:
+        list: producible compounds
+    """
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
-    #print(draftnet)
     print('done.')
 
     print('Reading seeds from ', seeds_sbml, '...', end='')
     sys.stdout.flush()
     seeds = sbml.readSBMLspecies(seeds_sbml,'seed')
-    #print(seeds)
     print('done.')
-    #seeds.to_file("seeds.lp")
 
     print('\nChecking draft network scope ...', end='')
     sys.stdout.flush()
@@ -47,7 +54,9 @@ def run_menescope(draft_sbml,seeds_sbml):
     utils.print_met(model.to_list())
     utils.clean_up()
 
-    return model
+    scope = [str(p.arg(0)).rstrip('"').lstrip('"') for p in model]
+
+    return scope
 
 if __name__ == '__main__':
     cmd_menescope()

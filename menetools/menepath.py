@@ -12,11 +12,11 @@ from pyasp.term import *
 
 
 def cmd_menepath():
+    """run menepath from shell
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
-    #parser.add_argument("-r", "--repairnet",
-    #                    help="metabolic network in SBML format")
     parser.add_argument("-s", "--seeds",
                         help="seeds in SBML format", required=True)
 
@@ -42,25 +42,33 @@ def cmd_menepath():
     run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size,enumeration)
 
 def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=None):
+    """Get production pathways of targets in metabolic networks, started from seeds
+    
+    Args:
+        draft_sbml (str): SBML 2 metabolic network file
+        seeds_sbml (str): SBML 2 seeds file
+        targets_sbml (str): SBML 2 targets file
+        min_size (bool, optional): Defaults to None. minimal size paths
+        enumeration (bool, optional): Defaults to None. enumeration of all paths
+    
+    Returns:
+        [type]: [description]
+    """
+
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
-    #print(draftnet)
     print('done.')
 
     print('Reading seeds from ', seeds_sbml, '...', end='')
     sys.stdout.flush()
     seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
-    #print(seeds)
     print('done.')
-    #seeds.to_file("seeds.lp")
 
     print('Reading targets from ', targets_sbml, '...', end='')
     sys.stdout.flush()
     targets = sbml.readSBMLspecies(targets_sbml, 'target')
-    #print(targets)
     print('done.')
-    #seeds.to_file("targets.lp")
 
     print('\nChecking network for unproducible targets ...', end=' ')
     sys.stdout.flush()
@@ -69,23 +77,17 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
     unproducible_targets = TermSet()
     producible_targets = TermSet()
 
-    #print(model)
     for p in model:
         if p.pred() == "unproducible_target":
             tgt = p.arg(0)
-            #print(tgt)
             unproducible_targets.add(Term('unproducible_targets', [tgt]))
         elif p.pred() == "producible_target":
             tgt = p.arg(0)
             producible_targets.add(Term('target', [tgt]))
-            #producible_targets = TermSet(producible_targets.union(t))
 
     print(' ',len(unproducible_targets),'unproducible targets:')
     utils.print_met(model.to_list())
 
-
-
-    #print(producible_targets)
     for t in producible_targets:
         print('\n')
         print(t)
@@ -123,7 +125,7 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         print('Intersection size (essential reactions) ',len(intersection), ' reactions')
         utils.print_met(intersection.to_list())
 
-    # if wanted, get union of all solutions
+    # if wanted, get enumeration of all solutions
         if enumeration:
             if min_size:
                 print('\nComputing all cardinality-minimal production paths for ', t, ' - ', optimum)

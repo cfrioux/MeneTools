@@ -33,7 +33,7 @@ Menecheck is a python3 tool to get the topologically producibility status of tar
 ### usage
 
 ```
-menecheck.py [-h] -d DRAFTNET -s SEEDS -t TARGETS
+menecheck [-h] -d DRAFTNET -s SEEDS -t TARGETS
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -60,7 +60,7 @@ seeds in a metabolic network.
 ### usage
 
 ```
-menescope.py [-h] -d DRAFTNET -s SEEDS
+menescope [-h] -d DRAFTNET -s SEEDS
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -84,7 +84,7 @@ respects to individual targets in metabolic networks.
 ### usage
 
 ```
-menepath.py [-h] -d DRAFTNET -s SEEDS -t TARGETS
+menepath [-h] -d DRAFTNET -s SEEDS -t TARGETS
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -111,7 +111,7 @@ topologically using reachable compounds from seeds.
 ### usage
 
 ```
-python menecof.py [-h] -d DRAFTNET -s SEEDS -t TARGETS [-c COFACTORS]
+menecof [-h] -d DRAFTNET -s SEEDS -t TARGETS [-c COFACTORS]
                   [--suffix SUFFIX] [--weight] [--enumerate]
 
 the following arguments are required: -d/--draftnet, -s/--seeds, -t/--targets

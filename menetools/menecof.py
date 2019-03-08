@@ -10,12 +10,15 @@ from menetools import utils, query, sbml
 from pyasp.asp import *
 
 
-# TODO handle preferences
-
 def convert_to_coded_id(uncoded):
-    '''
-    convert text to SBML-ID friendly text
-    '''
+    """encode str components
+    
+    Args:
+        uncoded (str): string to be encoded
+    
+    Returns:
+        str: encoded string
+    """
     charlist = ['-', '|', '/', '(', ')', '\'', '=', '#', '*', '.', ':', '!', '+']
     for c in charlist:
         uncoded = uncoded.replace(c, "__" + str(ord(c)) + "__")
@@ -24,23 +27,16 @@ def convert_to_coded_id(uncoded):
         uncoded = "_" + uncoded
     return uncoded
 
-def ascii_replace(match):
-    return chr(int(match.group(1)))
-
-
-
 def cmd_menecof():
+    """run menecof from shell
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--draftnet",
                         help="metabolic network in SBML format", required=True)
-    #parser.add_argument("-r", "--repairnet",
-    #                    help="metabolic network in SBML format")
     parser.add_argument("-s", "--seeds",
                         help="seeds in SBML format", required=True)
     parser.add_argument("-t", "--targets",
                         help="targets in SBML format", required=True)
-    #parser.add_argument("-r", "--repairnet",
-    #                    help="metabolic network in SBML format")
     parser.add_argument("-c", "--cofactors",
                         help="cofactors, in one-per-line text file format", required=False)
 
@@ -64,7 +60,6 @@ def cmd_menecof():
     args = parser.parse_args()
 
     draft_sbml = args.draftnet
-    #repair_sbml = args.repairnetwork
     seeds_sbml = args.seeds
     targets_sbml = args.targets
     cofactors_txt = args.cofactors
@@ -75,6 +70,20 @@ def cmd_menecof():
     run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt,weights,suffix,enumeration)
 
 def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumeration=None):
+    """propose cofactor whose producibility could unblock the producibility of targets
+    
+    Args:
+        draft_sbml (str): SBML 2 metabolic network file
+        seeds_sbml (str): SBML 2 seeds file
+        targets_sbml (str): SBML 2 targets file
+        cofactors_txt (str, optional): Defaults to None. Cofactors file, one per line
+        weights (bool, optional): Defaults to None. True if cofactors_txt is weighted
+        suffix (str, optional): Defaults to None. suffix to be added to metabolites in metabolic model
+        enumeration (bool, optional): Defaults to None. enumeration boolean
+    
+    Returns:
+        TermSet,str,TermSet,TermSet,list,list,list: ASP models and lists with cofactors and (un)producible targets
+    """
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
     draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
