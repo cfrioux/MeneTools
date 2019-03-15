@@ -19,7 +19,7 @@ from setuptools import setup
 
 setup(
     name             = 'MeneTools',
-    version          = '1.1.2',
+    version          = '1.1.3',
     url              = 'https://github.com/cfrioux/MeneTools',
     download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.4',
     license          = 'GPLv3+',
