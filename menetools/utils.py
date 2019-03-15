@@ -16,10 +16,10 @@ def clean_up() :
 
 def print_met(predictions) :
     for p in predictions:
-        if p.pred() == "xreaction" : logging.info(' ' + str(p.arg(0)))
-        if p.pred() == "unproducible_target" : logging.info(' ' + str(p.arg(0)))
-        if p.pred() == "dscope" : logging.info(' ' + str(p.arg(0)).rstrip('"').lstrip('"'))
-        if p.pred() == "target" : logging.info(' ' + str(p.arg(0)))
-        if p.pred() == "needed_rxn" : logging.info(' ' + str(p.arg(0)))
-        if p.pred() == "needed_mrxn" : logging.info(' ' + str(p.arg(0)))
-        if p.pred() == "selected" : logging.info(' ' + str(p.arg(0)))
+        if p.pred() == "xreaction" : logger.info(' ' + str(p.arg(0)))
+        if p.pred() == "unproducible_target" : logger.info(' ' + str(p.arg(0)))
+        if p.pred() == "dscope" : logger.info(' ' + str(p.arg(0)).rstrip('"').lstrip('"'))
+        if p.pred() == "target" : logger.info(' ' + str(p.arg(0)))
+        if p.pred() == "needed_rxn" : logger.info(' ' + str(p.arg(0)))
+        if p.pred() == "needed_mrxn" : logger.info(' ' + str(p.arg(0)))
+        if p.pred() == "selected" : logger.info(' ' + str(p.arg(0)))
