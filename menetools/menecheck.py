@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 import argparse
 import sys
-
+import logging
 from menetools import utils, query, sbml
 from pyasp.asp import *
+from xml.etree.ElementTree import ParseError
 
-
+logger = logging.getLogger(__name__)
 
 def cmd_menecheck():
     """run menecheck from shell
@@ -39,27 +40,38 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
     Returns:
         list, list: model, lists of unproducible and producibile targets
     """
-    print('Reading draft network from ',draft_sbml,'...',end=' ')
-    sys.stdout.flush()
-    draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
-    print('done.')
+    logger.info('Reading draft network from ' + draft_sbml)
+    try:
+        draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+    except FileNotFoundError:
+        logger.critical("File not found: "+draft_sbml)
+        sys.exit(1)
+    except ParseError:
+        logger.critical("Invalid syntax in SBML file: "+draft_sbml)
+        sys.exit(1)
 
-    print('Reading seeds from ',seeds_sbml,'...',end=' ')
-    sys.stdout.flush()
-    seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
-    print('done.')
+    logger.info('Reading seeds from ' + seeds_sbml)
+    try:
+        seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
+    except FileNotFoundError:
+        logger.critical("File not found: "+seeds_sbml)
+        sys.exit(1)
+    except ParseError:
+        logger.critical("Invalid syntax in SBML file: "+seeds_sbml)
+        sys.exit(1)
 
-    print('Reading targets from ',targets_sbml,'...',end=' ')
-    sys.stdout.flush()
-    targets = sbml.readSBMLspecies(targets_sbml, 'target')
-    print('done.')
+    logger.info('Reading targets from ' + seeds_sbml)
+    try:
+        targets = sbml.readSBMLspecies(targets_sbml, 'target')
+    except FileNotFoundError:
+        logger.critical("File not found: "+targets_sbml)
+        sys.exit(1)
+    except ParseError:
+        logger.critical("Invalid syntax in SBML file: "+targets_sbml)
+        sys.exit(1)
 
-    print('\nChecking draftnet for unproducible targets ...',end=' ')
-    sys.stdout.flush()
+    logger.info('\nChecking draftnet for unproducible targets')
     model = query.get_unproducible(draftnet, targets, seeds)
-    # print(model)
-    print('done.')
-    #utils.print_met(model.to_list())
     unprod = []
     prod = []
     for a in model :
@@ -67,11 +79,10 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
             unprod.append(a.arg(0).rstrip('"').lstrip('"'))
         elif a.pred() == 'producible_target':
             prod.append(a.arg(0).rstrip('"').lstrip('"'))
-    print(str(len(prod)),'producible targets:')
-    print(*prod, sep='\n')
-    print('\n')
-    print(str(len(unprod)),'unproducible targets:')
-    print(*unprod, sep='\n')
+    logger.info(str(len(prod)) + ' producible targets:')
+    logger.info('\n'.join(prod))
+    logger.info(str(len(unprod)) + ' unproducible targets:')
+    logger.info('\n'.join(unprod))
 
 
     utils.clean_up()

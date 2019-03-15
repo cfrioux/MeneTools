@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def clean_up() :
     if os.path.isfile("parser.out"): os.remove("parser.out")
@@ -12,10 +16,10 @@ def clean_up() :
 
 def print_met(predictions) :
     for p in predictions:
-        if p.pred() == "xreaction" : print(' ',str(p.arg(0)))
-        if p.pred() == "unproducible_target" : print(' ',str(p.arg(0)))
-        if p.pred() == "dscope" : print(' ',str(p.arg(0)).rstrip('"').lstrip('"'))
-        if p.pred() == "target" : print(' ',str(p.arg(0)))
-        if p.pred() == "needed_rxn" : print(' ',str(p.arg(0)))
-        if p.pred() == "needed_mrxn" : print(' ',str(p.arg(0)))
-        if p.pred() == "selected" : print(' ',str(p.arg(0)))
+        if p.pred() == "xreaction" : logging.info(' ' + str(p.arg(0)))
+        if p.pred() == "unproducible_target" : logging.info(' ' + str(p.arg(0)))
+        if p.pred() == "dscope" : logging.info(' ' + str(p.arg(0)).rstrip('"').lstrip('"'))
+        if p.pred() == "target" : logging.info(' ' + str(p.arg(0)))
+        if p.pred() == "needed_rxn" : logging.info(' ' + str(p.arg(0)))
+        if p.pred() == "needed_mrxn" : logging.info(' ' + str(p.arg(0)))
+        if p.pred() == "selected" : logging.info(' ' + str(p.arg(0)))

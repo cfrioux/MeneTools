@@ -5,11 +5,12 @@ import argparse
 import sys
 import inspect
 import os
-
+import logging
 from menetools import utils, query, sbml
 from pyasp.asp import *
+from xml.etree.ElementTree import ParseError
 
-
+logger = logging.getLogger(__name__)
 
 def cmd_menescope():
     """run menescope from shell
@@ -24,33 +25,44 @@ def cmd_menescope():
 
     draft_sbml = args.draftnet
     seeds_sbml = args.seeds
+
     run_menescope(draft_sbml,seeds_sbml)
 
-def run_menescope(draft_sbml,seeds_sbml):
+def run_menescope(draft_sbml,seeds_sbml,quiet=False):
     """get producible metabolites in a metabolic network, starting from seeds
     
     Args:
         draft_sbml (str): SBML 2 metabolic network file
         seeds_sbml (str): SBML 2 seeds file
+        quiet (bool): boolean for a silent mode
     
     Returns:
         list: producible compounds
     """
-    print('Reading draft network from ', draft_sbml, '...', end='')
-    sys.stdout.flush()
-    draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
-    print('done.')
+    logger.info('Reading draft network from ' + draft_sbml)
+    try:
+        draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+    except FileNotFoundError:
+        logger.critical("File not found: " + draft_sbml)
+        sys.exit(1)
+    except ParseError:
+        logger.critical("Invalid syntax in SBML file: "+draft_sbml)
+        sys.exit(1)
 
-    print('Reading seeds from ', seeds_sbml, '...', end='')
-    sys.stdout.flush()
-    seeds = sbml.readSBMLspecies(seeds_sbml,'seed')
-    print('done.')
+    logger.info('Reading seeds from ' + seeds_sbml)
+    try:
+        seeds = sbml.readSBMLspecies(seeds_sbml,'seed')
+    except FileNotFoundError:
+        logger.critical("File not found: "+targets_sbml)
+        sys.exit(1)
+    except ParseError:
+        logger.critical("Invalid syntax in SBML file: "+targets_sbml)
+        sys.exit(1)
 
-    print('\nChecking draft network scope ...', end='')
+    logger.info('\nChecking draft network scope')
     sys.stdout.flush()
     model = query.get_scope(draftnet, seeds)
-    print('done.')
-    print(' ', len(model), 'compounds on scope:')
+    logger.info(' ' + str(len(model)) + ' compounds on scope:')
     utils.print_met(model.to_list())
     utils.clean_up()
 
