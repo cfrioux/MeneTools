@@ -24,7 +24,7 @@ These two command lines should be an efficient workaround:
 1. uninstall pyasp
 ``pip uninstall pyasp``
 2. reinstall pyasp without cache
-``pip install pyasp --no-cache-dir``
+``pip install pyasp==1.4.3 --no-cache-dir``
 
 ## MENECHECK
 
