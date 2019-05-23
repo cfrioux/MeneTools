@@ -1,5 +1,6 @@
 import os
 import tempfile
+import clyngor
 from pyasp.asp import *
 
 
@@ -16,11 +17,16 @@ def get_scope(draft, seeds):
     draft_f = draft.to_file()
     seed_f =  seeds.to_file()
     prg = [scope_prg, draft_f, seed_f]
-    solver = Gringo4Clasp()
-    models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
+    options = ''
+    # solver = Gringo4Clasp()
+    # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
+    best_model = None
+    models = clyngor.solve(prg, options=options)
+    for model in models.discard_quotes.by_arity:
+        best_model = model
     os.unlink(draft_f)
     os.unlink(seed_f)
-    return models[0]
+    return best_model
 
 
 def get_unproducible(draft, seeds, targets):
@@ -28,12 +34,17 @@ def get_unproducible(draft, seeds, targets):
     seed_f =  seeds.to_file()
     target_f = targets.to_file()
     prg = [unproducible_prg, draft_f, seed_f, target_f ]
-    solver = Gringo4Clasp()
-    models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
+    options = ''
+    # solver = Gringo4Clasp()
+    # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
+    best_model = None
+    models = clyngor.solve(prg, options=options)
+    for model in models.discard_quotes.by_arity:
+        best_model = model
     os.unlink(draft_f)
     os.unlink(seed_f)
     os.unlink(target_f)
-    return models[0]
+    return best_model
 
 def get_paths(instance, min_bool):
     instance_f = instance.to_file()
