@@ -6,7 +6,7 @@ import subprocess
 from menetools import run_menecof, run_menescope, run_menecheck, run_menepath
 
 def test_menecof():
-    unproducible_targets = set(['"M_T2_c"', '"M_T1_c"'])
+    unproducible_targets = set(['M_T2_c', 'M_T1_c'])
     optimum_score = '1,2,31'
     selected_cofactors = set([('"M_c_c"', '1'), ('"M_T1_c"', '2')])
     newly_producible_targets = set(['"M_T2_c"', '"M_T1_c"'])

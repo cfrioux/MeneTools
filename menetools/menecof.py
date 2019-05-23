@@ -157,10 +157,14 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     print('\nChecking draft network for unproducible targets before cofactors selection ...', end='')
     sys.stdout.flush()
     model = query.get_unproducible(draftnet, targets, seeds)
-    unprod = [p.arg(0) for p in model if p.pred() == 'unproducible_target']
+    unprod = []
+    for pred in model :
+        if pred == 'unproducible_target':
+            for a in model[pred, 1]:
+                unprod.append(a[0])
     print('done.')
     print(' ',len(unprod),'unproducible targets:')
-    utils.print_met(model.to_list())
+    print('\n'.join(unprod))
 
     print('\nChecking minimal sets of cofactors to produce all targets ...', end='')
     sys.stdout.flush()

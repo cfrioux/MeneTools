@@ -74,11 +74,13 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
     model = query.get_unproducible(draftnet, targets, seeds)
     unprod = []
     prod = []
-    for a in model :
-        if a.pred() == 'unproducible_target':
-            unprod.append(a.arg(0).rstrip('"').lstrip('"'))
-        elif a.pred() == 'producible_target':
-            prod.append(a.arg(0).rstrip('"').lstrip('"'))
+    for pred in model :
+        if pred == 'unproducible_target':
+            for a in model[pred, 1]:
+                unprod.append(a[0])
+        elif pred == 'producible_target':
+            for a in model[pred, 1]:
+                prod.append(a[0])
     logger.info(str(len(prod)) + ' producible targets:')
     logger.info('\n'.join(prod))
     logger.info(str(len(unprod)) + ' unproducible targets:')

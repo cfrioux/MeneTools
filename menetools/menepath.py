@@ -76,17 +76,19 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
     print('done.')
     unproducible_targets = TermSet()
     producible_targets = TermSet()
+    unproducible_targets_lst = []
 
-    for p in model:
-        if p.pred() == "unproducible_target":
-            tgt = p.arg(0)
-            unproducible_targets.add(Term('unproducible_targets', [tgt]))
-        elif p.pred() == "producible_target":
-            tgt = p.arg(0)
-            producible_targets.add(Term('target', [tgt]))
+    for pred in model :
+        if pred == 'unproducible_target':
+            for a in model[pred, 1]:
+                unproducible_targets.add(Term('unproducible_targets', ['"'+a[0]+'"']))
+                unproducible_targets_lst.append(a[0])
+        elif pred == 'producible_target':
+            for a in model[pred, 1]:
+                producible_targets.add(Term('target', ['"'+a[0]+'"']))
 
     print(' ',len(unproducible_targets),'unproducible targets:')
-    utils.print_met(model.to_list())
+    print("\n".join(unproducible_targets_lst))
 
     for t in producible_targets:
         print('\n')
