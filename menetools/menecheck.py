@@ -5,6 +5,7 @@ import sys
 import logging
 from menetools import utils, query, sbml
 from pyasp.asp import *
+import clyngor
 from xml.etree.ElementTree import ParseError
 
 logger = logging.getLogger(__name__)

@@ -9,6 +9,7 @@ import os
 from menetools import utils, query, sbml
 from pyasp.asp import *
 from pyasp.term import *
+from clyngor import as_pyasp
 
 
 def cmd_menepath():
@@ -104,10 +105,26 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
             print('\nComputing one solution of cardinality-minimal production paths for ', t)
         else:
             print('\nComputing one solution of production paths for',t,)
+        # """
         one_model = query.get_paths(lp_instance, min_size)
+        one_path = []
+        for pred in one_model[0]:
+            if pred == 'selected':
+                for a in one_model[0][pred, 2]:
+                    one_path.append(a[0])
+        optimum = one_model[1]
+        if optimum:
+            optimum = ','.join(map(str, optimum))
+        print('Solution size ',len(one_path), ' reactions')
+        print('\n'.join(one_path))
+        # """
+        """
+        one_model = query.get_paths(lp_instance, min_size)
+        print(one_model.score)
         optimum = one_model.score
         print('Solution size ',len(one_model), ' reactions')
         utils.print_met(one_model.to_list())
+        """
 
     # union of solutions
         if min_size:
@@ -115,8 +132,14 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         else:
             print('\nComputing union of production paths for',t,)
         union = query.get_union_of_paths(lp_instance, optimum, min_size)
-        print('Union size ',len(union), ' reactions')
-        utils.print_met(union.to_list())
+        union_model = union[0]
+        union_path = []
+        for pred in union_model:
+            if pred == 'selected':
+                for a in union_model[pred, 2]:
+                    union_path.append(a[0])
+        print('Union size ',len(union_path), ' reactions')
+        print('\n'.join(union_path))
 
     # intersection of solutions
         if min_size:
@@ -124,8 +147,14 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         else:
             print('\nComputing intersection of production paths for',t,)
         intersection = query.get_intersection_of_paths(lp_instance, optimum, min_size)
-        print('Intersection size (essential reactions) ',len(intersection), ' reactions')
-        utils.print_met(intersection.to_list())
+        intersection_model = intersection[0]
+        intersection_path = []
+        for pred in intersection_model:
+            if pred == 'selected':
+                for a in intersection_model[pred, 2]:
+                    intersection_path.append(a[0])
+        print('Intersection size ',len(intersection_path), ' reactions')
+        print('\n'.join(intersection_path))
 
     # if wanted, get enumeration of all solutions
         if enumeration:
@@ -135,17 +164,24 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
                 print('\nComputing all production paths for ', t, ' - ', optimum)
 
             all_models = query.get_all_paths(lp_instance, optimum, min_size)
+            all_models_lst = []
             count = 1
             for model in all_models:
-                print('\nSolution '+str(count) + ' of size :' + str(len(model)) + ' reactions:')
+                current_enum_path=[]
+                for pred in model[0]:
+                    if pred == 'selected':
+                        for a in model[0][pred, 2]:
+                            current_enum_path.append(a[0])
+                print('\nSolution '+str(count) + ' of size :' + str(len(current_enum_path)) + ' reactions:')
                 count+=1
-                utils.print_met(model.to_list())
+                print('\n'.join(current_enum_path))
+                all_models_lst.append(current_enum_path)
             utils.clean_up()
-            return all_models, unproducible_targets, one_model, union, intersection
+            return all_models_lst, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
 
 
     utils.clean_up()
-    return model, unproducible_targets, one_model, union, intersection
+    return model, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
 
 if __name__ == '__main__':
     cmd_menepath()
