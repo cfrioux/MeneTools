@@ -7,8 +7,7 @@ import inspect
 import os
 import logging
 from menetools import utils, query, sbml
-from pyasp.asp import *
-import clyngor
+from clyngor import as_pyasp
 
 from xml.etree.ElementTree import ParseError
 
@@ -43,7 +42,7 @@ def run_menescope(draft_sbml,seeds_sbml,quiet=False):
     """
     logger.info('Reading draft network from ' + draft_sbml)
     try:
-        draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+        draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     except FileNotFoundError:
         logger.critical("File not found: " + draft_sbml)
         sys.exit(1)
@@ -53,7 +52,7 @@ def run_menescope(draft_sbml,seeds_sbml,quiet=False):
 
     logger.info('Reading seeds from ' + seeds_sbml)
     try:
-        seeds = sbml.readSBMLspecies(seeds_sbml,'seed')
+        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
     except FileNotFoundError:
         logger.critical("File not found: " + targets_sbml)
         sys.exit(1)

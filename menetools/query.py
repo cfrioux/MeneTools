@@ -1,6 +1,7 @@
 import os
 import tempfile
 import clyngor
+from menetools import utils
 
 
 root = __file__.rsplit('/', 1)[0]
@@ -13,8 +14,8 @@ cof_prg =       root + '/encodings/get_cofs.lp'
 cof_w_prg =       root + '/encodings/get_cofs_weighted.lp'
 
 def get_scope(draft, seeds):
-    draft_f = draft.to_file()
-    seed_f =  seeds.to_file()
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
     prg = [scope_prg, draft_f, seed_f]
     options = ''
     # solver = Gringo4Clasp()
@@ -29,9 +30,9 @@ def get_scope(draft, seeds):
 
 
 def get_unproducible(draft, seeds, targets):
-    draft_f = draft.to_file()
-    seed_f =  seeds.to_file()
-    target_f = targets.to_file()
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    target_f = utils.to_file(targets)
     prg = [unproducible_prg, draft_f, seed_f, target_f ]
     options = ''
     # solver = Gringo4Clasp()
