@@ -35,7 +35,7 @@ def to_file(termset, outputfile=None):
     if outputfile:
         f = open(outputfile, 'a')
     else:
-        fd, outputfile = tempfile.mkstemp(suffix='.lp', prefix='miscoto_')
+        fd, outputfile = tempfile.mkstemp(suffix='.lp', prefix='menetools_')
         f = os.fdopen(fd, 'a')
     for t in termset:
         f.write(str(t) + '.\n')

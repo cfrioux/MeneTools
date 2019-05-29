@@ -7,8 +7,8 @@ import inspect
 import os
 
 from menetools import utils, query, sbml
-from pyasp.asp import *
-import clyngor
+from clyngor import as_pyasp
+from clyngor.as_pyasp import TermSet, Atom
 
 def convert_to_coded_id(uncoded):
     """encode str components
@@ -86,20 +86,20 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     """
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
-    draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+    draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     #print(draftnet)
     print('done.')
 
     print('Reading seeds from ', seeds_sbml, '...', end='')
     sys.stdout.flush()
-    seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
+    seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, 'seed')
     #print(seeds)
     print('done.')
     #seeds.to_file("seeds.lp")
 
     print('Reading targets from ', targets_sbml, '...', end='')
     sys.stdout.flush()
-    targets = sbml.readSBMLspecies(targets_sbml, 'target')
+    targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
     #print(targets)
     print('done.')
     #targets.to_file("targets.lp")
@@ -151,7 +151,8 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
         species_and_weights = sbml.make_weighted_list_of_species(draft_sbml)
         cofactors = TermSet()
         for elem in species_and_weights:
-            cofactors.add(Term('cofactor', ["\""+elem+"\"", species_and_weights[elem]]))
+            cofactors.add(Atom('cofactor', ["\""+elem+"\"",+species_and_weights[elem]]))
+        print(cofactors)
         weights = True
 
     print('\nChecking draft network for unproducible targets before cofactors selection ...', end='')

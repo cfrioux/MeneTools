@@ -7,9 +7,8 @@ import inspect
 import os
 
 from menetools import utils, query, sbml
-from pyasp.asp import *
-from pyasp.term import *
 from clyngor import as_pyasp
+from clyngor.as_pyasp import TermSet, Atom
 
 
 def cmd_menepath():
@@ -58,47 +57,49 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
 
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
-    draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+    draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     print('done.')
 
     print('Reading seeds from ', seeds_sbml, '...', end='')
     sys.stdout.flush()
-    seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
+    seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, 'seed')
     print('done.')
 
     print('Reading targets from ', targets_sbml, '...', end='')
     sys.stdout.flush()
-    targets = sbml.readSBMLspecies(targets_sbml, 'target')
+    targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
     print('done.')
 
     print('\nChecking network for unproducible targets ...', end=' ')
     sys.stdout.flush()
     model = query.get_unproducible(draftnet, targets, seeds)
     print('done.')
-    unproducible_targets = TermSet()
-    producible_targets = TermSet()
+    # unproducible_targets_atoms = set()
+    producible_targets_atoms = set()
     unproducible_targets_lst = []
 
     for pred in model :
         if pred == 'unproducible_target':
             for a in model[pred, 1]:
-                unproducible_targets.add(Term('unproducible_targets', ['"'+a[0]+'"']))
+                # unproducible_targets_atoms.add(Atom('unproducible_targets', ['"'+a[0]+'"']))
                 unproducible_targets_lst.append(a[0])
         elif pred == 'producible_target':
             for a in model[pred, 1]:
-                producible_targets.add(Term('target', ['"'+a[0]+'"']))
+                producible_targets_atoms.add(Atom('target', ['"'+a[0]+'"']))
 
-    print(' ',len(unproducible_targets),'unproducible targets:')
+    print(' ',len(unproducible_targets_lst),'unproducible targets:')
     print("\n".join(unproducible_targets_lst))
 
-    for t in producible_targets:
+    for t in producible_targets_atoms:
         print('\n')
-        print(t)
         single_target = TermSet()
         single_target.add(t)
-
-        draftfact  = String2TermSet('draft("draft")')
-        lp_instance   = TermSet(draftnet.union(draftfact).union(single_target).union(seeds))
+        print(single_target)
+        draft_str = 'draft'
+        draftfact = TermSet()
+        draftatom = Atom('draft', ["\""+draft_str+"\""])
+        draftfact.add(draftatom)
+        lp_instance   = TermSet.union(draftnet,draftfact,single_target,seeds)
 
     # one solution, minimal or not, depending on option
         if min_size:
@@ -179,7 +180,7 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
             utils.clean_up()
             return all_models_lst, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
 
-
+    #TODO store for all targets
     utils.clean_up()
     return model, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
 

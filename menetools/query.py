@@ -47,7 +47,7 @@ def get_unproducible(draft, seeds, targets):
     return best_model
 
 def get_paths(instance, min_bool):
-    instance_f = instance.to_file()
+    instance_f = utils.to_file(instance)
     if min_bool:
         prg = [min_path_prg, instance_f]
     else:
@@ -63,7 +63,7 @@ def get_paths(instance, min_bool):
     return best_model #models[0]
 
 def get_union_of_paths(instance, optimum, min_bool):
-    instance_f = instance.to_file()
+    instance_f = utils.to_file(instance)
     if min_bool:
         prg = [min_path_prg, instance_f]
         options ='--configuration jumpy --opt-strategy=usc,oll --enum-mode=brave --opt-mode=optN,'+str(optimum)
@@ -80,7 +80,7 @@ def get_union_of_paths(instance, optimum, min_bool):
     return best_model #union[0]
 
 def get_intersection_of_paths(instance, optimum, min_bool):
-    instance_f = instance.to_file()
+    instance_f = utils.to_file(instance)
     if min_bool:
         prg = [min_path_prg, instance_f]
         options = '--configuration jumpy --opt-strategy=usc,oll --enum-mode cautious --opt-mode=optN,' +str(optimum)
@@ -97,7 +97,7 @@ def get_intersection_of_paths(instance, optimum, min_bool):
     return best_model #intersec[0]
 
 def get_all_paths(instance, optimum, min_bool, nmodels=0):
-    instance_f = instance.to_file()
+    instance_f = utils.to_file(instance)
     if min_bool:
         prg = [min_path_prg, instance_f]
         options = '--configuration handy --opt-strategy=usc,oll --opt-mode=optN,' +str(optimum)
@@ -112,10 +112,10 @@ def get_all_paths(instance, optimum, min_bool, nmodels=0):
     return allmodels
 
 def get_cofs(draft, seeds, targets, cofactors):
-    draft_f = draft.to_file()
-    seed_f =  seeds.to_file()
-    targets_f =  targets.to_file()
-    cofactors_f =  cofactors.to_file()
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    targets_f =  utils.to_file(targets)
+    cofactors_f =  utils.to_file(cofactors)
     prg = [cof_prg, draft_f, seed_f, targets_f, cofactors_f]
     # solver = Gringo4Clasp()
     # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
@@ -137,10 +137,10 @@ def get_cofs(draft, seeds, targets, cofactors):
     return best_model #models[0]
 
 def get_cofs_weighted(draft, seeds, targets, cofactors):
-    draft_f = draft.to_file()
-    seed_f =  seeds.to_file()
-    targets_f =  targets.to_file()
-    cofactors_f =  cofactors.to_file()
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    targets_f =  utils.to_file(targets)
+    cofactors_f =  utils.to_file(cofactors)
     prg = [cof_w_prg, draft_f, seed_f, targets_f, cofactors_f]
     options ='--configuration jumpy --opt-strategy=usc,oll'
     # solver = Gringo4Clasp(clasp_options='--configuration jumpy --opt-strategy=usc,oll')
@@ -161,10 +161,10 @@ def get_cofs_weighted(draft, seeds, targets, cofactors):
     return best_model #models[0]
 
 def get_intersection_of_optimal_solutions_cof(draft, seeds, targets, cofactors, optimum, weighted=False):
-    draft_f = draft.to_file()
-    seed_f =  seeds.to_file()
-    targets_f =  targets.to_file()
-    cofactors_f =  cofactors.to_file()
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    targets_f =  utils.to_file(targets)
+    cofactors_f =  utils.to_file(cofactors)
     if weighted:
         prg = [cof_w_prg, draft_f, seed_f, targets_f, cofactors_f]
     else:
@@ -184,10 +184,10 @@ def get_intersection_of_optimal_solutions_cof(draft, seeds, targets, cofactors, 
 
 
 def get_union_of_optimal_solutions_cof(draft, seeds, targets, cofactors, optimum, weighted=False):
-    draft_f = draft.to_file()
-    seed_f =  seeds.to_file()
-    targets_f =  targets.to_file()
-    cofactors_f =  cofactors.to_file()
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    targets_f =  utils.to_file(targets)
+    cofactors_f =  utils.to_file(cofactors)
     if weighted:
         prg = [cof_w_prg, draft_f, seed_f, targets_f, cofactors_f]
     else:
@@ -207,10 +207,10 @@ def get_union_of_optimal_solutions_cof(draft, seeds, targets, cofactors, optimum
 
 
 def get_optimal_solutions_cof(draft, seeds, targets, cofactors, optimum, weighted, nmodels=0):
-    draft_f = draft.to_file()
-    seed_f =  seeds.to_file()
-    targets_f =  targets.to_file()
-    cofactors_f =  cofactors.to_file()
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    targets_f =  utils.to_file(targets)
+    cofactors_f =  utils.to_file(cofactors)
     if weighted:
         prg = [cof_w_prg, draft_f, seed_f, targets_f, cofactors_f]
     else:
