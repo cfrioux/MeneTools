@@ -19,12 +19,12 @@ from setuptools import setup
 
 setup(
     name             = 'MeneTools',
-    version          = '1.1.3',
+    version          = '2.0.0',
     url              = 'https://github.com/cfrioux/MeneTools',
     download_url     = 'https://github.com/cfrioux/MeneTools/tarball/1.0.4',
     license          = 'GPLv3+',
     description      = 'Metabolic Network Topology Analysis Tools',
-    long_description = 'Python 3 Metabolic Network Topology Tools. Analyze the \
+    long_description = 'Python 3.6 Metabolic Network Topology Tools. Analyze the \
 topology of metabolic networks. Explore producibility, production paths and \
 needed initiation sources. \
 More information on usage and troubleshooting on Github: https://github.com/cfrioux/MeneTools',
@@ -36,5 +36,5 @@ More information on usage and troubleshooting on Github: https://github.com/cfri
     #scripts          = ['menetools/menecof.py','menetools/menescope.py','menetools/menepath.py','menetools/menecheck.py'],
     entry_points     = {'console_scripts': ['menecheck = menetools.__main__:main_menecheck', 'menecof = menetools.__main__:main_menecof',
                                             'menepath = menetools.__main__:main_menepath', 'menescope = menetools.__main__:main_menescope']},
-    install_requires = ['pyasp == 1.4.3']
+    install_requires = ['clyngor_with_clingo']
 )

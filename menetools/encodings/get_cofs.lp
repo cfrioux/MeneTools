@@ -27,10 +27,10 @@
 
     newly_prod(M) :- target(M), xscope(M), not dscope(M).
 
+    %minimize the number of cofactors which are actually targets
+        #minimize { 1@3, M : needed_cof(M), target(M)}.
     %minimize the number of unproducible targets
         #minimize { 1@2,M : still_unprod(M) ; 0@3}.
-    %minimize the number of cofactors which are actually targets
-        #minimize { 1@3, M : needed_cof(M,_), target(M)}.
     %minimize the number of cofcators
         #minimize { 1@1,R : needed_cof(R)}.
 

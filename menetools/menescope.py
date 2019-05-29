@@ -7,7 +7,8 @@ import inspect
 import os
 import logging
 from menetools import utils, query, sbml
-from pyasp.asp import *
+from clyngor import as_pyasp
+
 from xml.etree.ElementTree import ParseError
 
 logger = logging.getLogger(__name__)
@@ -41,32 +42,34 @@ def run_menescope(draft_sbml,seeds_sbml,quiet=False):
     """
     logger.info('Reading draft network from ' + draft_sbml)
     try:
-        draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+        draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     except FileNotFoundError:
         logger.critical("File not found: " + draft_sbml)
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: "+draft_sbml)
+        logger.critical("Invalid syntax in SBML file: " + draft_sbml)
         sys.exit(1)
 
     logger.info('Reading seeds from ' + seeds_sbml)
     try:
-        seeds = sbml.readSBMLspecies(seeds_sbml,'seed')
+        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
     except FileNotFoundError:
-        logger.critical("File not found: "+targets_sbml)
+        logger.critical("File not found: " + targets_sbml)
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: "+targets_sbml)
+        logger.critical("Invalid syntax in SBML file: " + targets_sbml)
         sys.exit(1)
 
     logger.info('\nChecking draft network scope')
     sys.stdout.flush()
     model = query.get_scope(draftnet, seeds)
-    logger.info(' ' + str(len(model)) + ' compounds on scope:')
-    utils.print_met(model.to_list())
-    utils.clean_up()
-
-    scope = [str(p.arg(0)).rstrip('"').lstrip('"') for p in model]
+    scope = []
+    for pred in model:
+        if pred == 'dscope':
+            for a in model[pred, 1]:
+                scope.append(a[0])
+    logger.info(' ' + str(len(scope)) + ' compounds on scope:')
+    print('\n'.join(scope))
 
     return scope
 

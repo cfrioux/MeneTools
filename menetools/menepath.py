@@ -7,8 +7,8 @@ import inspect
 import os
 
 from menetools import utils, query, sbml
-from pyasp.asp import *
-from pyasp.term import *
+from clyngor import as_pyasp
+from clyngor.as_pyasp import TermSet, Atom
 
 
 def cmd_menepath():
@@ -57,55 +57,75 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
 
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
-    draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+    draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     print('done.')
 
     print('Reading seeds from ', seeds_sbml, '...', end='')
     sys.stdout.flush()
-    seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
+    seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, 'seed')
     print('done.')
 
     print('Reading targets from ', targets_sbml, '...', end='')
     sys.stdout.flush()
-    targets = sbml.readSBMLspecies(targets_sbml, 'target')
+    targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
     print('done.')
 
     print('\nChecking network for unproducible targets ...', end=' ')
     sys.stdout.flush()
     model = query.get_unproducible(draftnet, targets, seeds)
     print('done.')
-    unproducible_targets = TermSet()
-    producible_targets = TermSet()
+    # unproducible_targets_atoms = set()
+    producible_targets_atoms = set()
+    unproducible_targets_lst = []
 
-    for p in model:
-        if p.pred() == "unproducible_target":
-            tgt = p.arg(0)
-            unproducible_targets.add(Term('unproducible_targets', [tgt]))
-        elif p.pred() == "producible_target":
-            tgt = p.arg(0)
-            producible_targets.add(Term('target', [tgt]))
+    for pred in model :
+        if pred == 'unproducible_target':
+            for a in model[pred, 1]:
+                # unproducible_targets_atoms.add(Atom('unproducible_targets', ['"'+a[0]+'"']))
+                unproducible_targets_lst.append(a[0])
+        elif pred == 'producible_target':
+            for a in model[pred, 1]:
+                producible_targets_atoms.add(Atom('target', ['"'+a[0]+'"']))
 
-    print(' ',len(unproducible_targets),'unproducible targets:')
-    utils.print_met(model.to_list())
+    print(' ',len(unproducible_targets_lst),'unproducible targets:')
+    print("\n".join(unproducible_targets_lst))
 
-    for t in producible_targets:
+    for t in producible_targets_atoms:
         print('\n')
-        print(t)
         single_target = TermSet()
         single_target.add(t)
-
-        draftfact  = String2TermSet('draft("draft")')
-        lp_instance   = TermSet(draftnet.union(draftfact).union(single_target).union(seeds))
+        print(single_target)
+        draft_str = 'draft'
+        draftfact = TermSet()
+        draftatom = Atom('draft', ["\""+draft_str+"\""])
+        draftfact.add(draftatom)
+        lp_instance   = TermSet.union(draftnet,draftfact,single_target,seeds)
 
     # one solution, minimal or not, depending on option
         if min_size:
             print('\nComputing one solution of cardinality-minimal production paths for ', t)
         else:
             print('\nComputing one solution of production paths for',t,)
+        # """
         one_model = query.get_paths(lp_instance, min_size)
+        one_path = []
+        for pred in one_model[0]:
+            if pred == 'selected':
+                for a in one_model[0][pred, 2]:
+                    one_path.append(a[0])
+        optimum = one_model[1]
+        if optimum:
+            optimum = ','.join(map(str, optimum))
+        print('Solution size ',len(one_path), ' reactions')
+        print('\n'.join(one_path))
+        # """
+        """
+        one_model = query.get_paths(lp_instance, min_size)
+        print(one_model.score)
         optimum = one_model.score
         print('Solution size ',len(one_model), ' reactions')
         utils.print_met(one_model.to_list())
+        """
 
     # union of solutions
         if min_size:
@@ -113,8 +133,14 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         else:
             print('\nComputing union of production paths for',t,)
         union = query.get_union_of_paths(lp_instance, optimum, min_size)
-        print('Union size ',len(union), ' reactions')
-        utils.print_met(union.to_list())
+        union_model = union[0]
+        union_path = []
+        for pred in union_model:
+            if pred == 'selected':
+                for a in union_model[pred, 2]:
+                    union_path.append(a[0])
+        print('Union size ',len(union_path), ' reactions')
+        print('\n'.join(union_path))
 
     # intersection of solutions
         if min_size:
@@ -122,8 +148,14 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         else:
             print('\nComputing intersection of production paths for',t,)
         intersection = query.get_intersection_of_paths(lp_instance, optimum, min_size)
-        print('Intersection size (essential reactions) ',len(intersection), ' reactions')
-        utils.print_met(intersection.to_list())
+        intersection_model = intersection[0]
+        intersection_path = []
+        for pred in intersection_model:
+            if pred == 'selected':
+                for a in intersection_model[pred, 2]:
+                    intersection_path.append(a[0])
+        print('Intersection size ',len(intersection_path), ' reactions')
+        print('\n'.join(intersection_path))
 
     # if wanted, get enumeration of all solutions
         if enumeration:
@@ -133,17 +165,24 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
                 print('\nComputing all production paths for ', t, ' - ', optimum)
 
             all_models = query.get_all_paths(lp_instance, optimum, min_size)
+            all_models_lst = []
             count = 1
             for model in all_models:
-                print('\nSolution '+str(count) + ' of size :' + str(len(model)) + ' reactions:')
+                current_enum_path=[]
+                for pred in model[0]:
+                    if pred == 'selected':
+                        for a in model[0][pred, 2]:
+                            current_enum_path.append(a[0])
+                print('\nSolution '+str(count) + ' of size :' + str(len(current_enum_path)) + ' reactions:')
                 count+=1
-                utils.print_met(model.to_list())
+                print('\n'.join(current_enum_path))
+                all_models_lst.append(current_enum_path)
             utils.clean_up()
-            return all_models, unproducible_targets, one_model, union, intersection
+            return all_models_lst, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
 
-
+    #TODO store for all targets
     utils.clean_up()
-    return model, unproducible_targets, one_model, union, intersection
+    return model, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
 
 if __name__ == '__main__':
     cmd_menepath()

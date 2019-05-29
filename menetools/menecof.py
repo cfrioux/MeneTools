@@ -7,8 +7,8 @@ import inspect
 import os
 
 from menetools import utils, query, sbml
-from pyasp.asp import *
-
+from clyngor import as_pyasp
+from clyngor.as_pyasp import TermSet, Atom
 
 def convert_to_coded_id(uncoded):
     """encode str components
@@ -86,20 +86,20 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     """
     print('Reading draft network from ', draft_sbml, '...', end='')
     sys.stdout.flush()
-    draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+    draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     #print(draftnet)
     print('done.')
 
     print('Reading seeds from ', seeds_sbml, '...', end='')
     sys.stdout.flush()
-    seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
+    seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, 'seed')
     #print(seeds)
     print('done.')
     #seeds.to_file("seeds.lp")
 
     print('Reading targets from ', targets_sbml, '...', end='')
     sys.stdout.flush()
-    targets = sbml.readSBMLspecies(targets_sbml, 'target')
+    targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
     #print(targets)
     print('done.')
     #targets.to_file("targets.lp")
@@ -151,22 +151,28 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
         species_and_weights = sbml.make_weighted_list_of_species(draft_sbml)
         cofactors = TermSet()
         for elem in species_and_weights:
-            cofactors.add(Term('cofactor', ["\""+elem+"\"", species_and_weights[elem]]))
+            cofactors.add(Atom('cofactor', ["\""+elem+"\"",+species_and_weights[elem]]))
+        print(cofactors)
         weights = True
 
     print('\nChecking draft network for unproducible targets before cofactors selection ...', end='')
     sys.stdout.flush()
     model = query.get_unproducible(draftnet, targets, seeds)
-    unprod = [p.arg(0) for p in model if p.pred() == 'unproducible_target']
+    unprod = []
+    for pred in model :
+        if pred == 'unproducible_target':
+            for a in model[pred, 1]:
+                unprod.append(a[0])
     print('done.')
     print(' ',len(unprod),'unproducible targets:')
-    utils.print_met(model.to_list())
+    print('\n'.join(unprod))
 
     print('\nChecking minimal sets of cofactors to produce all targets ...', end='')
     sys.stdout.flush()
     if weights:
         model = query.get_cofs_weighted(draftnet, targets, seeds, cofactors)
-        optimum = model.score
+        optimum = model[1]
+        # optimum = model.score
         if len(optimum) == 2:
             # it means that all targets can be produced with the selected cofactors
             optimum = [0] + optimum
@@ -175,30 +181,45 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
 
     else:
         model = query.get_cofs(draftnet, targets, seeds, cofactors)
-        optimum = model.score
+        # optimum = model.score
+        optimum = model[1]
         if len(optimum) == 1:
             # it means that all targets can be produced with the selected cofactors
             optimum = [0] + optimum
         optimum = ','.join(map(str, optimum))
     #print('done.')
     print('Optimum score {}'.format(optimum))
-    solumodel = model.to_list()
+    # solumodel = model.to_list()
     unproduced_targets = []
     chosen_cofactors = []
     newly_producible_targets = []
-    for p in solumodel:
-        if p.pred() == "needed_cof":
-            cof = p.arg(0)
-            try:
-                weight = p.arg(1)
-            except:
-                weight = None
-            chosen_cofactors.append((cof,weight))
-        elif p.pred() == "still_unprod":
-            tgt = p.arg(0)
-            unproduced_targets.append(tgt)
-        else:
-            newly_producible_targets.append(p.arg(0))
+    for pred in model[0]:
+        if pred == 'needed_cof':
+            if model[0][pred, 2]:
+                for a in model[0][pred, 2]:
+                    chosen_cofactors.append((a[0],a[1]))
+            else:
+                for a in model[0][pred, 1]:
+                    chosen_cofactors.append((a[0],None))
+        elif pred == 'still_unprod':
+            for a in model[0][pred, 1]:
+                unproduced_targets.append(a[0])
+        elif pred == 'newly_prod':
+            for a in model[0][pred, 1]:
+                newly_producible_targets.append(a[0])
+    # for p in solumodel:
+    #     if p.pred() == "needed_cof":
+    #         cof = p.arg(0)
+    #         try:
+    #             weight = p.arg(1)
+    #         except:
+    #             weight = None
+    #         chosen_cofactors.append((cof,weight))
+    #     elif p.pred() == "still_unprod":
+    #         tgt = p.arg(0)
+    #         unproduced_targets.append(tgt)
+    #     else:
+    #         newly_producible_targets.append(p.arg(0))
     print('Still '+ str(len(unproduced_targets)) + ' unproducible targets:')
     print(*unproduced_targets, sep='\n')
     print('\nSelected cofactors:')
@@ -206,77 +227,87 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
         if cofactor[1] == None:
             print(cofactor[0])
         else:
-            print(cofactor[0] + ' (' + cofactor[1] + ')')
+            print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
     print('\n' + str(len(newly_producible_targets))+' newly producible targets:')
     print(str(newly_producible_targets))
 
 
     print('\nIntersection of solutions') # with size', optimum, '
-    intersection_model = query.get_intersection_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
-    solumodel = intersection_model.to_list()
+    intersection = query.get_intersection_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+    # solumodel = intersection_model.to_list()
     intersection_icofactors = []
-    for p in solumodel:
-        if p.pred() == "needed_cof":
-            cof = p.arg(0)
-            try:
-                weight = p.arg(1)
-            except:
-                weight = None
-            intersection_icofactors.append((cof,weight))
+    # for p in solumodel:
+    #     if p.pred() == "needed_cof":
+    #         cof = p.arg(0)
+    #         try:
+    #             weight = p.arg(1)
+    #         except:
+    #             weight = None
+    #         intersection_icofactors.append((cof,weight))
         #print('\nSelected cofactors:')
+    intersection_model = intersection[0]
+    for pred in intersection_model:
+        if pred == 'needed_cof':
+            if intersection_model[pred, 2]:
+                for a in intersection_model[pred, 2]:
+                    intersection_icofactors.append((a[0],a[1]))
+            else:
+                for a in intersection_model[pred, 1]:
+                    intersection_icofactors.append((a[0],None))
     for cofactor in intersection_icofactors:
         if cofactor[1] == None:
             print(cofactor[0])
         else:
-            print(cofactor[0] + ' (' + cofactor[1] + ')')
+            print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
 
     print('\nUnion of solutions') # with size', optimum, '
-    union_model = query.get_union_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
-    solumodel = union_model.to_list()
+    union = query.get_union_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+    union_model= union[0]
     union_icofactors = []
-    for p in solumodel:
-        if p.pred() == "needed_cof":
-            cof = p.arg(0)
-            try:
-                weight = p.arg(1)
-            except:
-                weight = None
-            union_icofactors.append((cof,weight))
+    for pred in union_model:
+        if pred == 'needed_cof':
+            if union_model[pred, 2]:
+                for a in union_model[pred, 2]:
+                    union_icofactors.append((a[0],a[1]))
+            else:
+                for a in union_model[pred, 1]:
+                    union_icofactors.append((a[0],None))
         #print('\nSelected cofactors:')
     for cofactor in union_icofactors:
         if cofactor[1] == None:
             print(cofactor[0])
         else:
-            print(cofactor[0] + ' (' + cofactor[1] + ')')
+            print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
 
     if enumeration:
         print('\nComputing all completions with size ',optimum)
-        models =  query.get_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+        all_models =  query.get_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
         count = 1
-        for model in models:
+        all_models_lst = []
+        for model in all_models:
             print('\nSolution '+str(count)+':')
             count+=1
-            ccofactors = []
-            solumodel = model.to_list()
-            for p in solumodel:
-                if p.pred() == "needed_cof":
-                    cof = p.arg(0)
-                    try:
-                        weight = p.arg(1)
-                    except:
-                        weight = None
-                    ccofactors.append((cof,weight))
+            current_cofactors = []
+            for pred in model[0]:
+                if pred == 'needed_cof':
+                    if model[0][pred, 2]:
+                        for a in model[0][pred, 2]:
+                            current_cofactors.append((a[0],a[1]))
+                    else:
+                        for a in model[0][pred, 1]:
+                            current_cofactors.append((a[0],None))
             #print('\nSelected cofactors:')
-            for cofactor in ccofactors:
+            for cofactor in current_cofactors:
                 if cofactor[1] == None:
                     print(cofactor[0])
                 else:
-                    print(cofactor[0] + ' (' + cofactor[1] + ')')
+                    print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
+            all_models_lst.append(current_cofactors)
         utils.clean_up()
-        return models, optimum, union_icofactors, intersection_icofactors, chosen_cofactors, unprod, newly_producible_targets
+        return all_models_lst, optimum, set(union_icofactors), set(intersection_icofactors), set(chosen_cofactors), set(unprod), set(newly_producible_targets)
 
     utils.clean_up()
-    return model, optimum, union_icofactors, intersection_icofactors, chosen_cofactors, unprod, newly_producible_targets
+    return model, optimum, set(union_icofactors), set(intersection_icofactors), set(chosen_cofactors), set(unprod), set(newly_producible_targets)
 
 if __name__ == '__main__':
     cmd_menecof()

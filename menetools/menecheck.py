@@ -4,7 +4,7 @@ import argparse
 import sys
 import logging
 from menetools import utils, query, sbml
-from pyasp.asp import *
+from  clyngor import as_pyasp
 from xml.etree.ElementTree import ParseError
 
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
     """
     logger.info('Reading draft network from ' + draft_sbml)
     try:
-        draftnet = sbml.readSBMLnetwork(draft_sbml, 'draft')
+        draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     except FileNotFoundError:
         logger.critical("File not found: "+draft_sbml)
         sys.exit(1)
@@ -52,7 +52,7 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
 
     logger.info('Reading seeds from ' + seeds_sbml)
     try:
-        seeds = sbml.readSBMLspecies(seeds_sbml, 'seed')
+        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, 'seed')
     except FileNotFoundError:
         logger.critical("File not found: "+seeds_sbml)
         sys.exit(1)
@@ -62,7 +62,7 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
 
     logger.info('Reading targets from ' + seeds_sbml)
     try:
-        targets = sbml.readSBMLspecies(targets_sbml, 'target')
+        targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
     except FileNotFoundError:
         logger.critical("File not found: "+targets_sbml)
         sys.exit(1)
@@ -74,11 +74,13 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
     model = query.get_unproducible(draftnet, targets, seeds)
     unprod = []
     prod = []
-    for a in model :
-        if a.pred() == 'unproducible_target':
-            unprod.append(a.arg(0).rstrip('"').lstrip('"'))
-        elif a.pred() == 'producible_target':
-            prod.append(a.arg(0).rstrip('"').lstrip('"'))
+    for pred in model :
+        if pred == 'unproducible_target':
+            for a in model[pred, 1]:
+                unprod.append(a[0])
+        elif pred == 'producible_target':
+            for a in model[pred, 1]:
+                prod.append(a[0])
     logger.info(str(len(prod)) + ' producible targets:')
     logger.info('\n'.join(prod))
     logger.info(str(len(unprod)) + ' unproducible targets:')

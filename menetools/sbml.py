@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import re
-from pyasp.asp import *
+from  clyngor import as_pyasp
+from  clyngor.as_pyasp import TermSet, Atom
 import xml.etree.ElementTree as etree
 from xml.etree.ElementTree import XML, fromstring, tostring
 
@@ -118,6 +119,45 @@ def readSBMLnetwork(filename, name) :
     #print(lpfacts)
     return lpfacts
 
+def readSBMLnetwork_clyngor(filename, name) :
+    """
+    Read a SBML network and turn it into ASP-friendly data
+    """
+    all_atoms = set()
+    tree = etree.parse(filename)
+    sbml = tree.getroot()
+    model = get_model(sbml)
+
+    listOfReactions = get_listOfReactions(model)
+    for e in listOfReactions:
+        if e.tag[0] == "{":
+            uri, tag = e.tag[1:].split("}")
+        else:
+            tag = e.tag
+        if tag == "reaction":
+            reactionId = e.attrib.get("id")
+            all_atoms.add(Atom('dreaction', ["\""+reactionId+"\""])) #, "\""+name+"\""
+            if(e.attrib.get("reversible")=="true"):
+                all_atoms.add(Atom('reversible', ["\""+reactionId+"\""]))
+
+            listOfReactants = get_listOfReactants(e)
+            if listOfReactants == None :
+                print("\n Warning:",reactionId, "listOfReactants=None")
+            else:
+                for r in listOfReactants:
+                    all_atoms.add(Atom('reactant', ["\""+r.attrib.get("species")+"\"", "\""+reactionId+"\""])) #,"\""+name+"\""
+
+            listOfProducts = get_listOfProducts(e)
+            if listOfProducts == None:
+                print("\n Warning:",reactionId, "listOfProducts=None")
+            else:
+                for p in listOfProducts:
+                    all_atoms.add(Atom('product', ["\""+p.attrib.get("species")+"\"", "\""+reactionId+"\""])) #,"\""+name+"\""
+    #print(lpfacts)
+    lpfacts = TermSet(all_atoms)
+    return lpfacts
+
+
 def make_weighted_list_of_species(network):
     """
     Read a SBML network and return its list of species with weights
@@ -169,4 +209,27 @@ def readSBMLspecies(filename, speciestype) :
             tag = e.tag
         if tag == "species":
             lpfacts.add(Term(speciestype, ["\""+e.attrib.get("id")+"\""]))
+    return lpfacts
+
+def readSBMLspecies_clyngor(filename, speciestype) :
+    """
+    Read a SBML network return its species as seeds or targets
+    """
+    all_atoms = set()
+
+    tree = etree.parse(filename)
+    sbml = tree.getroot()
+    model = get_model(sbml)
+
+    listOfSpecies = get_listOfSpecies(model)
+    for e in listOfSpecies:
+        if e.tag[0] == "{":
+            uri, tag = e.tag[1:].split("}")
+        else:
+            tag = e.tag
+        if tag == "species":
+            all_atoms.add(Atom(speciestype, ["\""+e.attrib.get("id")+"\""]))
+
+    lpfacts = TermSet(all_atoms)
+
     return lpfacts

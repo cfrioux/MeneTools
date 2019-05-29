@@ -6,25 +6,16 @@ MeneTools are Python3 tools to explore the topology of metabolic network to:
 * get production paths of specific compounds (Menepath)
 * obtain compounds that if added to the seeds, would ensure the topological producibility of targets (Menecof)
 
-Required package:
-* ``pyasp`` (``pip install pyasp`` or ``pip install pyasp --no-cache-dir`` in case of ASP solvers installation issues)
+Requires **Python >= 3.6**
+
+Required package (starting from version 2.0 of the package):
+* [``Clyngor``](https://github.com/Aluriak/clyngor) or [``Clyngor_with_clingo``](https://github.com/Aluriak/clyngor-with-clingo) that includes the solvers
 
 ## Install
 
 ```
 python setup.py install
 ```
-
-**There are some known issues with the pyasp package. If obtaining such an error when running a Menetool:**
-
-``OSError: Grounder '/.../lib/python3.4/site-packages/pyasp/bin/gringo4' not found``
-
-It means that the binaries were not correctly installed for pyasp.
-These two command lines should be an efficient workaround:
-1. uninstall pyasp
-``pip uninstall pyasp``
-2. reinstall pyasp without cache
-``pip install pyasp==1.4.3 --no-cache-dir``
 
 ## MENECHECK
 
@@ -150,3 +141,7 @@ from menetools import run_menecof
 
 model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='required',cofactors_txt='optional',weights='optional',suffix='optional',enumeration='optional')
 ```
+
+## Acknowledgements
+
+Thanks [@Aluriak](https://github.com/Aluriak) for his awesome work with [Clyngor](https://github.com/Aluriak/clyngor).
