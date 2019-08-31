@@ -54,10 +54,10 @@ def run_menescope(draft_sbml,seeds_sbml,quiet=False):
     try:
         seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
     except FileNotFoundError:
-        logger.critical("File not found: " + targets_sbml)
+        logger.critical("File not found: " + seeds_sbml)
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: " + targets_sbml)
+        logger.critical("Invalid syntax in SBML file: " + seeds_sbml)
         sys.exit(1)
 
     logger.info('\nChecking draft network scope')
@@ -69,7 +69,7 @@ def run_menescope(draft_sbml,seeds_sbml,quiet=False):
             for a in model[pred, 1]:
                 scope.append(a[0])
     logger.info(' ' + str(len(scope)) + ' compounds on scope:')
-    print('\n'.join(scope))
+    logger.info('\n'.join(scope))
 
     return scope
 
