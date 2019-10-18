@@ -5,6 +5,9 @@ from  clyngor import as_pyasp
 from  clyngor.as_pyasp import TermSet, Atom
 import xml.etree.ElementTree as etree
 from xml.etree.ElementTree import XML, fromstring, tostring
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_model(sbml):
     """
