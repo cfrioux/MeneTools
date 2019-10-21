@@ -6,6 +6,7 @@ import subprocess
 from menetools import run_menecof, run_menescope, run_menecheck, run_menepath
 
 def test_menecof():
+    print("*** test menecof ***")
     unproducible_targets = set(['M_T2_c', 'M_T1_c'])
     # optimum_score = '1,2,31'
     selected_cofactors = set([('M_c_c', 1), ('M_T1_c', 2)])
@@ -24,6 +25,7 @@ def test_menecof():
     assert set(results[2]) == unions
 
 def test_menescope():
+    print("*** test menescope ***")
     scope = 8
     compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c']
     results = run_menescope('../toy/tiny_toy/draft.xml', '../toy/tiny_toy/seeds.xml')
@@ -32,6 +34,7 @@ def test_menescope():
     assert len(results) == scope
 
 def test_menecheck():
+    print("*** test menecheck ***")
     producible_targets = ['M_T3_c']
     unproducible_targets = ['M_T2_c', 'M_T1_c']
     results = run_menecheck('../toy/tiny_toy/draft.xml', '../toy/tiny_toy/seeds.xml', '../toy/tiny_toy/targets.xml')
@@ -45,6 +48,7 @@ def test_menecheck():
     assert len(unproducible_results) == len(unproducible_targets)
 
 def test_menepath():
+    print("*** test menepath ***")
     unproducible_targets = set(['M_T1_c', 'M_T2_c'])
     one_solution = set(['R_4', 'R_5', 'R_3'])
     intersections = set(['R_4', 'R_5', 'R_3'])
@@ -63,7 +67,7 @@ def test_menepath():
 
 
 test_menepath()
-test_menecheck
-test_menecof
-test_menescope
+test_menecheck()
+test_menecof()
+test_menescope()
 print('Done testing.')
