@@ -17,6 +17,12 @@ Required package (starting from version 2.0 of the package):
 python setup.py install
 ```
 
+or 
+
+```
+pip install menetools
+```
+
 ## MENECHECK
 
 Menecheck is a python3 tool to get the topologically producibility status of target compounds
