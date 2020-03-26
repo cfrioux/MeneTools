@@ -60,7 +60,7 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
         logger.critical("Invalid syntax in SBML file: "+seeds_sbml)
         sys.exit(1)
 
-    logger.info('Reading targets from ' + seeds_sbml)
+    logger.info('Reading targets from ' + targets_sbml)
     try:
         targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
     except FileNotFoundError:
