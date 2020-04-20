@@ -1,0 +1,2 @@
+clyngor>=0.3.31
+clyngor-with-clingo>=5.3
