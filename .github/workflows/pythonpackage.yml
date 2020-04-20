@@ -37,4 +37,5 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        cd test
+        pytest menetools_test.py
