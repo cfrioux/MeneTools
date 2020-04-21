@@ -1,6 +1,6 @@
 # MeneTools
 
-MeneTools are Python (3.6 and higher) tools to explore the topology of metabolic network to:
+MeneTools are Python (3.6 and higher) tools to explore the topology of a metabolic network to:
 * assess whether targets are topologically producible (Menecheck)
 * get all compounds that are topologically producible (Menescope)
 * get production paths of specific compounds (Menepath)
