@@ -1,17 +1,31 @@
-# MENETOOLS
+# MeneTools
 
-MeneTools are Python3 (3.6 and higher) tools to explore the topology of metabolic network to:
+MeneTools are Python (3.6 and higher) tools to explore the topology of metabolic network to:
 * assess whether targets are topologically producible (Menecheck)
 * get all compounds that are topologically producible (Menescope)
 * get production paths of specific compounds (Menepath)
 * obtain compounds that if added to the seeds, would ensure the topological producibility of targets (Menecof)
 
+MeneTools follows the producibility in metabolic networks as defined by the [network expansion](http://www.ncbi.nlm.nih.gov/pubmed/15712108) algorithm.
+Mainly, two rules are followed:
+* a *recursive rule*: the products of a reactions are producible if **all** reactants of this reaction are themselves producible
+* an *initiation rule*: producibility is initiated by the presence of nutrients, called *seeds*. 
+
+A metabolite that is producible from a set of nutrients is described as being "in the scope of the seeds".
+The computation is made using logic solvers (Answer Set Programming). The present modelling ignores the stoichiometry of reactions (2A + B --> C is considered equivalent to A + B --> C), and is therefore suited to non-curated or draft metabolic networks.
+
+**Menescopes** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. Lastly, **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism.
+
+If you use MeneTools, please cite: 
+
+Aite* M, Chevallier* M, Frioux* C, Trottier* C, Got J, Cortés MP, et al. Traceability, reproducibility and wiki-exploration for “à-la-carte” reconstructions of genome-scale metabolic models. PLoS Comput Biol 2018;14:e1006146. [https://doi.org/10.1371/journal.pcbi.1006146](https://doi.org/10.1371/journal.pcbi.1006146).
+
+## Install
+
 Requires **Python >= 3.6**
 
 Required package (starting from version 2.0 of the package):
 * [``Clyngor``](https://github.com/Aluriak/clyngor) or [``Clyngor_with_clingo``](https://github.com/Aluriak/clyngor-with-clingo) that includes the solvers
-
-## Install
 
 ```
 python setup.py install
@@ -150,4 +164,4 @@ model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='re
 
 ## Acknowledgements
 
-Thanks [@Aluriak](https://github.com/Aluriak) for his awesome work with [Clyngor](https://github.com/Aluriak/clyngor).
+Many thanks to [@Aluriak](https://github.com/Aluriak) for his awesome work with [Clyngor](https://github.com/Aluriak/clyngor).
