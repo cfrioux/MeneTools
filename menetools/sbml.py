@@ -8,7 +8,7 @@ import xml.etree.ElementTree as etree
 from xml.etree.ElementTree import XML, fromstring, tostring
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('menetools.sbml')
 
 def get_model(sbml):
     """

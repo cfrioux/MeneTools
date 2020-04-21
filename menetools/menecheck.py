@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 import argparse
 import sys
-import logging
 from menetools import utils, query, sbml
-from  clyngor import as_pyasp
+from clyngor import as_pyasp
 from xml.etree.ElementTree import ParseError
-
-logger = logging.getLogger(__name__)
+import logging
+logger = logging.getLogger('menetools.menecheck')
 
 def cmd_menecheck():
     """run menecheck from shell
@@ -40,34 +39,34 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
     Returns:
         list, list: model, lists of unproducible and producibile targets
     """
-    logger.info('Reading draft network from ' + draft_sbml)
+    logger.info(f'Reading draft network from {draft_sbml}')
     try:
         draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     except FileNotFoundError:
-        logger.critical("File not found: "+draft_sbml)
+        logger.critical(f'File not found: {draft_sbml}')
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: "+draft_sbml)
+        logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
 
-    logger.info('Reading seeds from ' + seeds_sbml)
+    logger.info(f'Reading seeds from {seeds_sbml}')
     try:
-        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, 'seed')
+        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
     except FileNotFoundError:
-        logger.critical("File not found: "+seeds_sbml)
+        logger.critical(f'File not found: {seeds_sbml}')
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: "+seeds_sbml)
+        logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
         sys.exit(1)
 
-    logger.info('Reading targets from ' + targets_sbml)
+    logger.info(f'Reading targets from {targets_sbml}')
     try:
         targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
     except FileNotFoundError:
-        logger.critical("File not found: "+targets_sbml)
+        logger.critical(f"File not found: {targets_sbml}")
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: "+targets_sbml)
+        logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
         sys.exit(1)
 
     logger.info('\nChecking draftnet for unproducible targets')

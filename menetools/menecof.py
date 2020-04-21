@@ -1,14 +1,18 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-
 import argparse
 import sys
 import inspect
 import os
-
-from menetools import utils, query, sbml
+import re
+from xml.etree.ElementTree import ParseError
+from .utils import clean_up
+from .query import get_unproducible, get_cofs_weighted, get_cofs, get_intersection_of_optimal_solutions_cof, get_union_of_optimal_solutions_cof, get_optimal_solutions_cof
+from .sbml import readSBMLspecies_clyngor, make_weighted_list_of_species, readSBMLnetwork_clyngor
 from clyngor import as_pyasp
 from clyngor.as_pyasp import TermSet, Atom
+import logging
+logger = logging.getLogger('menetools.menecof')
 
 def convert_to_coded_id(uncoded):
     """encode str components
@@ -84,29 +88,38 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     Returns:
         TermSet,str,TermSet,TermSet,list,list,list: ASP models and lists with cofactors and (un)producible targets
     """
-    print('Reading draft network from ', draft_sbml, '...', end='')
-    sys.stdout.flush()
-    draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
-    #print(draftnet)
-    print('done.')
+    logger.info(f'Reading draft network from {draft_sbml}')
+    try:
+        draftnet = readSBMLnetwork_clyngor(draft_sbml, 'draft')
+    except FileNotFoundError:
+        logger.critical(f'File not found: {draft_sbml}')
+        sys.exit(1)
+    except ParseError:
+        logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
+        sys.exit(1)
 
-    print('Reading seeds from ', seeds_sbml, '...', end='')
-    sys.stdout.flush()
-    seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, 'seed')
-    #print(seeds)
-    print('done.')
-    #seeds.to_file("seeds.lp")
+    logger.info(f'Reading seeds from {seeds_sbml}')
+    try:
+        seeds = readSBMLspecies_clyngor(seeds_sbml,'seed')
+    except FileNotFoundError:
+        logger.critical(f'File not found: {seeds_sbml}')
+        sys.exit(1)
+    except ParseError:
+        logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
+        sys.exit(1)
 
-    print('Reading targets from ', targets_sbml, '...', end='')
-    sys.stdout.flush()
-    targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
-    #print(targets)
-    print('done.')
-    #targets.to_file("targets.lp")
+    logger.info(f'Reading targets from {targets_sbml}')
+    try:
+        targets = readSBMLspecies_clyngor(targets_sbml, 'target')
+    except FileNotFoundError:
+        logger.critical(f"File not found: {targets_sbml}")
+        sys.exit(1)
+    except ParseError:
+        logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
+        sys.exit(1)
 
     if weights and cofactors_txt:
-        print('Reading cofactors with weights from ', cofactors_txt, '...', end='')
-        sys.stdout.flush()
+        logger.info('Reading cofactors with weights from {cofactors_txt}')
         with open(cofactors_txt,'r') as f:
             cofactors_list = f.read().splitlines()
         cofactors = TermSet()
@@ -118,22 +131,19 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                 else:
                     cofactors.add(Term('cofactor', ["\""+convert_to_coded_id(data[0]) + "\"", data[1]]))
             except:
-                print('Input cofactor file is not tabulated (at least not on every line)\
+                logger.critical('Input cofactor file is not tabulated (at least not on every line)\
                 \n Please check the file, maybe you did not mean to use --weight option?\
                 \nUnsuitable input file... Quitting program')
                 quit()
-        #print(cofactors)
-        print('done.')
-        #cofactors.to_file("cofactors.lp")
 
     elif cofactors_txt:
-        print('Reading cofactors from ', cofactors_txt)
+        looger.info('Reading cofactors from {cofactors_txt}')
         with open(cofactors_txt,'r') as f:
             cofactors_list = f.read().splitlines()
         cofactors = TermSet()
         for elem in cofactors_list:
             if '\t' in elem:
-                print('A tabulated file was given as input cofactors. \
+                logger.critical('A tabulated file was given as input cofactors. \
                 \nAre you sure you did not mean to use the weight option? \
                 \nUnsuitable input file... Quitting program')
                 quit()
@@ -141,36 +151,30 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                 cofactors.add(Term('cofactor', ["\""+convert_to_coded_id(elem) + suffix + "\""]))
             else:
                 cofactors.add(Term('cofactor', ["\""+convert_to_coded_id(elem) + "\""]))
-        #print(cofactors)
-        print('done.')
-        #cofactors.to_file("cofactors.lp")
 
     else:
-        print('No cofactor file is given as input.')
-        print('Research of cofactors will be done in the network itself')
-        species_and_weights = sbml.make_weighted_list_of_species(draft_sbml)
+        logger.warning('No cofactors file is given as input.')
+        logger.info('Research of cofactors will be done in the network itself')
+        species_and_weights = make_weighted_list_of_species(draft_sbml)
         cofactors = TermSet()
         for elem in species_and_weights:
             cofactors.add(Atom('cofactor', ["\""+elem+"\"",+species_and_weights[elem]]))
-        print(cofactors)
         weights = True
 
-    print('\nChecking draft network for unproducible targets before cofactors selection ...', end='')
-    sys.stdout.flush()
-    model = query.get_unproducible(draftnet, targets, seeds)
+    logger.info('\nChecking draft network for unproducible targets before cofactors selection ...')
+    model = get_unproducible(draftnet, targets, seeds)
     unprod = []
     for pred in model :
         if pred == 'unproducible_target':
             for a in model[pred, 1]:
                 unprod.append(a[0])
-    print('done.')
-    print(' ',len(unprod),'unproducible targets:')
-    print('\n'.join(unprod))
+    logger.info(f'{len(unprod)} unproducible targets:')
+    logger.info('\n'.join(unprod))
 
-    print('\nChecking minimal sets of cofactors to produce all targets ...', end='')
+    logger.info('\nChecking minimal sets of cofactors to produce all targets ...')
     sys.stdout.flush()
     if weights:
-        model = query.get_cofs_weighted(draftnet, targets, seeds, cofactors)
+        model = get_cofs_weighted(draftnet, targets, seeds, cofactors)
         optimum = model[1]
         # optimum = model.score
         if len(optimum) == 2:
@@ -180,15 +184,14 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
         #print(optimum)
 
     else:
-        model = query.get_cofs(draftnet, targets, seeds, cofactors)
+        model = get_cofs(draftnet, targets, seeds, cofactors)
         # optimum = model.score
         optimum = model[1]
         if len(optimum) == 1:
             # it means that all targets can be produced with the selected cofactors
             optimum = [0] + optimum
         optimum = ','.join(map(str, optimum))
-    #print('done.')
-    print('Optimum score {}'.format(optimum))
+    logger.info('Optimum score {optimum}')
     # solumodel = model.to_list()
     unproduced_targets = []
     chosen_cofactors = []
@@ -220,20 +223,20 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     #         unproduced_targets.append(tgt)
     #     else:
     #         newly_producible_targets.append(p.arg(0))
-    print('Still '+ str(len(unproduced_targets)) + ' unproducible targets:')
-    print(*unproduced_targets, sep='\n')
-    print('\nSelected cofactors:')
+    logger.info(f'Still {len(unproduced_targets)} unproducible targets:')
+    logger.info('\n'.join(unproduced_targets))
+    logger.info('\nSelected cofactors:')
     for cofactor in chosen_cofactors:
         if cofactor[1] == None:
-            print(cofactor[0])
+            logger.info(cofactor[0])
         else:
-            print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
-    print('\n' + str(len(newly_producible_targets))+' newly producible targets:')
-    print(str(newly_producible_targets))
+            logger.info(f'{cofactor[0]} ({str(cofactor[1])})')
+    logger.info(f'\n{len(newly_producible_targets)} newly producible targets:')
+    logger.info(str(newly_producible_targets))
 
 
-    print('\nIntersection of solutions') # with size', optimum, '
-    intersection = query.get_intersection_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+    logger.info('\nIntersection of solutions') # with size', optimum, '
+    intersection = get_intersection_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
     # solumodel = intersection_model.to_list()
     intersection_icofactors = []
     # for p in solumodel:
@@ -256,12 +259,12 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                     intersection_icofactors.append((a[0],None))
     for cofactor in intersection_icofactors:
         if cofactor[1] == None:
-            print(cofactor[0])
+            logger.info(cofactor[0])
         else:
-            print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
+            logger.info(f'{cofactor[0]} ({str(cofactor[1])})')
 
-    print('\nUnion of solutions') # with size', optimum, '
-    union = query.get_union_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+    logger.info('\nUnion of solutions') # with size', optimum, '
+    union = get_union_of_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
     union_model= union[0]
     union_icofactors = []
     for pred in union_model:
@@ -275,17 +278,17 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
         #print('\nSelected cofactors:')
     for cofactor in union_icofactors:
         if cofactor[1] == None:
-            print(cofactor[0])
+            logger.info(cofactor[0])
         else:
-            print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
+            logger.info(f'{cofactor[0]} ({str(cofactor[1])})')
 
     if enumeration:
-        print('\nComputing all completions with size ',optimum)
-        all_models =  query.get_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
+        logger.info(f'\nComputing all solutions with size {optimum}')
+        all_models =  get_optimal_solutions_cof(draftnet, seeds, targets, cofactors, optimum, weights)
         count = 1
         all_models_lst = []
         for model in all_models:
-            print('\nSolution '+str(count)+':')
+            logger.info(f'\nSolution {str(count)}:')
             count+=1
             current_cofactors = []
             for pred in model[0]:
@@ -299,14 +302,14 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
             #print('\nSelected cofactors:')
             for cofactor in current_cofactors:
                 if cofactor[1] == None:
-                    print(cofactor[0])
+                    logger.info(cofactor[0])
                 else:
-                    print(cofactor[0] + ' (' + str(cofactor[1]) + ')')
+                    logger.info(f'{cofactor[0]} ({str(cofactor[1])})')
             all_models_lst.append(current_cofactors)
-        utils.clean_up()
+        clean_up()
         return all_models_lst, optimum, set(union_icofactors), set(intersection_icofactors), set(chosen_cofactors), set(unprod), set(newly_producible_targets)
 
-    utils.clean_up()
+    clean_up()
     return model, optimum, set(union_icofactors), set(intersection_icofactors), set(chosen_cofactors), set(unprod), set(newly_producible_targets)
 
 if __name__ == '__main__':

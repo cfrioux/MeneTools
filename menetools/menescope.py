@@ -5,13 +5,11 @@ import argparse
 import sys
 import inspect
 import os
-import logging
 from menetools import utils, query, sbml
 from clyngor import as_pyasp
-
 from xml.etree.ElementTree import ParseError
-
-logger = logging.getLogger(__name__)
+import logging
+logger = logging.getLogger('menetools.menescope')
 
 def cmd_menescope():
     """run menescope from shell
@@ -40,24 +38,24 @@ def run_menescope(draft_sbml,seeds_sbml,quiet=False):
     Returns:
         list: producible compounds
     """
-    logger.info('Reading draft network from ' + draft_sbml)
+    logger.info(f'Reading draft network from {draft_sbml}')
     try:
         draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
     except FileNotFoundError:
-        logger.critical("File not found: " + draft_sbml)
+        logger.critical(f'File not found: {draft_sbml}')
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: " + draft_sbml)
+        logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
 
-    logger.info('Reading seeds from ' + seeds_sbml)
+    logger.info(f'Reading seeds from {seeds_sbml}')
     try:
         seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
     except FileNotFoundError:
-        logger.critical("File not found: " + seeds_sbml)
+        logger.critical(f'File not found: {seeds_sbml}')
         sys.exit(1)
     except ParseError:
-        logger.critical("Invalid syntax in SBML file: " + seeds_sbml)
+        logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
         sys.exit(1)
 
     logger.info('\nChecking draft network scope')

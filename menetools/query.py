@@ -1,8 +1,10 @@
 import os
 import tempfile
 import clyngor
+import logging
 from menetools import utils
 
+logger = logging.getLogger('menetools.query')
 
 root = __file__.rsplit('/', 1)[0]
 
@@ -106,9 +108,13 @@ def get_all_paths(instance, optimum, min_bool, nmodels=0):
         options = '--configuration handy --opt-strategy=usc,oll --opt-mode=enum'
     # solver = Gringo4Clasp(clasp_options=options)
     # models = solver.run(prg, collapseTerms=True, collapseAtoms=False)
-    models = clyngor.solve(prg, options=options, nb_model=nmodels)
-    allmodels = [model for model in models.by_arity.with_optimization]
-    os.unlink(instance_f)
+    models = clyngor.solve(prg, options=options, nb_model=nmodels).by_arity
+    if min_bool:
+        allmodels = clyngor.opt_models_from_clyngor_answers(models)
+    else:
+        allmodels = models
+    # allmodels = [model for model in models.by_arity.with_optimization]
+    # os.unlink(instance_f)
     return allmodels
 
 def get_cofs(draft, seeds, targets, cofactors):

@@ -16,20 +16,29 @@
 # along with menetools.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
 from setuptools import setup
+import menetools
 
 setup(
     name             = 'MeneTools',
-    version          = '2.0.4',
+    version          = menetools.__version__,
     url              = 'https://github.com/cfrioux/MeneTools',
-    download_url     = 'https://github.com/cfrioux/MeneTools/tarball/2.0.4',
+    download_url     = f'https://github.com/cfrioux/MeneTools/tarball/{menetools.__version__}',
     license          = 'GPLv3+',
     description      = 'Metabolic Network Topology Analysis Tools',
-    long_description = 'Python 3.6 Metabolic Network Topology Tools. Analyze the \
+    long_description = 'Python Metabolic Network Topology Tools. Analyze the \
 topology of metabolic networks. Explore producibility, production paths and \
 needed initiation sources. \
 More information on usage and troubleshooting on Github: https://github.com/cfrioux/MeneTools',
     author           = 'Clemence Frioux',
-    author_email     = 'clemence.frioux@gmail.com',
+    author_email     = 'clemence.frioux@inria.fr',
+    classifiers      =[
+                            'Programming Language :: Python :: 3.6',
+                            'Programming Language :: Python :: 3.6',
+                            'Programming Language :: Python :: 3.7',
+                            'Programming Language :: Python :: 3.8',
+                            'Operating System :: MacOS :: MacOS X',
+                            'Operating System :: Unix',
+                        ],
     packages         = ['menetools'],
     package_dir      = {'menetools' : 'menetools'},
     package_data     = {'menetools' : ['encodings/*.lp']},

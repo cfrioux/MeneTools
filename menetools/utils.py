@@ -3,7 +3,7 @@ import os
 import logging
 import tempfile
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('menetools.utils')
 
 
 def clean_up() :
