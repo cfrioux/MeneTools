@@ -108,7 +108,7 @@ optional arguments:
 ```
 
 ```python
-from menetools import run_menescope
+from menetools import run_menepath
 
 model = run_menepath(draft_sbml='required',seeds_sbml='required',targets_sbml='required',min_size='optional',enumeration='optional')
 ```
