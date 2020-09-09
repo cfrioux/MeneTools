@@ -3,7 +3,7 @@
 
 import subprocess
 
-from menetools import run_menecof, run_menescope, run_menecheck, run_menepath
+from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti
 
 def test_menecof():
     print("*** test menecof ***")
@@ -32,6 +32,16 @@ def test_menescope():
 
     assert set(results) == set(compounds)
     assert len(results) == scope
+
+def test_meneacti():
+    print("*** test meneacti ***")
+    activ = 7
+    reactions = ['R_boundary', 'R_import_S', 'R_7', 'R_5', 'R_4', 'R_3', 'R_6']
+    results = run_meneacti('../toy/tiny_toy/draft.xml', '../toy/tiny_toy/seeds.xml')
+
+    assert set(results) == set(reactions)
+    assert len(results) == activ
+
 
 def test_menecheck():
     print("*** test menecheck ***")

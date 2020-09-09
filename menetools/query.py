@@ -9,6 +9,7 @@ logger = logging.getLogger('menetools.query')
 root = __file__.rsplit('/', 1)[0]
 
 scope_prg = root + '/encodings/get_scope.lp'
+acti_prg = root + '/encodings/get_activated.lp'
 unproducible_prg = root + '/encodings/get_unproducible_targets.lp'
 path_prg = root + '/encodings/get_paths.lp'
 min_path_prg = root + '/encodings/get_min_paths.lp'
@@ -22,6 +23,19 @@ def get_scope(draft, seeds):
     options = ''
     # solver = Gringo4Clasp()
     # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
+    best_model = None
+    models = clyngor.solve(prg, options=options)
+    for model in models.discard_quotes.by_arity:
+        best_model = model
+    os.unlink(draft_f)
+    os.unlink(seed_f)
+    return best_model
+
+def get_acti(draft, seeds):
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    prg = [acti_prg, draft_f, seed_f]
+    options = ''
     best_model = None
     models = clyngor.solve(prg, options=options)
     for model in models.discard_quotes.by_arity:

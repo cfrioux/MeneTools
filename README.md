@@ -14,7 +14,7 @@ Mainly, two rules are followed:
 A metabolite that is producible from a set of nutrients is described as being "in the scope of the seeds".
 The computation is made using logic solvers (Answer Set Programming). The present modelling ignores the stoichiometry of reactions (2A + B --> C is considered equivalent to A + B --> C), and is therefore suited to non-curated or draft metabolic networks.
 
-**Menescopes** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. Lastly, **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism.
+**Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. Lastly, **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism.
 
 If you use MeneTools, please cite: 
 
@@ -66,6 +66,30 @@ model = run_menecheck(draft_sbml='required',seeds_sbml='required',targets_sbml='
 ## MENESCOPE
 
 Menescope is a python3 tool to get the topologically reachable compounds from
+seeds in a metabolic network.
+
+### usage
+
+```
+menescope [-h] -d DRAFTNET -s SEEDS
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DRAFTNET, --draftnet DRAFTNET
+                        metabolic network in SBML format
+  -s SEEDS, --seeds SEEDS
+                        seeds in SBML format
+```
+
+```python
+from menetools import run_menescope
+
+model = run_menescope(draft_sbml='required',seeds_sbml='required')
+```
+
+## MENEACTI
+
+Meneacti is a python3 tool that retrieve the activable reactions from
 seeds in a metabolic network.
 
 ### usage

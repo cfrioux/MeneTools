@@ -12,10 +12,10 @@
 </listOfUnitDefinitions>
 <listOfCompartments>
 <compartment id="C_c" name="C_c"/>
-<compartment id="C_c" name="C_b"/>
+<compartment id="C_b" name="C_b"/>
 </listOfCompartments>
 <listOfSpecies>
-  <species id="M_S_c" name="M_T2_c" compartment="C_c"/>
+  <species id="M_S_c" name="M_S_c" compartment="C_c"/>
 </listOfSpecies>
 <listOfReactions>
 </listOfReactions>
