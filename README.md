@@ -1,3 +1,5 @@
+[![PyPI version](https://img.shields.io/pypi/v/menetools.svg)](https://pypi.org/project/MeneTools/) [![GitHub license](https://img.shields.io/github/license/cfrioux/menetools.svg)](https://github.com/MeneTools/MeneTools/blob/master/LICENSE) [![Actions Status](https://github.com/cfrioux/MeneTools/workflows/Python%20package/badge.svg)](https://github.com/cfrioux/MeneTools/actions) [![](https://img.shields.io/badge/doi-10.1371/journal.pcbi.1006146-blueviolet.svg)](https://doi.org/10.1371/journal.pcbi.1006146)
+
 # MeneTools
 
 MeneTools are Python (3.6 and higher) tools to explore the producibility potential in a metabolic network using the network expansion algorithm. The MeneTools can:
