@@ -1,10 +1,11 @@
 # MeneTools
 
-MeneTools are Python (3.6 and higher) tools to explore the topology of a metabolic network to:
-* assess whether targets are topologically producible (Menecheck)
-* get all compounds that are topologically producible (Menescope)
+MeneTools are Python (3.6 and higher) tools to explore the producibility potential in a metabolic network using the network expansion algorithm. The MeneTools can:
+* assess whether targets are producible starting from nutrients (Menecheck)
+* get all compounds that are producible starting from nutrients (Menescope)
+* get all reactions that are activable from nutrients (Meneacti)
 * get production paths of specific compounds (Menepath)
-* obtain compounds that if added to the seeds, would ensure the topological producibility of targets (Menecof)
+* obtain compounds that if added to the nutrients, would ensure the producibility of targets (Menecof)
 
 MeneTools follows the producibility in metabolic networks as defined by the [network expansion](http://www.ncbi.nlm.nih.gov/pubmed/15712108) algorithm.
 Mainly, two rules are followed:
