@@ -59,7 +59,7 @@ subcommands:
   {acti,check,cof,path,scope}
     acti                Get activable reactions in a metabolic network,
                         starting from seeds.
-    check               Checks the producibility of targets from seeds in a
+    check               Check the producibility of targets from seeds in a
                         metabolic network.
     cof                 Propose cofactor whose producibility could unblock the
                         producibility of targets.

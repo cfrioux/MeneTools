@@ -157,7 +157,7 @@ def main():
 
     check_parser = subparsers.add_parser(
         "check",
-        help="Checks the producibility of targets from seeds in a metabolic network.",
+        help="Check the producibility of targets from seeds in a metabolic network.",
         parents=[
             parent_parser_d, parent_parser_s, parent_parser_t, parent_parser_o
         ]
