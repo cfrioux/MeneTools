@@ -19,7 +19,7 @@ from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
 from shutil import which
 
-VERSION = pkg_resources.get_distribution("miscoto").version
+VERSION = pkg_resources.get_distribution("menetools").version
 LICENSE = """Copyright (C) Dyliss
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 MeneTools is free software: you are free to change and redistribute it.
@@ -37,7 +37,7 @@ logger.setLevel(logging.DEBUG)
 
 # Check ASP binaries.
 if not which('clingo'):
-    logger.critical('clingo is not in the Path, miscoto can not work without it.')
+    logger.critical('clingo is not in the Path, menetools can not work without it.')
     logger.critical('You can install with: pip install clyngor-with-clingo')
     sys.exit(1)
 
@@ -48,7 +48,7 @@ def main():
     start_time = time.time()
     parser = argparse.ArgumentParser(
         "mene",
-        description=MESSAGE + " For specific help on each subcommand use: miscoto {cmd} --help",
+        description=MESSAGE + " For specific help on each subcommand use: mene {cmd} --help",
         epilog=REQUIRES
     )
     parser.add_argument(
@@ -207,6 +207,6 @@ def main():
     elif args.cmd == "scope":
         run_menescope(args.draftnet, args.seeds, args.output)
     else:
-        logger.critical("Invalid commands for miscoto.")
+        logger.critical("Invalid commands for mene.")
         parser.print_help()
         sys.exit(1)

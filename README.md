@@ -45,8 +45,9 @@ pip install menetools
 ```
 usage: mene [-h] [-v] {acti,check,cof,path,scope} ...
 
-Explore microbiomes and select minimal communities within them. For specific
-help on each subcommand use: miscoto {cmd} --help
+Explore the producibility potential in a metabolic network using the network
+expansion algorithm. For specific help on each subcommand use: mene {cmd}
+--help
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -68,6 +69,7 @@ subcommands:
                         starting from seeds.
 
 Requires Clingo and clyngor package: "pip install clyngor clyngor-with-clingo"
+
 ```
 
 ### MENECHECK
