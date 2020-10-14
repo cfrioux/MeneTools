@@ -43,8 +43,6 @@ More information on usage and troubleshooting on Github: https://github.com/cfri
     package_dir      = {'menetools' : 'menetools'},
     package_data     = {'menetools' : ['encodings/*.lp']},
     #scripts          = ['menetools/menecof.py','menetools/menescope.py','menetools/menepath.py','menetools/menecheck.py'],
-    entry_points     = {'console_scripts': ['menecheck = menetools.__main__:main_menecheck', 'menecof = menetools.__main__:main_menecof',
-                                            'menepath = menetools.__main__:main_menepath', 'menescope = menetools.__main__:main_menescope',
-                                            'meneacti = menetools.__main__:main_meneacti']},
+    entry_points     = {'console_scripts': ['mene = menetools.__main__:main']},
     install_requires = ['clyngor_with_clingo']
 )

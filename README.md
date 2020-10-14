@@ -40,14 +40,42 @@ or
 pip install menetools
 ```
 
-## MENECHECK
+## Usage
+
+```
+usage: mene [-h] [-v] {acti,check,cof,path,scope} ...
+
+Explore microbiomes and select minimal communities within them. For specific
+help on each subcommand use: miscoto {cmd} --help
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+
+subcommands:
+  valid subcommands:
+
+  {acti,check,cof,path,scope}
+    acti                Get activable reactions in a metabolic network,
+                        starting from seeds.
+    check               Checks the producibility of targets from seeds in a
+                        metabolic network.
+    cof                 Propose cofactor whose producibility could unblock the
+                        producibility of targets.
+    path                Get production pathways of targets in metabolic
+                        networks, started from seeds.
+    scope               Get producible metabolites in a metabolic network,
+                        starting from seeds.
+
+Requires Clingo and clyngor package: "pip install clyngor clyngor-with-clingo"
+```
+
+### MENECHECK
 
 Menecheck is a python3 tool to get the topologically producibility status of target compounds
 
-### usage
-
 ```
-menecheck [-h] -d DRAFTNET -s SEEDS -t TARGETS
+usage: mene check [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--output OUTPUT]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -57,24 +85,23 @@ optional arguments:
                         seeds in SBML format
   -t TARGETS, --targets TARGETS
                         targets in SBML format
+  --output OUTPUT       output file for instance
 ```
 
 
 ```python
 from menetools import run_menecheck
 
-model = run_menecheck(draft_sbml='required',seeds_sbml='required',targets_sbml='required')
+model = run_menecheck(draft_sbml='required',seeds_sbml='required',targets_sbml='required',output='optional')
 ```
 
-## MENESCOPE
+### MENESCOPE
 
 Menescope is a python3 tool to get the topologically reachable compounds from
 seeds in a metabolic network.
 
-### usage
-
 ```
-menescope [-h] -d DRAFTNET -s SEEDS
+usage: mene scope [-h] -d DRAFTNET -s SEEDS [--output OUTPUT]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -82,23 +109,22 @@ optional arguments:
                         metabolic network in SBML format
   -s SEEDS, --seeds SEEDS
                         seeds in SBML format
+  --output OUTPUT       output file for instance
 ```
 
 ```python
 from menetools import run_menescope
 
-model = run_menescope(draft_sbml='required',seeds_sbml='required')
+model = run_menescope(draft_sbml='required',seeds_sbml='required',output='optional')
 ```
 
-## MENEACTI
+### MENEACTI
 
 Meneacti is a python3 tool that retrieve the activable reactions from
 seeds in a metabolic network.
 
-### usage
-
 ```
-menescope [-h] -d DRAFTNET -s SEEDS
+usage: mene acti [-h] -d DRAFTNET -s SEEDS [--output OUTPUT]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -106,23 +132,23 @@ optional arguments:
                         metabolic network in SBML format
   -s SEEDS, --seeds SEEDS
                         seeds in SBML format
+  --output OUTPUT       output file for instance
 ```
 
 ```python
 from menetools import run_menescope
 
-model = run_menescope(draft_sbml='required',seeds_sbml='required')
+model = run_mene_acti(draft_sbml='required',seeds_sbml='required',output='optional')
 ```
 
-## MENEPATH
+### MENEPATH
 
 Menepath is a python3 tool to get the topologically essential reactions with
 respects to individual targets in metabolic networks.
 
-### usage
-
 ```
-menepath [-h] -d DRAFTNET -s SEEDS -t TARGETS
+usage: mene path [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--enumerate] [--min]
+                 [--output OUTPUT]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -132,12 +158,15 @@ optional arguments:
                         seeds in SBML format
   -t TARGETS, --targets TARGETS
                         targets in SBML format
+  --enumerate           enumerates all cofactors solutions
+  --min                 call this option to obtain minimal-size paths
+  --output OUTPUT       output file for instance
 ```
 
 ```python
 from menetools import run_menepath
 
-model = run_menepath(draft_sbml='required',seeds_sbml='required',targets_sbml='required',min_size='optional',enumeration='optional')
+model = run_menepath(draft_sbml='required',seeds_sbml='required',targets_sbml='required',min_size='optional',enumeration='optional',output='optional')
 ```
 
 ### MENECOF
@@ -149,44 +178,35 @@ topologically using reachable compounds from seeds.
 ### usage
 
 ```
-menecof [-h] -d DRAFTNET -s SEEDS -t TARGETS [-c COFACTORS]
-                  [--suffix SUFFIX] [--weight] [--enumerate]
+usage: mene cof [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [-c COFACTORS]
+                [--weight] [--suffix SUFFIX] [--enumerate] [--output OUTPUT]
 
-the following arguments are required: -d/--draftnet, -s/--seeds, -t/--targets
-
-optional arguments: --suffix --weight --enumerate -h/--help
-
+optional arguments:
   -h, --help            show this help message and exit
-
   -d DRAFTNET, --draftnet DRAFTNET
                         metabolic network in SBML format
-
   -s SEEDS, --seeds SEEDS
                         seeds in SBML format
-
   -t TARGETS, --targets TARGETS
                         targets in SBML format
-
   -c COFACTORS, --cofactors COFACTORS
                         cofactors, in one-per-line text file format
-
-  --suffix SUFFIX       suffix to be added to the compounds of the database.
-                        It can be the suffix for the cytosolic compartment or
-                        external one. Cytosolic one is prefered to ensure the
-                        impact of the added cofactors. Default = None
-
   --weight              call this option if cofactors are weighted according
                         to their occurrence frequency in database. If so,
                         cofactors file must be tabulated with per line
                         compound' 'occurrence
-
+  --suffix SUFFIX       suffix to be added to the compounds of the database.
+                        It can be the suffix for the cytosolic compartment or
+                        external one. Cytosolic one is prefered to ensure the
+                        impact of the added cofactors. Default = None
   --enumerate           enumerates all cofactors solutions
+  --output OUTPUT       output file for instance
 ```
 
 ```python
 from menetools import run_menecof
 
-model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='required',cofactors_txt='optional',weights='optional',suffix='optional',enumeration='optional')
+model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='required',cofactors_txt='optional',weights='optional',suffix='optional',enumeration='optional',output='optional')
 ```
 
 ## Acknowledgements
