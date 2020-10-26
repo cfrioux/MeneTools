@@ -2,38 +2,27 @@
 #-*- coding: utf-8 -*-
 
 import argparse
-import sys
 import inspect
+import json
+import logging
 import os
+import sys
+
 from menetools import utils, query, sbml
 from clyngor import as_pyasp
 from xml.etree.ElementTree import ParseError
-import logging
+
+
 logger = logging.getLogger('menetools.menescope')
 
-def cmd_menescope():
-    """run menescope from shell
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--draftnet",
-                        help="metabolic network in SBML format", required=True)
-    parser.add_argument("-s", "--seeds",
-                        help="seeds in SBML format", required=True)
 
-    args = parser.parse_args()
-
-    draft_sbml = args.draftnet
-    seeds_sbml = args.seeds
-
-    run_menescope(draft_sbml,seeds_sbml)
-
-def run_menescope(draft_sbml,seeds_sbml,quiet=False):
+def run_menescope(draft_sbml,seeds_sbml,output=None):
     """get producible metabolites in a metabolic network, starting from seeds
     
     Args:
         draft_sbml (str): SBML 2 metabolic network file
         seeds_sbml (str): SBML 2 seeds file
-        quiet (bool): boolean for a silent mode
+        output (str): path to json output file
     
     Returns:
         list: producible compounds
@@ -69,7 +58,8 @@ def run_menescope(draft_sbml,seeds_sbml,quiet=False):
     logger.info(' ' + str(len(scope)) + ' compounds on scope:')
     logger.info('\n'.join(scope))
 
-    return scope
+    if output:
+        with open(output, "w") as output_file:
+            json.dump({'scope': scope}, output_file, indent=True, sort_keys=True)
 
-if __name__ == '__main__':
-    cmd_menescope()
+    return scope

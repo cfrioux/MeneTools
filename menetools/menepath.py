@@ -2,47 +2,21 @@
 #-*- coding: utf-8 -*-
 
 import argparse
-import sys
 import inspect
+import json
+import logging
 import os
-from xml.etree.ElementTree import ParseError
-from menetools import utils, query, sbml
+import sys
+
 from clyngor import as_pyasp
 from clyngor.as_pyasp import TermSet, Atom
-import logging
+from menetools import utils, query, sbml
+from xml.etree.ElementTree import ParseError
+
 logger = logging.getLogger('menetools.menepath')
 
-def cmd_menepath():
-    """run menepath from shell
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--draftnet",
-                        help="metabolic network in SBML format", required=True)
-    parser.add_argument("-s", "--seeds",
-                        help="seeds in SBML format", required=True)
 
-    parser.add_argument("-t", "--targets",
-                        help="targets in SBML format", required=True)
-
-    parser.add_argument("--min",
-                        help="call this option to obtain minimal-size paths",
-                        required=False, action="store_true")
-
-    parser.add_argument("--enumerate",
-                        help="call this option for an enumeration of solutions",
-                        required=False, action="store_true")
-
-    args = parser.parse_args()
-
-    draft_sbml = args.draftnet
-    seeds_sbml = args.seeds
-    targets_sbml = args.targets
-    min_size = args.min
-    enumeration = args.enumerate
-
-    run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size,enumeration)
-
-def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=None):
+def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=None,output=None):
     """Get production pathways of targets in metabolic networks, started from seeds
     
     Args:
@@ -51,11 +25,12 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         targets_sbml (str): SBML 2 targets file
         min_size (bool, optional): Defaults to None. minimal size paths
         enumeration (bool, optional): Defaults to None. enumeration of all paths
-    
+        output (str): path to json output file
+
     Returns:
         [type]: [description]
     """
-
+    results = {}
     logger.info(f'Reading draft network from {draft_sbml}')
     try:
         draftnet = sbml.readSBMLnetwork_clyngor(draft_sbml, 'draft')
@@ -101,6 +76,7 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         elif pred == 'producible_target':
             for a in model[pred, 1]:
                 producible_targets_atoms.add(Atom('target', ['"'+a[0]+'"']))
+    results['unproducible_targets_lst'] = unproducible_targets_lst
 
     logger.info(f'{len(unproducible_targets_lst)} unproducible targets:')
     logger.info("\n".join(unproducible_targets_lst))
@@ -128,6 +104,7 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
             if pred == 'selected':
                 for a in one_model[0][pred, 2]:
                     one_path.append(a[0])
+        results['one_path'] = one_path
         optimum = one_model[1]
         if optimum:
             optimum = ','.join(map(str, optimum))
@@ -154,6 +131,7 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
             if pred == 'selected':
                 for a in union_model[pred, 2]:
                     union_path.append(a[0])
+        results['union_path'] = union_path
         logger.info(f'Union size {len(union_path)} reactions')
         logger.info('\n'.join(union_path))
 
@@ -169,6 +147,7 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
             if pred == 'selected':
                 for a in intersection_model[pred, 2]:
                     intersection_path.append(a[0])
+        results['intersection_path'] = intersection_path
         logger.info(f'Intersection size {len(intersection_path)} reactions')
         logger.info('\n'.join(intersection_path))
 
@@ -192,12 +171,17 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
                 count+=1
                 logger.info('\n'.join(current_enum_path))
                 all_models_lst.append(current_enum_path)
+            if output:
+                with open(output, "w") as output_file:
+                    json.dump(results, output_file, indent=True, sort_keys=True)
+
             utils.clean_up()
             return all_models_lst, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
+
+    if output:
+        with open(output, "w") as output_file:
+            json.dump(results, output_file, indent=True, sort_keys=True)
 
     #TODO store for all targets
     utils.clean_up()
     return model, set(unproducible_targets_lst), set(one_path), set(union_path), set(intersection_path)
-
-if __name__ == '__main__':
-    cmd_menepath()

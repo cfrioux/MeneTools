@@ -1,41 +1,26 @@
 #!python
 # -*- coding: utf-8 -*-
 import argparse
+import json
+import logging
 import sys
+
 from menetools import utils, query, sbml
 from clyngor import as_pyasp
 from xml.etree.ElementTree import ParseError
-import logging
+
 logger = logging.getLogger('menetools.menecheck')
 
-def cmd_menecheck():
-    """run menecheck from shell
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--draftnet",
-                        help="metabolic network in SBML format", required=True)
-    parser.add_argument("-s", "--seeds",
-                        help="seeds in SBML format", required=True)
-    parser.add_argument("-t", "--targets",
-                        help="targets in SBML format", required=True)
 
-
-    args = parser.parse_args()
-
-    draft_sbml = args.draftnet
-    seeds_sbml = args.seeds
-    targets_sbml =  args.targets
-
-    run_menecheck(draft_sbml,seeds_sbml,targets_sbml)
-
-def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
+def run_menecheck(draft_sbml,seeds_sbml,targets_sbml,output=None):
     """checks the producibility of targets from seeds in a metabolic network
     
     Args:
         draft_sbml (str): metabolic network SBML 2 file
         seeds_sbml (str): SBML 2 file
         targets_sbml (str): SBML 2 file
-    
+        output (str): path to json output file
+
     Returns:
         list, list: model, lists of unproducible and producibile targets
     """
@@ -86,9 +71,12 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml):
     logger.info(f"\n{len(unprod)} unproducible targets:")
     logger.info('\n'.join(unprod))
 
+    results = {}
+    results['producible_target'] = prod
+    results['unproducible_target'] = unprod
+    if output:
+        with open(output, "w") as output_file:
+            json.dump(results, output_file, indent=True, sort_keys=True)
 
     utils.clean_up()
     return unprod, prod
-
-if __name__ == '__main__':
-    cmd_menecheck()

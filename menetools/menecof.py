@@ -1,18 +1,23 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
+
 import argparse
-import sys
 import inspect
+import json
+import logging
 import os
 import re
-from xml.etree.ElementTree import ParseError
+import sys
+
 from .utils import clean_up
 from .query import get_unproducible, get_cofs_weighted, get_cofs, get_intersection_of_optimal_solutions_cof, get_union_of_optimal_solutions_cof, get_optimal_solutions_cof
 from .sbml import readSBMLspecies_clyngor, make_weighted_list_of_species, readSBMLnetwork_clyngor
 from clyngor import as_pyasp
 from clyngor.as_pyasp import TermSet, Atom
-import logging
+from xml.etree.ElementTree import ParseError
+
 logger = logging.getLogger('menetools.menecof')
+
 
 def convert_to_coded_id(uncoded):
     """encode str components
@@ -31,49 +36,8 @@ def convert_to_coded_id(uncoded):
         uncoded = "_" + uncoded
     return uncoded
 
-def cmd_menecof():
-    """run menecof from shell
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--draftnet",
-                        help="metabolic network in SBML format", required=True)
-    parser.add_argument("-s", "--seeds",
-                        help="seeds in SBML format", required=True)
-    parser.add_argument("-t", "--targets",
-                        help="targets in SBML format", required=True)
-    parser.add_argument("-c", "--cofactors",
-                        help="cofactors, in one-per-line text file format", required=False)
 
-    parser.add_argument("--suffix",
-                        help="suffix to be added to the compounds of the database. \
-                        It can be the suffix for the cytosolic compartment or   \
-                        external one. Cytosolic one is prefered to ensure the \
-                        impact of the added cofactors. Default = None",
-                        required=False)
-
-    parser.add_argument("--weight",
-                        help="call this option if cofactors are weighted according \
-                        to their occurrence frequency in database. If so, cofactors \
-                        file must be tabulated with per line compound'\t'occurrence",\
-                        required=False, action="store_true")
-
-    parser.add_argument("--enumerate",
-                        help="enumerates all cofactors solutions",\
-                        required=False, action="store_true")
-
-    args = parser.parse_args()
-
-    draft_sbml = args.draftnet
-    seeds_sbml = args.seeds
-    targets_sbml = args.targets
-    cofactors_txt = args.cofactors
-    weights = args.weight
-    suffix = args.suffix
-    enumeration = args.enumerate
-
-    run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt,weights,suffix,enumeration)
-
-def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumeration=None):
+def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumeration=None,output=None):
     """propose cofactor whose producibility could unblock the producibility of targets
     
     Args:
@@ -88,6 +52,7 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     Returns:
         TermSet,str,TermSet,TermSet,list,list,list: ASP models and lists with cofactors and (un)producible targets
     """
+    results = {}
     logger.info(f'Reading draft network from {draft_sbml}')
     try:
         draftnet = readSBMLnetwork_clyngor(draft_sbml, 'draft')
@@ -137,7 +102,7 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                 quit()
 
     elif cofactors_txt:
-        looger.info('Reading cofactors from {cofactors_txt}')
+        logger.info('Reading cofactors from {cofactors_txt}')
         with open(cofactors_txt,'r') as f:
             cofactors_list = f.read().splitlines()
         cofactors = TermSet()
@@ -168,6 +133,7 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
         if pred == 'unproducible_target':
             for a in model[pred, 1]:
                 unprod.append(a[0])
+    results['unprod'] = unprod
     logger.info(f'{len(unprod)} unproducible targets:')
     logger.info('\n'.join(unprod))
 
@@ -223,6 +189,9 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     #         unproduced_targets.append(tgt)
     #     else:
     #         newly_producible_targets.append(p.arg(0))
+    results['chosen_cofactors'] = chosen_cofactors
+    results['newly_producible_targets'] = newly_producible_targets
+
     logger.info(f'Still {len(unproduced_targets)} unproducible targets:')
     logger.info('\n'.join(unproduced_targets))
     logger.info('\nSelected cofactors:')
@@ -257,6 +226,7 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
             else:
                 for a in intersection_model[pred, 1]:
                     intersection_icofactors.append((a[0],None))
+    results['intersection_icofactors'] = intersection_icofactors
     for cofactor in intersection_icofactors:
         if cofactor[1] == None:
             logger.info(cofactor[0])
@@ -276,6 +246,7 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                 for a in union_model[pred, 1]:
                     union_icofactors.append((a[0],None))
         #print('\nSelected cofactors:')
+    results['union_icofactors'] = union_icofactors
     for cofactor in union_icofactors:
         if cofactor[1] == None:
             logger.info(cofactor[0])
@@ -307,10 +278,15 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
                     logger.info(f'{cofactor[0]} ({str(cofactor[1])})')
             all_models_lst.append(current_cofactors)
         clean_up()
+        if output:
+            with open(output, "w") as output_file:
+                json.dump(results, output_file, indent=True, sort_keys=True)
         return all_models_lst, optimum, set(union_icofactors), set(intersection_icofactors), set(chosen_cofactors), set(unprod), set(newly_producible_targets)
+
+
+    if output:
+        with open(output, "w") as output_file:
+            json.dump(results, output_file, indent=True, sort_keys=True)
 
     clean_up()
     return model, optimum, set(union_icofactors), set(intersection_icofactors), set(chosen_cofactors), set(unprod), set(newly_producible_targets)
-
-if __name__ == '__main__':
-    cmd_menecof()
