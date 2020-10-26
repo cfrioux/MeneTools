@@ -20,15 +20,15 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
     """Get production pathways of targets in metabolic networks, started from seeds
     
     Args:
-        draft_sbml (str): SBML 2 metabolic network file
-        seeds_sbml (str): SBML 2 seeds file
-        targets_sbml (str): SBML 2 targets file
+        draft_sbml (str): SBML metabolic network file
+        seeds_sbml (str): SBML seeds file
+        targets_sbml (str): SBML targets file
         min_size (bool, optional): Defaults to None. minimal size paths
         enumeration (bool, optional): Defaults to None. enumeration of all paths
         output (str): path to json output file
 
     Returns:
-        [type]: [description]
+        TermSet, set, set, set, set: Model, unproducible targets and paths
     """
     results = {}
     logger.info(f'Reading draft network from {draft_sbml}')

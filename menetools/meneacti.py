@@ -19,12 +19,12 @@ def run_meneacti(draft_sbml,seeds_sbml,output=None):
     """get activable reactions in a metabolic network, starting from seeds
     
     Args:
-        draft_sbml (str): SBML 2 metabolic network file
-        seeds_sbml (str): SBML 2 seeds file
+        draft_sbml (str): SBML metabolic network file
+        seeds_sbml (str): SBML seeds file
         output (str): path to json output file
 
     Returns:
-        list: producible compounds
+        list: activable reactions
     """
     logger.info(f'Reading draft network from {draft_sbml}')
     try:

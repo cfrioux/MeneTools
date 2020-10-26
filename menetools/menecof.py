@@ -41,13 +41,14 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     """propose cofactor whose producibility could unblock the producibility of targets
     
     Args:
-        draft_sbml (str): SBML 2 metabolic network file
-        seeds_sbml (str): SBML 2 seeds file
-        targets_sbml (str): SBML 2 targets file
+        draft_sbml (str): SBML metabolic network file
+        seeds_sbml (str): SBML seeds file
+        targets_sbml (str): SBML targets file
         cofactors_txt (str, optional): Defaults to None. Cofactors file, one per line
         weights (bool, optional): Defaults to None. True if cofactors_txt is weighted
         suffix (str, optional): Defaults to None. suffix to be added to metabolites in metabolic model
         enumeration (bool, optional): Defaults to None. enumeration boolean
+        output (str): path to json output file
     
     Returns:
         TermSet,str,TermSet,TermSet,list,list,list: ASP models and lists with cofactors and (un)producible targets

@@ -16,9 +16,9 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml,output=None):
     """checks the producibility of targets from seeds in a metabolic network
     
     Args:
-        draft_sbml (str): metabolic network SBML 2 file
-        seeds_sbml (str): SBML 2 file
-        targets_sbml (str): SBML 2 file
+        draft_sbml (str): metabolic network SBML file
+        seeds_sbml (str): SBML file
+        targets_sbml (str): SBML file
         output (str): path to json output file
 
     Returns:

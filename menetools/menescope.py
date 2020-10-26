@@ -20,8 +20,8 @@ def run_menescope(draft_sbml,seeds_sbml,output=None):
     """get producible metabolites in a metabolic network, starting from seeds
     
     Args:
-        draft_sbml (str): SBML 2 metabolic network file
-        seeds_sbml (str): SBML 2 seeds file
+        draft_sbml (str): SBML metabolic network file
+        seeds_sbml (str): SBML seeds file
         output (str): path to json output file
     
     Returns:
