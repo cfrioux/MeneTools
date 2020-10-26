@@ -87,7 +87,7 @@ def main():
     parent_parser_o.add_argument(
         "--output",
         dest="output",
-        help="output file for instance",
+        help="json output file",
         required=False,
     )
 
