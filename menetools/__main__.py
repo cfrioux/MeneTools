@@ -20,7 +20,7 @@ from menetools.menepath import run_menepath
 from shutil import which
 
 VERSION = pkg_resources.get_distribution("menetools").version
-LICENSE = """Copyright (C) Dyliss
+LICENSE = """Copyright (C) Dyliss - Pleiade
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 MeneTools is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.\n
@@ -45,7 +45,7 @@ if not which('clingo'):
 def main():
     """Run programm.
     """
-    start_time = time.time()
+    # start_time = time.time()
     parser = argparse.ArgumentParser(
         "mene",
         description=MESSAGE + " For specific help on each subcommand use: mene {cmd} --help",
