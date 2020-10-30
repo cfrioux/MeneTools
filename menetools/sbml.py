@@ -97,7 +97,8 @@ def readSBMLnetwork(filename, name) :
 
     listOfReactions = get_listOfReactions(model)
     if listOfReactions is None:
-        sys.exit('No reaction in SBML '+filename)
+        logger.critical('No reaction in SBML '+filename)
+        sys.exit(1)
     for e in listOfReactions:
         if e.tag[0] == "{":
             uri, tag = e.tag[1:].split("}")
@@ -136,7 +137,8 @@ def readSBMLnetwork_clyngor(filename, name) :
 
     listOfReactions = get_listOfReactions(model)
     if listOfReactions is None:
-        sys.exit('No reaction in SBML '+filename)
+        logger.critical('No reaction in SBML '+filename)
+        sys.exit(1)
     for e in listOfReactions:
         if e.tag[0] == "{":
             uri, tag = e.tag[1:].split("}")

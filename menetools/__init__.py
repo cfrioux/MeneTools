@@ -5,6 +5,6 @@ from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
 
 
-__version__="3.0.0"
+__version__="3.0.1"
 """Define the version of the package.
 """
