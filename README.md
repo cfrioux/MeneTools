@@ -8,6 +8,7 @@ MeneTools are Python (3.6 and higher) tools to explore the producibility potenti
 * get all reactions that are activable from nutrients (Meneacti)
 * get production paths of specific compounds (Menepath)
 * obtain compounds that if added to the nutrients, would ensure the producibility of targets (Menecof)
+* identify metabolic deadends, _i.e._ metabolites that act as reactants of reactions but never as products, or metabolites that act as products of reactions but never as reactants. This is a purely structural analysis.
 
 MeneTools follows the producibility in metabolic networks as defined by the [network expansion](http://www.ncbi.nlm.nih.gov/pubmed/15712108) algorithm.
 Mainly, two rules are followed:
