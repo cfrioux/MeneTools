@@ -17,6 +17,7 @@ from menetools.meneacti import run_meneacti
 from menetools.menecheck import run_menecheck
 from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
+from menetools.menedead import run_menedead
 from shutil import which
 
 VERSION = pkg_resources.get_distribution("menetools").version
@@ -172,6 +173,14 @@ def main():
         ]
     )
 
+    dead_parser = subparsers.add_parser(
+        "dead",
+        help="Identification of dead-end reactions (reactions whose reactants are never consumed or whose reactants are never produced) in metabolic networks.",
+        parents=[
+            parent_parser_d, parent_parser_o
+        ]
+    )
+
     path_parser = subparsers.add_parser(
         "path",
         help="Get production pathways of targets in metabolic networks, started from seeds.",
@@ -202,6 +211,8 @@ def main():
         run_menecheck(args.draftnet, args.seeds, args.targets, args.output)
     elif args.cmd == "cof":
         run_menecof(args.draftnet, args.seeds, args.targets, args.cofactors, args.weight, args.suffix, args.enumerate, args.output)
+    elif args.cmd == "dead":
+        run_menedead(args.draftnet, args.output)
     elif args.cmd == "path":
         run_menepath(args.draftnet, args.seeds, args.targets, args.min, args.enumerate, args.output)
     elif args.cmd == "scope":

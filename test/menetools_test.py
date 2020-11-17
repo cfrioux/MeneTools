@@ -5,7 +5,7 @@ import json
 import os
 import subprocess
 
-from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti
+from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti, run_menedead
 
 
 def test_menecof():
@@ -170,6 +170,31 @@ def test_menepath_cli():
     assert set(results['unproducible_targets_lst']) == unproducible_targets
     assert set(results['intersection_path']) == intersections
     assert set(results['union_path']) == unions
+    os.remove('test.json')
+
+
+def test_menedead():
+    non_consumed_metabolites = ['M_i_c', 'M_f_c', 'M_g_c', 'M_biomass_c', 'M_j_c', 'M_b_c', 'M_l_c']
+    non_produced_metabolites = ['M_a_c', 'M_h_c', 'M_k_c', 'M_T1_c', 'M_c_c']
+
+    results = run_menedead('../toy/tiny_toy/draft.xml')
+
+    assert sorted(results['non_consumed_metabolites']) == sorted(non_consumed_metabolites)
+    assert sorted(results['non_produced_metabolites']) == sorted(non_produced_metabolites)
+
+
+def test_menedead_cli():
+    non_consumed_metabolites = ['M_i_c', 'M_f_c', 'M_g_c', 'M_biomass_c', 'M_j_c', 'M_b_c', 'M_l_c']
+    non_produced_metabolites = ['M_a_c', 'M_h_c', 'M_k_c', 'M_T1_c', 'M_c_c']
+
+    subprocess.call(['mene', 'dead', '-d', '../toy/tiny_toy/draft.xml',
+                      '--output', 'test.json'])
+
+    results = json.loads(open('test.json', 'r').read())
+
+    assert sorted(results['non_consumed_metabolites']) == sorted(non_consumed_metabolites)
+    assert sorted(results['non_produced_metabolites']) == sorted(non_produced_metabolites)
+
     os.remove('test.json')
 
 

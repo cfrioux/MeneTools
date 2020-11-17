@@ -13,8 +13,9 @@ acti_prg = root + '/encodings/get_activated.lp'
 unproducible_prg = root + '/encodings/get_unproducible_targets.lp'
 path_prg = root + '/encodings/get_paths.lp'
 min_path_prg = root + '/encodings/get_min_paths.lp'
-cof_prg =       root + '/encodings/get_cofs.lp'
-cof_w_prg =       root + '/encodings/get_cofs_weighted.lp'
+cof_prg = root + '/encodings/get_cofs.lp'
+cof_w_prg = root + '/encodings/get_cofs_weighted.lp'
+dead_prg = root + '/encodings/get_deadends.lp'
 
 def get_scope(draft, seeds):
     draft_f = utils.to_file(draft)
@@ -246,3 +247,14 @@ def get_optimal_solutions_cof(draft, seeds, targets, cofactors, optimum, weighte
     os.unlink(targets_f)
     os.unlink(cofactors_f)
     return allmodels
+
+def get_dead(draft):
+    draft_f = utils.to_file(draft)
+
+    prg = [dead_prg, draft_f]
+    options = ''
+    models = clyngor.solve(prg, options=options)
+    for model in models.discard_quotes.by_arity:
+        best_model = model
+
+    return best_model

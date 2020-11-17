@@ -211,6 +211,30 @@ from menetools import run_menecof
 model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='required',cofactors_txt='optional',weights='optional',suffix='optional',enumeration='optional',output='optional')
 ```
 
+### MENEDEAD
+
+Menedead is a python3 tool to identify dead ends in a metabolic network, by
+searching non produced and non consumed metabolites. Study of the metabolic network is made`
+topologically.
+
+### usage
+
+```
+usage: mene dead [-h] -d DRAFTNET [--output OUTPUT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DRAFTNET, --draftnet DRAFTNET
+                        metabolic network in SBML format
+  --output OUTPUT       json output file
+```
+
+```python
+from menetools import run_menedead
+
+model = run_menedead(draft_sbml='required',output='optional')
+```
+
 ## Acknowledgements
 
 Many thanks to [@Aluriak](https://github.com/Aluriak) for his awesome work with [Clyngor](https://github.com/Aluriak/clyngor).
