@@ -6,16 +6,16 @@ from menetools import utils
 
 logger = logging.getLogger('menetools.query')
 
-root = __file__.rsplit('/', 1)[0]
+root = os.path.dirname(__file__)
+scope_prg = os.path.join(*[root, 'encodings', 'get_scope.lp'])
+acti_prg = os.path.join(*[root, 'encodings', 'get_activated.lp'])
+unproducible_prg = os.path.join(*[root, 'encodings', 'get_unproducible_targets.lp'])
+path_prg = os.path.join(*[root, 'encodings', 'get_paths.lp'])
+min_path_prg = os.path.join(*[root, 'encodings', 'get_min_paths.lp'])
+cof_prg = os.path.join(*[root, 'encodings', 'get_cofs.lp'])
+cof_w_prg = os.path.join(*[root, 'encodings', 'get_cofs_weighted.lp'])
+dead_prg = os.path.join(*[root, 'encodings', 'get_deadends.lp'])
 
-scope_prg = root + '/encodings/get_scope.lp'
-acti_prg = root + '/encodings/get_activated.lp'
-unproducible_prg = root + '/encodings/get_unproducible_targets.lp'
-path_prg = root + '/encodings/get_paths.lp'
-min_path_prg = root + '/encodings/get_min_paths.lp'
-cof_prg = root + '/encodings/get_cofs.lp'
-cof_w_prg = root + '/encodings/get_cofs_weighted.lp'
-dead_prg = root + '/encodings/get_deadends.lp'
 
 def get_scope(draft, seeds):
     draft_f = utils.to_file(draft)

@@ -17,7 +17,7 @@ Mainly, two rules are followed:
 A metabolite that is producible from a set of nutrients is described as being "in the scope of the seeds".
 The computation is made using logic solvers (Answer Set Programming). The present modelling ignores the stoichiometry of reactions (2A + B --> C is considered equivalent to A + B --> C), and is therefore suited to non-curated or draft metabolic networks.
 
-**Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. Lastly, **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism.
+**Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism. **Menedead** (*beta* version) identifies deadends in a metabolic network. Deadends are compounds which are not produced or consumed (meaning that they are not reactant or product of a reaction).
 
 If you use MeneTools, please cite: 
 
@@ -174,7 +174,7 @@ model = run_menepath(draft_sbml='required',seeds_sbml='required',targets_sbml='r
 ### MENECOF
 
 Menecof is a python3 tool to get the minimal set of cofactors that enables to
-maximize the number f producible targets. Study of the metabolic network is made`
+maximize the number f producible targets. Study of the metabolic network is made
 topologically using reachable compounds from seeds.
 
 ### usage
@@ -214,8 +214,7 @@ model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='re
 ### MENEDEAD
 
 Menedead is a python3 tool to identify dead ends in a metabolic network, by
-searching non produced and non consumed metabolites. Study of the metabolic network is made`
-topologically.
+searching non produced and non consumed metabolites.
 
 ### usage
 
