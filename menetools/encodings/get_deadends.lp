@@ -1,5 +1,6 @@
 % dreaction("r1").
 % dreaction("r2").
+% reversible("r1").
 % reactant("A","r1").
 % product("B","r1").
 % reactant("B","r2").
