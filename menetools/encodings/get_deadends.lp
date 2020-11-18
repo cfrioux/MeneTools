@@ -5,6 +5,9 @@
 % reactant("B","r2").
 % product("C","r2").
 
+product(M,R) :- dreaction(R), reactant(M,R), reversible(R).
+reactant(M,R) :- dreaction(R), product(M,R), reversible(R).
+
 deadend_np(M) :- dreaction(R), reactant(M,R), not product(M,R2):dreaction(R2).
 deadend_nc(M) :- dreaction(R), product(M,R), not reactant(M,R2):dreaction(R2).
 

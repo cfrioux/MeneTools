@@ -179,8 +179,33 @@ def test_menepath_cli():
 
 
 def test_menedead():
-    non_consumed_metabolites = ['M_i_c', 'M_f_c', 'M_g_c', 'M_biomass_c', 'M_j_c', 'M_b_c', 'M_l_c']
-    non_produced_metabolites = ['M_a_c', 'M_h_c', 'M_k_c', 'M_T1_c', 'M_c_c']
+    non_consumed_metabolites = ["M_H_c", "M_B_c"]
+    non_produced_metabolites = ['M_A_c', 'M_E_c']
+
+    results = run_menedead('menedead_test.sbml')
+
+    assert sorted(results['non_consumed_metabolites']) == sorted(non_consumed_metabolites)
+    assert sorted(results['non_produced_metabolites']) == sorted(non_produced_metabolites)
+
+
+def test_menedead_cli():
+    non_consumed_metabolites = ["M_H_c", "M_B_c"]
+    non_produced_metabolites = ['M_A_c', 'M_E_c']
+
+    subprocess.call(['mene', 'dead', '-d', 'menedead_test.sbml',
+                      '--output', 'test.json'])
+
+    results = json.loads(open('test.json', 'r').read())
+
+    assert sorted(results['non_consumed_metabolites']) == sorted(non_consumed_metabolites)
+    assert sorted(results['non_produced_metabolites']) == sorted(non_produced_metabolites)
+
+    os.remove('test.json')
+
+
+def test_menedead_toy():
+    non_consumed_metabolites = ['M_j_c', 'M_l_c', 'M_i_c', 'M_f_c', 'M_biomass_c', 'M_g_c']
+    non_produced_metabolites = ['M_T1_c', 'M_h_c', 'M_k_c', 'M_c_c']
 
     results = run_menedead(DRAFT_PATH)
 
@@ -188,9 +213,9 @@ def test_menedead():
     assert sorted(results['non_produced_metabolites']) == sorted(non_produced_metabolites)
 
 
-def test_menedead_cli():
-    non_consumed_metabolites = ['M_i_c', 'M_f_c', 'M_g_c', 'M_biomass_c', 'M_j_c', 'M_b_c', 'M_l_c']
-    non_produced_metabolites = ['M_a_c', 'M_h_c', 'M_k_c', 'M_T1_c', 'M_c_c']
+def test_menedead_toy_cli():
+    non_consumed_metabolites = ['M_j_c', 'M_l_c', 'M_i_c', 'M_f_c', 'M_biomass_c', 'M_g_c']
+    non_produced_metabolites = ['M_T1_c', 'M_h_c', 'M_k_c', 'M_c_c']
 
     subprocess.call(['mene', 'dead', '-d', DRAFT_PATH,
                       '--output', 'test.json'])

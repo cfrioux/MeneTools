@@ -7,6 +7,7 @@ import sys
 
 from menetools import utils, query, sbml
 from pkg_resources import resource_filename
+from xml.etree.ElementTree import ParseError
 
 logger = logging.getLogger('menetools.menedead')
 

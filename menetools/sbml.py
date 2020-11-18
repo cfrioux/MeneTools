@@ -163,8 +163,9 @@ def readSBMLnetwork_clyngor(filename, name) :
             else:
                 for p in listOfProducts:
                     all_atoms.add(Atom('product', ["\""+p.attrib.get("species")+"\"", "\""+reactionId+"\""])) #,"\""+name+"\""
-    #print(lpfacts)
+
     lpfacts = TermSet(all_atoms)
+    #print(lpfacts)
     return lpfacts
 
 
