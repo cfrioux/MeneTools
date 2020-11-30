@@ -51,15 +51,19 @@ def run_menescope(draft_sbml,seeds_sbml,output=None):
     sys.stdout.flush()
     model = query.get_scope(draftnet, seeds)
     scope = []
+    produced_seeds = []
     for pred in model:
         if pred == 'dscope':
             for a in model[pred, 1]:
                 scope.append(a[0])
+        if pred == 'produced_seed':
+            for a in model[pred, 1]:
+                produced_seeds.append(a[0])
     logger.info(' ' + str(len(scope)) + ' compounds on scope:')
     logger.info('\n'.join(scope))
 
     if output:
         with open(output, "w") as output_file:
-            json.dump({'scope': scope}, output_file, indent=True, sort_keys=True)
+            json.dump({'scope': scope, 'produced_seeds': produced_seeds}, output_file, indent=True, sort_keys=True)
 
     return scope
