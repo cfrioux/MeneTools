@@ -62,8 +62,9 @@ def run_menescope(draft_sbml,seeds_sbml,output=None):
     logger.info(' ' + str(len(scope)) + ' compounds on scope:')
     logger.info('\n'.join(scope))
 
+    results = {'scope': scope, 'produced_seeds': produced_seeds}
     if output:
         with open(output, "w") as output_file:
-            json.dump({'scope': scope, 'produced_seeds': produced_seeds}, output_file, indent=True, sort_keys=True)
+            json.dump(results, output_file, indent=True, sort_keys=True)
 
-    return scope
+    return results

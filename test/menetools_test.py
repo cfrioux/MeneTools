@@ -62,16 +62,19 @@ def test_menescope():
     print("*** test menescope ***")
     scope = 8
     compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c']
+    seeds_produced = ['M_S_c']
     results = run_menescope(DRAFT_PATH, SEED_PATH)
 
-    assert set(results) == set(compounds)
-    assert len(results) == scope
+    assert set(results['scope']) == set(compounds)
+    assert len(results['scope']) == scope
+    assert set(results['produced_seeds']) == set(seeds_produced)
 
 
 def test_menescope_cli():
     print("*** test menescope cli ***")
     scope = 8
     compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c']
+    seeds_produced = ['M_S_c']
 
     subprocess.call(['mene', 'scope', '-d', DRAFT_PATH,
                         '-s', SEED_PATH,  '--output', 'test.json'])
@@ -80,6 +83,7 @@ def test_menescope_cli():
 
     assert set(results['scope']) == set(compounds)
     assert len(results['scope']) == scope
+    assert set(results['produced_seeds']) == set(seeds_produced)
     os.remove('test.json')
 
 
