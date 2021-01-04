@@ -1,4 +1,4 @@
-[![PyPI version](https://img.shields.io/pypi/v/menetools.svg)](https://pypi.org/project/MeneTools/) [![GitHub license](https://img.shields.io/github/license/cfrioux/menetools.svg)](https://github.com/MeneTools/MeneTools/blob/master/LICENSE) [![Actions Status](https://github.com/cfrioux/MeneTools/workflows/Python%20package/badge.svg)](https://github.com/cfrioux/MeneTools/actions) [![](https://img.shields.io/badge/doi-10.1371/journal.pcbi.1006146-blueviolet.svg)](https://doi.org/10.1371/journal.pcbi.1006146)
+[![PyPI version](https://img.shields.io/pypi/v/menetools.svg)](https://pypi.org/project/MeneTools/) [![GitHub license](https://img.shields.io/github/license/cfrioux/menetools.svg)](https://github.com/MeneTools/MeneTools/blob/master/LICENSE) [![Actions Status](https://github.com/cfrioux/MeneTools/workflows/Python%20package/badge.svg)](https://github.com/cfrioux/MeneTools/actions) [![](https://img.shields.io/badge/doi-10.1371/journal.pcbi.1006146-blueviolet.svg)](https://doi.org/10.1371/journal.pcbi.1006146) [![](https://img.shields.io/badge/doi-10.7554/eLife.61968-blueviolet.svg)](https://doi.org/10.7554/eLife.61968)
 
 # MeneTools
 
@@ -20,7 +20,9 @@ The computation is made using logic solvers (Answer Set Programming). The presen
 
 **Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism. **Menedead** (*beta* version) identifies deadends in a metabolic network. Deadends are compounds which are not produced or consumed (meaning that they are not reactant or product of a reaction).
 
-If you use MeneTools, please cite: 
+**If you use MeneTools, please cite:**
+
+Belcour* A, Frioux* C, Aite M, Bretaudeau A, Hildebrand F, Siegel A. Metage2Metabo, microbiota-scale metabolic complementarity for the identification of key species. eLife 2020;9:e61968 [https://doi.org/10.7554/eLife.61968](https://doi.org/10.7554/eLife.61968).
 
 Aite* M, Chevallier* M, Frioux* C, Trottier* C, Got J, Cortés MP, et al. Traceability, reproducibility and wiki-exploration for “à-la-carte” reconstructions of genome-scale metabolic models. PLoS Comput Biol 2018;14:e1006146. [https://doi.org/10.1371/journal.pcbi.1006146](https://doi.org/10.1371/journal.pcbi.1006146).
 
