@@ -20,6 +20,6 @@ from menetools.menepath import run_menepath
 from menetools.menedead import run_menedead
 
 
-__version__="3.1.0"
+__version__="3.1.1"
 """Define the version of the package.
 """
