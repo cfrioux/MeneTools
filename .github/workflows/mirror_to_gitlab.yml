@@ -20,5 +20,5 @@ jobs:
         echo Starting to push repo to gitlab
         git config user.name "${{ secrets.GITLAB_USERNAME }}"
         git config user.email "${{ secrets.GITLAB_EMAIL }}"
-        git remote set-url origin gitlabinria https://oauth2:${token}@gitlab.inria.fr/pleiade/menetools.git
+        git remote set-url origin https://oauth2:${token}@gitlab.inria.fr/pleiade/menetools.git
         git push origin master
