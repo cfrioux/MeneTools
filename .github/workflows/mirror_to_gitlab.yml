@@ -21,5 +21,5 @@ jobs:
         git config user.name "${{ secrets.GITLAB_USERNAME }}"
         git config user.email "${{ secrets.GITLAB_EMAIL }}"
         git config user.password ${token}
-        git remote add gitlabinria https://git@gitlab.inria.fr:pleiade/menetools.git
+        git remote add gitlabinria git@gitlab.inria.fr:pleiade/menetools.git
         git push gitlabinria master
