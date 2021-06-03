@@ -20,6 +20,5 @@ jobs:
         echo Starting to push repo to gitlab
         git config user.name "${{ secrets.GITLAB_USERNAME }}"
         git config user.email "${{ secrets.GITLAB_EMAIL }}"
-        git config user.password ${token}
-        git remote add gitlabinria https://gitlab.inria.fr/pleiade/menetools.git
+        git remote add gitlabinria https://oauth2:${token}@gitlab.inria.fr/pleiade/menetools.git
         git push gitlabinria master
