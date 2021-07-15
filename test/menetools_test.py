@@ -5,7 +5,7 @@ import json
 import os
 import subprocess
 
-from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti, run_menedead
+from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti, run_menedead, run_meneseed
 
 DRAFT_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'draft.xml'])
 SEED_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'seeds.xml'])
@@ -228,6 +228,26 @@ def test_menedead_toy_cli():
 
     assert sorted(results['non_consumed_metabolites']) == sorted(non_consumed_metabolites)
     assert sorted(results['non_produced_metabolites']) == sorted(non_produced_metabolites)
+
+    os.remove('test.json')
+
+def test_meneseed_toy():
+    seeds = ["M_A_c", "M_D_c", "M_B_c", "M_C_c", "M_E_c", "M_F_c"]
+
+    results = run_meneseed('meneseed_test.sbml')
+
+    assert sorted(results['seeds']) == sorted(seeds)
+
+
+def test_meneseed_toy_cli():
+    seeds = ["M_A_c", "M_D_c", "M_B_c", "M_C_c", "M_E_c", "M_F_c"]
+
+    subprocess.call(['mene', 'seed', '-d', 'meneseed_test.sbml',
+                      '--output', 'test.json'])
+
+    results = json.loads(open('test.json', 'r').read())
+
+    assert sorted(results['seeds']) == sorted(seeds)
 
     os.remove('test.json')
 
