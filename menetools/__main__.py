@@ -32,6 +32,7 @@ from menetools.menecheck import run_menecheck
 from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
 from menetools.menedead import run_menedead
+from menetools.meneseed import run_meneseed
 from shutil import which
 
 VERSION = pkg_resources.get_distribution("menetools").version
@@ -221,6 +222,14 @@ def main():
         ]
     )
 
+    seed_parser = subparsers.add_parser(
+        "seed",
+        help="Get seed metabolites in a metabolic network.",
+        parents=[
+            parent_parser_d, parent_parser_o
+        ]
+    )
+
     args = parser.parse_args()
 
     # If no argument print the help.
@@ -240,6 +249,8 @@ def main():
         run_menepath(args.draftnet, args.seeds, args.targets, args.min, args.enumerate, args.output)
     elif args.cmd == "scope":
         run_menescope(args.draftnet, args.seeds, args.output)
+    elif args.cmd == "seed":
+        run_meneseed(args.draftnet, args.output)
     else:
         logger.critical("Invalid commands for mene.")
         parser.print_help()
