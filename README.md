@@ -3,12 +3,13 @@
 # MeneTools
 
 MeneTools are Python (3.6 and higher) tools to explore the producibility potential in a metabolic network using the network expansion algorithm. The MeneTools can:
-* assess whether targets are producible starting from nutrients (Menecheck)
-* get all compounds that are producible starting from nutrients (Menescope)
-* get all reactions that are activable from nutrients (Meneacti)
-* get production paths of specific compounds (Menepath)
-* obtain compounds that if added to the nutrients, would ensure the producibility of targets (Menecof)
-* identify metabolic deadends, _i.e._ metabolites that act as reactants of reactions but never as products, or metabolites that act as products of reactions but never as reactants. This is a purely structural analysis.
+* assess whether targets are producible starting from nutrients (`Mene check`)
+* get all compounds that are producible starting from nutrients (`Mene scope`)
+* get all reactions that are activable from nutrients (`Mene acti`)
+* get production paths of specific compounds (`Mene path`)
+* obtain compounds that if added to the nutrients, would ensure the producibility of targets (`Mene cof`)
+* identify metabolic deadends, _i.e._ metabolites that act as reactants of reactions but never as products, or metabolites that act as products of reactions but never as reactants. This is a purely structural analysis (`Mene dead`)
+* identify exchanged compounds in metabolic networks based on exchange reactions, _i.e._ outputs of reactions that do not have reactants (`Mene seed`).
 
 MeneTools follows the producibility in metabolic networks as defined by the [network expansion](http://www.ncbi.nlm.nih.gov/pubmed/15712108) algorithm.
 Mainly, two rules are followed:
@@ -46,7 +47,7 @@ pip install menetools
 ## Usage
 
 ```
-usage: mene [-h] [-v] {acti,check,cof,path,scope} ...
+usage: mene [-h] [-v] {acti,check,cof,dead,path,scope,seed} ...
 
 Explore the producibility potential in a metabolic network using the network
 expansion algorithm. For specific help on each subcommand use: mene {cmd}
@@ -59,17 +60,21 @@ optional arguments:
 subcommands:
   valid subcommands:
 
-  {acti,check,cof,path,scope}
+  {acti,check,cof,dead,path,scope,seed}
     acti                Get activable reactions in a metabolic network,
                         starting from seeds.
     check               Check the producibility of targets from seeds in a
                         metabolic network.
     cof                 Propose cofactor whose producibility could unblock the
                         producibility of targets.
+    dead                Identification of dead-end reactions (reactions whose
+                        reactants are never consumed or whose reactants are
+                        never produced) in metabolic networks.
     path                Get production pathways of targets in metabolic
                         networks, started from seeds.
     scope               Get producible metabolites in a metabolic network,
                         starting from seeds.
+    seed                Get metabolites from exchange reactions in a metabolic network.
 
 Requires Clingo and clyngor package: "pip install clyngor clyngor-with-clingo"
 
@@ -180,8 +185,6 @@ Menecof is a python3 tool to get the minimal set of cofactors that enables to
 maximize the number f producible targets. Study of the metabolic network is made
 topologically using reachable compounds from seeds.
 
-### usage
-
 ```
 usage: mene cof [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [-c COFACTORS]
                 [--weight] [--suffix SUFFIX] [--enumerate] [--output OUTPUT]
@@ -219,8 +222,6 @@ model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='re
 Menedead is a python3 tool to identify dead ends in a metabolic network, by
 searching non produced and non consumed metabolites.
 
-### usage
-
 ```
 usage: mene dead [-h] -d DRAFTNET [--output OUTPUT]
 
@@ -236,6 +237,14 @@ from menetools import run_menedead
 
 model = run_menedead(draft_sbml='required',output='optional')
 ```
+
+### Meneseed
+
+Meneseed identifies metabolites produced by exchange reactions in a metabolic network.
+It does not consider the flux value of these exchange reactions, it solely considers the
+structure of the network. 
+
+e.g. Given the reactions ` <-> A`, ` -> B`, ` <- C`, A and be would be reported by Meneseed. 
 
 ## Acknowledgements
 

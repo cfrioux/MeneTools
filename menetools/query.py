@@ -29,6 +29,7 @@ min_path_prg = os.path.join(*[root, 'encodings', 'get_min_paths.lp'])
 cof_prg = os.path.join(*[root, 'encodings', 'get_cofs.lp'])
 cof_w_prg = os.path.join(*[root, 'encodings', 'get_cofs_weighted.lp'])
 dead_prg = os.path.join(*[root, 'encodings', 'get_deadends.lp'])
+seed_prg = os.path.join(*[root, 'encodings', 'get_seeds.lp'])
 
 
 def get_scope(draft, seeds):
@@ -271,4 +272,13 @@ def get_dead(draft):
     for model in models.discard_quotes.by_arity:
         best_model = model
 
+    return best_model
+
+def get_seed(draft):
+    draft_f = utils.to_file(draft)
+    prg = [seed_prg, draft_f]
+    options = ''
+    models = clyngor.solve(prg, options=options)
+    for model in models.discard_quotes.by_arity:
+        best_model = model
     return best_model

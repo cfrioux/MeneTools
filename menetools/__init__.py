@@ -18,6 +18,7 @@ from menetools.menecheck import run_menecheck
 from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
 from menetools.menedead import run_menedead
+from menetools.meneseed import run_meneseed
 
 
 __version__="3.1.1"
