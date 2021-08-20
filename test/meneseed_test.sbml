@@ -13,6 +13,7 @@
       <species metaid="M_E_c" id="M_E_c" name="E" compartment="c" initialAmount="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species metaid="M_F_c" id="M_F_c" name="F" compartment="c" initialAmount="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species metaid="M_G_c" id="M_G_c" name="G" compartment="c" initialAmount="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species metaid="M_H_c" id="M_H_c" name="H" compartment="c" initialAmount="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
     <listOfReactions>
       <reaction id="R_1" name="R1" reversible="false" fast="false">
@@ -44,6 +45,11 @@
         <listOfProducts>
           <speciesReference species="M_G_c" stoichiometry="1" constant="false"/>
         </listOfProducts>
+      </reaction>
+      <reaction id="R_6" name="R6" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference species="M_H_c" stoichiometry="1" constant="false"/>
+        </listOfReactants>
       </reaction>
     </listOfReactions>
   </model>

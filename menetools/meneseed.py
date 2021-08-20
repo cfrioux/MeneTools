@@ -48,7 +48,7 @@ def run_meneseed(draft_sbml, output=None):
         logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
 
-    logger.info('\nChecking draft network seeds')
+    logger.info('\nChecking draft network exchange reactions')
     sys.stdout.flush()
     model = query.get_seed(draftnet)
 
@@ -58,6 +58,12 @@ def run_meneseed(draft_sbml, output=None):
             [seeds.append(a[0]) for a in model[pred, 1]]
             
     results = {'seeds': seeds}
+
+    logger.info(
+        f"{len(seeds)} seed metabolites (related to exchange reactions):"
+    )
+    logger.info('\n'.join(seeds))
+
     if output:
         with open(output, "w") as output_file:
             json.dump(results, output_file, indent=True, sort_keys=True)

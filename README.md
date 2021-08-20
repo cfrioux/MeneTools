@@ -244,8 +244,23 @@ Meneseed identifies metabolites produced by exchange reactions in a metabolic ne
 It does not consider the flux value of these exchange reactions, it solely considers the
 structure of the network. 
 
-e.g. Given the reactions ` <-> A`, ` -> B`, ` <- C`, A and be would be reported by Meneseed. 
+e.g. Given the reactions ` <-> A`, ` -> B`, ` <- C`, A and be would be reported by Meneseed.
 
+```
+usage: mene seed [-h] -d DRAFTNET [--output OUTPUT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DRAFTNET, --draftnet DRAFTNET
+                        metabolic network in SBML format
+  --output OUTPUT       json output file
+```
+
+```python
+from menetools import run_meneseed
+
+model = run_meneseed(draft_sbml='required',output='optional')
+```
 ## Acknowledgements
 
 Many thanks to [@Aluriak](https://github.com/Aluriak) for his awesome work with [Clyngor](https://github.com/Aluriak/clyngor).
