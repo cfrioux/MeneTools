@@ -238,7 +238,7 @@ from menetools import run_menedead
 model = run_menedead(draft_sbml='required',output='optional')
 ```
 
-### Meneseed
+### MENESEED
 
 Meneseed identifies metabolites produced by exchange reactions in a metabolic network.
 It does not consider the flux value of these exchange reactions, it solely considers the
