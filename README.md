@@ -265,5 +265,5 @@ model = run_meneseed(draft_sbml='required',output='optional')
 
 Many thanks to
 * [@Aluriak](https://github.com/Aluriak) for his awesome work with [Clyngor](https://github.com/Aluriak/clyngor).
-* [@mablt](ttps://github.com/mablt) for his contribution to MeneSeed.
+* [@mablt](https://github.com/mablt) for his contribution to MeneSeed.
 
