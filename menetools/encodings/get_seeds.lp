@@ -14,9 +14,11 @@
 % dreaction("r2").
 % reversible("r1").
 % reactant("A","r1").
-% product("B","r1").
-% reactant("B","r2").
-% product("C","r2").
+% product("B","r2").
+% reaction("r3").
+% reactant("C").
+
+% The above example identifies A and B as seeds.
 
 seed(M) :- reactant(M,R) ; not product(_, R) ; reversible(R) ; dreaction(R).
 seed(M) :- product(M,R) ; not reactant(_,R) ; dreaction(R).

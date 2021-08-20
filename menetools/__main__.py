@@ -224,7 +224,7 @@ def main():
 
     seed_parser = subparsers.add_parser(
         "seed",
-        help="Get seed metabolites in a metabolic network.",
+        help="Get metabolites from exchange reactions in a metabolic network.",
         parents=[
             parent_parser_d, parent_parser_o
         ]
