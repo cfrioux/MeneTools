@@ -244,7 +244,7 @@ Meneseed identifies metabolites produced by exchange reactions in a metabolic ne
 It does not consider the flux value of these exchange reactions, it solely considers the
 structure of the network. 
 
-e.g. Given the reactions ` <-> A`, ` -> B`, ` <- C`, A and be would be reported by Meneseed.
+e.g. Given the reactions ` <-> A`, ` -> B`, ` <- C`, A and B would be reported by Meneseed.
 
 ```
 usage: mene seed [-h] -d DRAFTNET [--output OUTPUT]
