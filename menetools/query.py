@@ -40,7 +40,7 @@ def get_scope(draft, seeds):
     # solver = Gringo4Clasp()
     # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
     best_model = None
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:
         best_model = model
     os.unlink(draft_f)
@@ -53,7 +53,7 @@ def get_acti(draft, seeds):
     prg = [acti_prg, draft_f, seed_f]
     options = ''
     best_model = None
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:
         best_model = model
     os.unlink(draft_f)
@@ -70,7 +70,7 @@ def get_unproducible(draft, seeds, targets):
     # solver = Gringo4Clasp()
     # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
     best_model = None
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:
         best_model = model
     os.unlink(draft_f)
@@ -88,7 +88,7 @@ def get_paths(instance, min_bool):
     # solver = Gringo4Clasp()
     # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
     best_model = None
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
 
@@ -104,7 +104,7 @@ def get_union_of_paths(instance, optimum, min_bool):
         options = '--configuration jumpy --opt-strategy=usc,oll --enum-mode=brave --opt-mode=ignore '
     # solver = Gringo4Clasp(clasp_options=options)
     # union = solver.run(prg, collapseTerms=True, collapseAtoms=False)
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
 
@@ -119,7 +119,7 @@ def get_intersection_of_paths(instance, optimum, min_bool):
     else:
         prg = [path_prg, instance_f]
         options = '--configuration jumpy --opt-strategy=usc,oll --enum-mode cautious --opt-mode=ignore'
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
     # solver = Gringo4Clasp(clasp_options=options)
@@ -138,7 +138,7 @@ def get_all_paths(instance, optimum, min_bool, nmodels=0):
         options = '--configuration handy --opt-strategy=usc,oll --opt-mode=enum'
     # solver = Gringo4Clasp(clasp_options=options)
     # models = solver.run(prg, collapseTerms=True, collapseAtoms=False)
-    models = clyngor.solve(prg, options=options, nb_model=nmodels).by_arity
+    models = clyngor.solve(prg, options=options, nb_model=nmodels, use_clingo_module=False).by_arity
     if min_bool:
         allmodels = clyngor.opt_models_from_clyngor_answers(models)
     else:
@@ -162,7 +162,7 @@ def get_cofs(draft, seeds, targets, cofactors):
     # print(os.path.abspath(cofactors_f))
     best_model = None
     options = ''
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
     os.unlink(draft_f)
@@ -187,7 +187,7 @@ def get_cofs_weighted(draft, seeds, targets, cofactors):
     # print(os.path.abspath(targets_f))
     # print(os.path.abspath(cofactors_f))
     best_model = None
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
     os.unlink(draft_f)
@@ -207,7 +207,7 @@ def get_intersection_of_optimal_solutions_cof(draft, seeds, targets, cofactors, 
         prg = [cof_prg, draft_f, seed_f, targets_f, cofactors_f]
     options='--configuration jumpy --opt-strategy=usc,oll --enum-mode=cautious --opt-mode=optN,'+str(optimum)
     best_model = None
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
     # solver = Gringo4Clasp(clasp_options=options)
@@ -232,7 +232,7 @@ def get_union_of_optimal_solutions_cof(draft, seeds, targets, cofactors, optimum
     # solver = Gringo4Clasp(clasp_options=options)
     # union = solver.run(prg, collapseTerms=True, collapseAtoms=False)
     best_model = None
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
     os.unlink(draft_f)
@@ -254,7 +254,7 @@ def get_optimal_solutions_cof(draft, seeds, targets, cofactors, optimum, weighte
     options = '--configuration jumpy --opt-strategy=usc,oll --opt-mode=enum,' +str(optimum)
     # solver = Gringo4Clasp(clasp_options=options)
     # models = solver.run(prg, collapseTerms=True, collapseAtoms=False)
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     # print(os.path.abspath(draft_f), os.path.abspath(seed_f), os.path.abspath(targets_f), os.path.abspath(cofactors_f))
     allmodels = [model for model in models.by_arity.with_optimization]
     os.unlink(draft_f)
@@ -268,7 +268,7 @@ def get_dead(draft):
 
     prg = [dead_prg, draft_f]
     options = ''
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:
         best_model = model
 
@@ -278,7 +278,7 @@ def get_seed(draft):
     draft_f = utils.to_file(draft)
     prg = [seed_prg, draft_f]
     options = ''
-    models = clyngor.solve(prg, options=options)
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:
         best_model = model
     return best_model
