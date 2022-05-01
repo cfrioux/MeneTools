@@ -262,3 +262,32 @@ def readSBMLspecies_clyngor(filename, speciestype) :
     lpfacts = TermSet(all_atoms)
 
     return lpfacts
+
+def readSBMLspecies_labelled_clyngor(filename, speciestype) :
+    """
+    Read a SBML network return its species as seeds or targets
+    """
+    all_atoms = set()
+
+    tree = etree.parse(filename)
+    sbml = tree.getroot()
+    model = get_model(sbml)
+
+    labelled_seeds = {}
+    listOfSpecies = get_listOfSpecies(model)
+    if listOfSpecies:
+        for index, e in enumerate(listOfSpecies):
+            seed_id = e.attrib.get("id")
+            labelled_seeds[index] = seed_id
+            if e.tag[0] == "{":
+                uri, tag = e.tag[1:].split("}")
+            else:
+                tag = e.tag
+            if tag == "species":
+                all_atoms.add(Atom(speciestype, ["\""+seed_id+"\"", "\""+str(index)+"\""]))
+    else:
+        sys.exit("Invalid SBML (missing species or listOfSpecies) " + filename)
+
+    lpfacts = TermSet(all_atoms)
+
+    return lpfacts, labelled_seeds

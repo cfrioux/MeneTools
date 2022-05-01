@@ -30,6 +30,7 @@ cof_prg = os.path.join(*[root, 'encodings', 'get_cofs.lp'])
 cof_w_prg = os.path.join(*[root, 'encodings', 'get_cofs_weighted.lp'])
 dead_prg = os.path.join(*[root, 'encodings', 'get_deadends.lp'])
 seed_prg = os.path.join(*[root, 'encodings', 'get_seeds.lp'])
+label_prg = os.path.join(*[root, 'encodings', 'get_labelled_scope.lp'])
 
 
 def get_scope(draft, seeds):
@@ -281,4 +282,19 @@ def get_seed(draft):
     models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:
         best_model = model
+    return best_model
+
+def get_labelled_scope(draft, seeds):
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    prg = [label_prg, draft_f, seed_f]
+    options = ''
+    # solver = Gringo4Clasp()
+    # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
+    best_model = None
+    models = clyngor.solve(prg, options=options)
+    for model in models.discard_quotes.by_arity:
+        best_model = model
+    os.unlink(draft_f)
+    os.unlink(seed_f)
     return best_model
