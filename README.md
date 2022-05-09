@@ -10,6 +10,7 @@ MeneTools are Python (3.6 and higher) tools to explore the producibility potenti
 * obtain compounds that if added to the nutrients, would ensure the producibility of targets (`Mene cof`)
 * identify metabolic deadends, _i.e._ metabolites that act as reactants of reactions but never as products, or metabolites that act as products of reactions but never as reactants. This is a purely structural analysis (`Mene dead`)
 * identify exchanged compounds in metabolic networks based on exchange reactions, _i.e._ outputs of reactions that do not have reactants (`Mene seed`).
+* identify the number of step needed either to produce targets or all producible compounds (computed with menescope) starting from nutrients (`Mene scope_inc`).
 
 MeneTools follows the producibility in metabolic networks as defined by the [network expansion](http://www.ncbi.nlm.nih.gov/pubmed/15712108) algorithm.
 Mainly, two rules are followed:
@@ -19,7 +20,7 @@ Mainly, two rules are followed:
 A metabolite that is producible from a set of nutrients is described as being "in the scope of the seeds".
 The computation is made using logic solvers (Answer Set Programming). The present modelling ignores the stoichiometry of reactions (2A + B --> C is considered equivalent to A + B --> C), and is therefore suited to non-curated or draft metabolic networks.
 
-**Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism. **Menedead** (*beta* version) identifies deadends in a metabolic network. Deadends are compounds which are not produced or consumed (meaning that they are not reactant or product of a reaction).
+**Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism. **Menedead** (*beta* version) identifies deadends in a metabolic network. Deadends are compounds which are not produced or consumed (meaning that they are not reactant or product of a reaction). **Menescope_inc** (*beta* version) computes the number of step needed by the expansion algorithm to reach either (1) targets o (2) all producible compounds.
 
 **If you use MeneTools, please cite:**
 
@@ -261,6 +262,31 @@ from menetools import run_meneseed
 
 model = run_meneseed(draft_sbml='required',output='optional')
 ```
+
+### MENESCOPE_INC
+
+Menescope_inc identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets (2) all producible compounds.
+
+```
+usage: mene scope_inc [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--output OUTPUT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DRAFTNET, --draftnet DRAFTNET
+                        metabolic network in SBML format
+  -s SEEDS, --seeds SEEDS
+                        seeds in SBML format
+  -t TARGETS, --targets TARGETS
+                        targets in SBML format
+  --output OUTPUT       json output file
+```
+
+```python
+from menetools import run_menescope_inc
+
+model = run_menescope_inc(draft_sbml='required',seeds_sbml='required',targets_sbml='optional',output='optional')
+```
+
 ## Acknowledgements
 
 Many thanks to

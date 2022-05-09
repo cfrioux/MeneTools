@@ -19,7 +19,7 @@ from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
 from menetools.menedead import run_menedead
 from menetools.meneseed import run_meneseed
-from menetools.meneinc import run_meneinc
+from menetools.menescope_inc import run_menescope_inc
 
 
 __version__="3.2.1"

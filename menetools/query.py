@@ -284,11 +284,14 @@ def get_seed(draft):
         best_model = model
     return best_model
 
-def get_inc_scope(draft, targets, seeds):
+def get_inc_scope(draft, seeds, targets=None):
     draft_f = utils.to_file(draft)
     seed_f =  utils.to_file(seeds)
-    targets_f =  utils.to_file(targets)
-    prg = [inc_scope_prg, draft_f, seed_f, targets_f]
+    prg = [inc_scope_prg, draft_f, seed_f]
+    if targets:
+        targets_f =  utils.to_file(targets)
+        prg.append(targets_f)
+
     options = ''
     # solver = Gringo4Clasp()
     # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)

@@ -33,7 +33,7 @@ from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
 from menetools.menedead import run_menedead
 from menetools.meneseed import run_meneseed
-from menetools.meneinc import run_meneinc
+from menetools.menescope_inc import run_menescope_inc
 from shutil import which
 
 VERSION = pkg_resources.get_distribution("menetools").version
@@ -231,8 +231,8 @@ def main():
         ]
     )
 
-    inc_scope_parser = subparsers.add_parser(
-        "inc",
+    scope_inc_parser = subparsers.add_parser(
+        "scope_inc",
         help="Get producible targets in a metabolic network, starting from seeds. And using incremnetal mode show each step of activation.",
         parents=[
             parent_parser_d, parent_parser_s, parent_parser_t, parent_parser_o
@@ -260,8 +260,8 @@ def main():
         run_menescope(args.draftnet, args.seeds, args.output)
     elif args.cmd == "seed":
         run_meneseed(args.draftnet, args.output)
-    elif args.cmd == "inc":
-        run_meneinc(args.draftnet, args.seeds, args.targets, args.output)
+    elif args.cmd == "scope_inc":
+        run_menescope_inc(args.draftnet, args.seeds, args.targets, args.output)
     else:
         logger.critical("Invalid commands for mene.")
         parser.print_help()

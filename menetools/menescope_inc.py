@@ -23,16 +23,15 @@ import os
 import sys
 
 from menetools import utils, query, sbml
-from clyngor import as_pyasp
+from  clyngor.as_pyasp import Atom
 from xml.etree.ElementTree import ParseError
 
 
-logger = logging.getLogger('menetools.meneinc')
+logger = logging.getLogger('menetools.menescope_inc')
 
 
-def run_meneinc(draft_sbml,seeds_sbml,targets_sbml,output=None):
-    """get producible metabolites in a metabolic network, starting from seeds
-    using incremental mode to show each activation.
+def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
+    """identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets (2) all producible compounds.
     
     Args:
         draft_sbml (str): SBML metabolic network file
@@ -63,36 +62,56 @@ def run_meneinc(draft_sbml,seeds_sbml,targets_sbml,output=None):
         logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
         sys.exit(1)
 
-    logger.info(f'Reading targets from {targets_sbml}')
-    try:
-        targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
-    except FileNotFoundError:
-        logger.critical(f"File not found: {targets_sbml}")
-        sys.exit(1)
-    except ParseError:
-        logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
-        sys.exit(1)
+    # if targets are given, meneinc will show the incremental step needed to produce them.
+    if targets_sbml:
+        logger.info(f'Reading targets from {targets_sbml}')
+        try:
+            targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
+        except FileNotFoundError:
+            logger.critical(f"File not found: {targets_sbml}")
+            sys.exit(1)
+        except ParseError:
+            logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
+            sys.exit(1)
 
-    # Check if all targets are producible, if not stop the script.
-    # As the incremental scope will never end if tehre is unproducible targets.
-    logger.info('\nChecking network for unproducible targets')
+        # Check if all targets are producible, if not stop the script.
+        # As the incremental scope will never end if tehre is unproducible targets.
+        logger.info('\nChecking network for unproducible targets')
+        sys.stdout.flush()
+        model = query.get_unproducible(draftnet, targets, seeds)
+
+        unproducible_targets_lst = []
+        for pred in model :
+            if pred == 'unproducible_target':
+                for a in model[pred, 1]:
+                    unproducible_targets_lst.append(a[0])
+
+        if len(unproducible_targets_lst):
+            logger.critical('There is unproducible targets, incremental scope will enter an infinite loop due to them. Remove them if you want to pursue:')
+            logger.critical("\n".join(unproducible_targets_lst))
+            sys.exit()
+
+    # If no targets are given meneinc will predict the number of step needed to compute the all scope (first computed by menescope to have a goal).
+    if not targets_sbml:
+        sys.stdout.flush()
+        model = query.get_scope(draftnet, seeds)
+        scope = []
+        for pred in model:
+            if pred == 'dscope':
+                for a in model[pred, 1]:
+                    scope.append(a[0])
+        scope_size = len(scope)
+        seeds.add(Atom('maxscope', [str(scope_size)]))
+        utils.to_file(draftnet, 'test.lp')
+        utils.to_file(seeds, 'test.lp')
+
+    # Comptue incremental scope.
+    logger.info('\nChecking draft network incremental scope')
     sys.stdout.flush()
-    model = query.get_unproducible(draftnet, targets, seeds)
-
-    unproducible_targets_lst = []
-    for pred in model :
-        if pred == 'unproducible_target':
-            for a in model[pred, 1]:
-                unproducible_targets_lst.append(a[0])
-
-    if len(unproducible_targets_lst):
-        logger.critical('There is unproducible targets, incremental scope will enter an infinite loop due to them. Remove them if you want to pursue:')
-        logger.critical("\n".join(unproducible_targets_lst))
-        sys.exit()
-
-    logger.info('\nChecking draft network scope')
-    sys.stdout.flush()
-    model = query.get_inc_scope(draftnet, targets, seeds)
+    if targets_sbml:
+        model = query.get_inc_scope(draftnet, seeds, targets)
+    else:
+        model = query.get_inc_scope(draftnet, seeds)
 
     incremental_scope = {}
     for pred in model:

@@ -30,8 +30,14 @@ dscope(M, t) :- product(M,R), dreaction(R),
 dscope(M, t) :-  reactant(M,R), dreaction(R), reversible(R),
            dscope(M2, t-1): product(M2,R).
 
-% Check if the targets are produced.
+% Compute the size of the scope at step.
+dscopeSize(t, ScopeSize) :- ScopeSize=#sum{1,M : dscope(M, t)}.
+
+% Two possible goals:
+% - either targets are given as input and check the number of step to produce the target. WARNING if the taget are not producible, it will enter an infinite loop.
+% - or it will try to reach the same scope size as the one known from a menescope call to compute maxscope(MaxScope).
 #program check(t).
 :- target(F), query(t), not dscope(F, t).
+:- not dscopeSize(t, ScopeSize), query(t), maxscope(MaxScope), ScopeSize == MaxScope.
 
 #show dscope/2.

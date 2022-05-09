@@ -5,7 +5,7 @@ import json
 import os
 import subprocess
 
-from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti, run_menedead, run_meneseed, run_meneinc
+from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti, run_menedead, run_meneseed, run_menescope_inc
 
 DRAFT_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'draft.xml'])
 SEED_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'seeds.xml'])
@@ -255,8 +255,8 @@ def test_meneseed_toy_cli():
 
     os.remove('test.json')
 
-def test_meneinc():
-    print("*** test meneinc ***")
+def test_menescope_inc():
+    print("*** test menescope_inc ***")
     scope_step = {"M_A_c": 0, "M_C_c": 0,
                 "M_B_c": 1, "M_D_c": 1,
                 "M_E_c": 2,
@@ -269,7 +269,7 @@ def test_meneinc():
                         3: ["M_F_c"],
                         4: ["M_H_c", "M_G_c"]
                         }
-    results = run_meneinc(MENEINC_DRAFT_PATH, MENEINC_SEED_PATH, MENEINC_TARGETS_PATH)
+    results = run_menescope_inc(MENEINC_DRAFT_PATH, MENEINC_SEED_PATH, MENEINC_TARGETS_PATH)
 
     assert len(results['incremental_scope']) == len(scope_step)
     for metabolite in scope_step:
@@ -278,8 +278,8 @@ def test_meneinc():
         assert set(step_production[step]) == set(results['step_produced'][step])
 
 
-def test_meneinc_cli():
-    print("*** test meneinc cli ***")
+def test_menescope_inc_cli():
+    print("*** test menescope_inc cli ***")
     scope_step = {"M_A_c": 0, "M_C_c": 0,
                 "M_B_c": 1, "M_D_c": 1,
                 "M_E_c": 2,
@@ -293,7 +293,7 @@ def test_meneinc_cli():
                         "4": ["M_H_c", "M_G_c"]
                         }
 
-    subprocess.call(['mene', 'inc', '-d', MENEINC_DRAFT_PATH,
+    subprocess.call(['mene', 'scope_inc', '-d', MENEINC_DRAFT_PATH,
                         '-s', MENEINC_SEED_PATH, '-t', MENEINC_TARGETS_PATH,
                         '--output', 'test.json'])
 
