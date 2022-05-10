@@ -31,7 +31,7 @@ logger = logging.getLogger('menetools.menescope_inc')
 
 
 def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
-    """identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets (2) all producible compounds.
+    """identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets or (2) all producible compounds.
     
     Args:
         draft_sbml (str): SBML metabolic network file
@@ -40,7 +40,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
         output (str): path to json output file
     
     Returns:
-        list: producible compounds
+        dict: with 2 subdicts containing the step and their associated producible compounds
     """
     logger.info(f'Reading draft network from {draft_sbml}')
     try:
@@ -62,7 +62,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
         logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
         sys.exit(1)
 
-    # if targets are given, meneinc will show the incremental step needed to produce them.
+    # If targets are given, menescope_inc will output the number of steps needed to produce them.
     if targets_sbml:
         logger.info(f'Reading targets from {targets_sbml}')
         try:
@@ -75,7 +75,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
             sys.exit(1)
 
         # Check if all targets are producible, if not stop the script.
-        # As the incremental scope will never end if tehre is unproducible targets.
+        # As the incremental scope will never end if there is unproducible targets.
         logger.info('\nChecking network for unproducible targets')
         sys.stdout.flush()
         model = query.get_unproducible(draftnet, targets, seeds)
@@ -87,7 +87,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
                     unproducible_targets_lst.append(a[0])
 
         if len(unproducible_targets_lst):
-            logger.critical('There is unproducible targets, incremental scope will enter an infinite loop due to them. Remove them if you want to pursue:')
+            logger.critical('There is unproducible targets in {0}, incremental scope will enter an infinite loop due to them. Remove them if you want to continue:'.format(targets_sbml))
             logger.critical("\n".join(unproducible_targets_lst))
             sys.exit()
 
@@ -105,7 +105,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
         utils.to_file(draftnet, 'test.lp')
         utils.to_file(seeds, 'test.lp')
 
-    # Comptue incremental scope.
+    # Compute incremental scope.
     logger.info('\nChecking draft network incremental scope')
     sys.stdout.flush()
     if targets_sbml:
@@ -137,7 +137,10 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
 
     ordered_steps = sorted(list(step_produced.keys()))
     for step in ordered_steps:
-        logger.info('{0} new metabolites producible at step {1}'.format(len(step_produced[step]), step))
+        if step == 0:
+            logger.info('{0} seeds at step {1}'.format(len(step_produced[step]), step))
+        else:
+            logger.info('{0} new metabolites producible at step {1}'.format(len(step_produced[step]), step))
 
     results = {'incremental_scope': incremental_scope, 'step_produced': step_produced}
     if output:

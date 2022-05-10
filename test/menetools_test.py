@@ -11,9 +11,9 @@ DRAFT_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'draft.xml'])
 SEED_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'seeds.xml'])
 TARGETS_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'targets.xml'])
 
-MENEINC_DRAFT_PATH = os.path.join('meneinc_test_data', 'network.sbml')
-MENEINC_SEED_PATH = os.path.join('meneinc_test_data', 'seeds.sbml')
-MENEINC_TARGETS_PATH = os.path.join('meneinc_test_data', 'targets.sbml')
+MENEINC_DRAFT_PATH = os.path.join('mene_scope_inc', 'network.sbml')
+MENEINC_SEED_PATH = os.path.join('mene_scope_inc', 'seeds.sbml')
+MENEINC_TARGETS_PATH = os.path.join('mene_scope_inc', 'targets.sbml')
 
 
 def test_menecof():
