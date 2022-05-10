@@ -233,7 +233,7 @@ def main():
 
     scope_inc_parser = subparsers.add_parser(
         "scope_inc",
-        help="Get producible targets in a metabolic network, starting from seeds. And using incremnetal mode show each step of activation.",
+        help="Get the step of the network expansion to produce either targets or all the producible compounds, starting from seeds.",
         parents=[
             parent_parser_d, parent_parser_s, parent_parser_t, parent_parser_o
         ]
