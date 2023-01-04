@@ -10,7 +10,7 @@ MeneTools are Python (3.6 and higher) tools to explore the producibility potenti
 * obtain compounds that if added to the nutrients, would ensure the producibility of targets (`Mene cof`)
 * identify metabolic deadends, _i.e._ metabolites that act as reactants of reactions but never as products, or metabolites that act as products of reactions but never as reactants. This is a purely structural analysis (`Mene dead`)
 * identify exchanged compounds in metabolic networks based on exchange reactions, _i.e._ outputs of reactions that do not have reactants (`Mene seed`).
-* identify the number of step needed either to produce targets or all producible compounds (computed with menescope) starting from nutrients (`Mene scope_inc`).
+* identify the number of steps needed either to produce targets or all producible compounds (computed with menescope) starting from nutrients (`Mene scope_inc`).
 
 MeneTools follows the producibility in metabolic networks as defined by the [network expansion](http://www.ncbi.nlm.nih.gov/pubmed/15712108) algorithm.
 Mainly, two rules are followed:
@@ -265,7 +265,7 @@ model = run_meneseed(draft_sbml='required',output='optional')
 
 ### MENESCOPE_INC
 
-Menescope_inc identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets (2) all producible compounds.
+Menescope_inc identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets or (2) all producible compounds.
 
 ```
 usage: mene scope_inc [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--output OUTPUT]
