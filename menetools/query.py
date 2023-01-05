@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import os
-import tempfile
 import clyngor
 import logging
 from menetools import utils
@@ -293,8 +292,6 @@ def get_inc_scope(draft, seeds, targets=None):
         prg.append(targets_f)
 
     options = ''
-    # solver = Gringo4Clasp()
-    # models = solver.run(prg,collapseTerms=True,collapseAtoms=False)
     best_model = None
     models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:

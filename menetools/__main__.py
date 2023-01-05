@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -233,7 +233,7 @@ def main():
 
     scope_inc_parser = subparsers.add_parser(
         "scope_inc",
-        help="Get the step of the network expansion to produce either targets or all the producible compounds, starting from seeds.",
+        help="Get the steps of the network expansion to produce either targets or all the producible compounds, starting from seeds.",
         parents=[
             parent_parser_d, parent_parser_s, parent_parser_t, parent_parser_o
         ]

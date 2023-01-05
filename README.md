@@ -20,7 +20,7 @@ Mainly, two rules are followed:
 A metabolite that is producible from a set of nutrients is described as being "in the scope of the seeds".
 The computation is made using logic solvers (Answer Set Programming). The present modelling ignores the stoichiometry of reactions (2A + B --> C is considered equivalent to A + B --> C), and is therefore suited to non-curated or draft metabolic networks.
 
-**Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism. **Menedead** (*beta* version) identifies deadends in a metabolic network. Deadends are compounds which are not produced or consumed (meaning that they are not reactant or product of a reaction). **Menescope_inc** (*beta* version) computes the number of step needed by the expansion algorithm to reach either (1) targets o (2) all producible compounds.
+**Menescope** computes the set of metabolites that are producible from a set of nutrients: its provides the scope of the seeds in a metabolic network. **Menecheck** assesses whether a list of target metabolites are producible from the nutrients in a metabolic model, following the network expansion algorithm. **Meneacti** has a similar functioning than Menetools but focuses on activable reactions. It computes all reactions that can be activated from the nutritional environment (i.e. whose sets of reactants are in the scope). **Menepath** (*beta* version) proposes a pathway (set of reactions) that explains the producibility of a given target metabolite from the seeds. The objective if to find a path of reactions for metabolites of interest. **Menecof** (*beta* version) proposes compounds that would unblock the producibility of taregt metabolites if they were producible. It can therefore identify missing cofactor for the modelling or compounds that would need to be added to the growth medium of the modelled organism. **Menedead** (*beta* version) identifies deadends in a metabolic network. Deadends are compounds which are not produced or consumed (meaning that they are not reactant or product of a reaction). **Meneseed** (*beta* version) returns metabolites produced by reaction without reactants. **Menescope_inc** (*beta* version) computes the number of steps needed by the expansion algorithm to reach either (1) targets o (2) all producible compounds.
 
 **If you use MeneTools, please cite:**
 
@@ -48,7 +48,7 @@ pip install menetools
 ## Usage
 
 ```
-usage: mene [-h] [-v] {acti,check,cof,dead,path,scope,seed} ...
+usage: mene [-h] [-v] {acti,check,cof,dead,path,scope,seed,scope_inc} ...
 
 Explore the producibility potential in a metabolic network using the network
 expansion algorithm. For specific help on each subcommand use: mene {cmd}
@@ -61,7 +61,7 @@ optional arguments:
 subcommands:
   valid subcommands:
 
-  {acti,check,cof,dead,path,scope,seed}
+  {acti,check,cof,dead,path,scope,seed,scope_inc}
     acti                Get activable reactions in a metabolic network,
                         starting from seeds.
     check               Check the producibility of targets from seeds in a
@@ -76,6 +76,9 @@ subcommands:
     scope               Get producible metabolites in a metabolic network,
                         starting from seeds.
     seed                Get metabolites from exchange reactions in a metabolic network.
+    scope_inc           Get the steps of the network expansion to produce
+                        either targets or all the producible compounds,
+                        starting from seeds.
 
 Requires Clingo and clyngor package: "pip install clyngor clyngor-with-clingo"
 
@@ -266,6 +269,7 @@ model = run_meneseed(draft_sbml='required',output='optional')
 ### MENESCOPE_INC
 
 Menescope_inc identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets or (2) all producible compounds.
+The results are for each step, the producible metabolites.
 
 ```
 usage: mene scope_inc [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--output OUTPUT]

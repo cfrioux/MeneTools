@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #-*- coding: utf-8 -*-
 
-# Copyright (C) 2017-2021 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -15,11 +15,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import argparse
-import inspect
 import json
 import logging
-import os
 import sys
 
 from menetools import utils, query, sbml
@@ -40,7 +37,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
         output (str): path to json output file
     
     Returns:
-        dict: with 2 subdicts containing the step and their associated producible compounds
+        dict: with 2 subdicts containing the steps and their associated producible compounds
     """
     logger.info(f'Reading draft network from {draft_sbml}')
     try:
@@ -86,14 +83,15 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
                 for a in model[pred, 1]:
                     unproducible_targets_lst.append(a[0])
 
-        if len(unproducible_targets_lst):
+        if len(unproducible_targets_lst) > 0:
             logger.critical('There is unproducible targets in {0}, incremental scope will enter an infinite loop due to them. Remove them if you want to continue:'.format(targets_sbml))
             logger.critical("\n".join(unproducible_targets_lst))
             sys.exit()
 
-    # If no targets are given meneinc will predict the number of step needed to compute the all scope (first computed by menescope to have a goal).
+    # If no targets are given mene scope_inc will predict the number of steps needed to produce all producible compounds (first computed by menescope to have a goal).
     if not targets_sbml:
         sys.stdout.flush()
+        # Compute the producible compounds.
         model = query.get_scope(draftnet, seeds)
         scope = []
         for pred in model:
@@ -101,6 +99,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
                 for a in model[pred, 1]:
                     scope.append(a[0])
         scope_size = len(scope)
+        # Add the number of producible compounds as the maxscope to reach.
         seeds.add(Atom('maxscope', [str(scope_size)]))
         utils.to_file(draftnet, 'test.lp')
         utils.to_file(seeds, 'test.lp')

@@ -3,6 +3,7 @@
 
 import json
 import os
+import pytest
 import subprocess
 
 from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti, run_menedead, run_meneseed, run_menescope_inc
@@ -13,6 +14,7 @@ TARGETS_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'targets.xml'])
 
 MENEINC_DRAFT_PATH = os.path.join('mene_scope_inc', 'network.sbml')
 MENEINC_SEED_PATH = os.path.join('mene_scope_inc', 'seeds.sbml')
+MENEINC_UNCORRECT_SEED_PATH = os.path.join('mene_scope_inc', 'uncorrect_seeds.sbml')
 MENEINC_TARGETS_PATH = os.path.join('mene_scope_inc', 'targets.sbml')
 
 
@@ -255,6 +257,7 @@ def test_meneseed_toy_cli():
 
     os.remove('test.json')
 
+
 def test_menescope_inc():
     print("*** test menescope_inc ***")
     scope_step = {"M_A_c": 0, "M_C_c": 0,
@@ -276,6 +279,15 @@ def test_menescope_inc():
         assert scope_step[metabolite] == results['incremental_scope'][metabolite]
     for step in step_production:
         assert set(step_production[step]) == set(results['step_produced'][step])
+
+
+def test_menescope_inc_unproducible_targets():
+    print("*** test menescope_inc unproducible targets ***")
+
+    # Check that mene scope_inc successfully exists when having unproducible targets.
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        run_menescope_inc(MENEINC_DRAFT_PATH, MENEINC_UNCORRECT_SEED_PATH, MENEINC_TARGETS_PATH)
+    assert pytest_wrapped_e.type == SystemExit
 
 
 def test_menescope_inc_cli():
