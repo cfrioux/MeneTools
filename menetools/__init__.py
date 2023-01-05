@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -22,6 +22,6 @@ from menetools.meneseed import run_meneseed
 from menetools.menescope_inc import run_menescope_inc
 
 
-__version__="3.2.1"
+__version__="3.3.0"
 """Define the version of the package.
 """
