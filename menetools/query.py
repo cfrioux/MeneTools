@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import os
-import tempfile
 import clyngor
 import logging
 from menetools import utils
@@ -30,6 +29,7 @@ cof_prg = os.path.join(*[root, 'encodings', 'get_cofs.lp'])
 cof_w_prg = os.path.join(*[root, 'encodings', 'get_cofs_weighted.lp'])
 dead_prg = os.path.join(*[root, 'encodings', 'get_deadends.lp'])
 seed_prg = os.path.join(*[root, 'encodings', 'get_seeds.lp'])
+inc_scope_prg = os.path.join(*[root, 'encodings', 'get_incremental_scope.lp'])
 
 
 def get_scope(draft, seeds):
@@ -281,4 +281,21 @@ def get_seed(draft):
     models = clyngor.solve(prg, options=options, use_clingo_module=False)
     for model in models.discard_quotes.by_arity:
         best_model = model
+    return best_model
+
+def get_inc_scope(draft, seeds, targets=None):
+    draft_f = utils.to_file(draft)
+    seed_f =  utils.to_file(seeds)
+    prg = [inc_scope_prg, draft_f, seed_f]
+    if targets:
+        targets_f =  utils.to_file(targets)
+        prg.append(targets_f)
+
+    options = ''
+    best_model = None
+    models = clyngor.solve(prg, options=options, use_clingo_module=False)
+    for model in models.discard_quotes.by_arity:
+        best_model = model
+    os.unlink(draft_f)
+    os.unlink(seed_f)
     return best_model

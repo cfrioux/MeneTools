@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -33,6 +33,7 @@ from menetools.menecof import run_menecof
 from menetools.menepath import run_menepath
 from menetools.menedead import run_menedead
 from menetools.meneseed import run_meneseed
+from menetools.menescope_inc import run_menescope_inc
 from shutil import which
 
 VERSION = pkg_resources.get_distribution("menetools").version
@@ -230,6 +231,14 @@ def main():
         ]
     )
 
+    scope_inc_parser = subparsers.add_parser(
+        "scope_inc",
+        help="Get the steps of the network expansion to produce either targets or all the producible compounds, starting from seeds.",
+        parents=[
+            parent_parser_d, parent_parser_s, parent_parser_t, parent_parser_o
+        ]
+    )
+
     args = parser.parse_args()
 
     # If no argument print the help.
@@ -251,6 +260,8 @@ def main():
         run_menescope(args.draftnet, args.seeds, args.output)
     elif args.cmd == "seed":
         run_meneseed(args.draftnet, args.output)
+    elif args.cmd == "scope_inc":
+        run_menescope_inc(args.draftnet, args.seeds, args.targets, args.output)
     else:
         logger.critical("Invalid commands for mene.")
         parser.print_help()

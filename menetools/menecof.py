@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-# Copyright (C) 2017-2021 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -15,18 +15,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import argparse
-import inspect
 import json
 import logging
-import os
 import re
 import sys
 
 from .utils import clean_up
 from .query import get_unproducible, get_cofs_weighted, get_cofs, get_intersection_of_optimal_solutions_cof, get_union_of_optimal_solutions_cof, get_optimal_solutions_cof
 from .sbml import readSBMLspecies_clyngor, make_weighted_list_of_species, readSBMLnetwork_clyngor
-from clyngor import as_pyasp
 from clyngor.as_pyasp import TermSet, Atom
 from xml.etree.ElementTree import ParseError
 
