@@ -8,7 +8,7 @@
 * tests and doc for `Mene scope_inc` 
 * CHANGELOG.md file
 
-## Modify
+## Modify
 
 * Remove uneeded imports
 * Update license year
