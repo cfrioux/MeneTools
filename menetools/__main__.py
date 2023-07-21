@@ -217,7 +217,7 @@ def main():
 
     scope_parser = subparsers.add_parser(
         "scope",
-        help="Get producible metabolites in a metabolic network, starting from seeds.",
+        help="Get producible metabolites in a metabolic network, starting from seeds. The outputs for menecope are (i) As a control: seeds that were provided but do not appear in the metabolic network., (ii) The _scope_ i.e. compounds that are in the seeds and those that are produced from the seeds, (iii) Two subsets to distinguish seed status. (iii-a) those that can be produced by the metabolic network. For such seeds, the organism would have the metabolic capability to renew the production in addition to what was available in the environement. (iii-b) those that cannot be produced by the metabolic network. For such seeds, there is no alternative other than relying on the environmental composition.",
         parents=[
             parent_parser_d, parent_parser_s, parent_parser_o
         ]

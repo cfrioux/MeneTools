@@ -66,21 +66,27 @@ def test_menecof_cli():
 
 def test_menescope():
     print("*** test menescope ***")
-    scope = 8
-    compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c']
+    scope = 9
+    compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c', 'M_l_c']
     seeds_produced = ['M_S_c']
+    missing_seeds = ['M_foo_c']
+    seeds_non_produced = ['M_l_c']
     results = run_menescope(DRAFT_PATH, SEED_PATH)
 
     assert set(results['scope']) == set(compounds)
     assert len(results['scope']) == scope
     assert set(results['produced_seeds']) == set(seeds_produced)
+    assert set(results['non_produced_seeds']) == set(seeds_non_produced)
+    assert set(results['absent_seeds']) == set(missing_seeds)
 
 
 def test_menescope_cli():
     print("*** test menescope cli ***")
-    scope = 8
-    compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c']
+    scope = 9
+    compounds = ['M_e_c', 'M_g_c', 'M_S_c', 'M_f_c', 'M_S_b', 'M_i_c', 'M_d_c', 'M_T3_c', 'M_l_c']
     seeds_produced = ['M_S_c']
+    missing_seeds = ['M_foo_c']
+    seeds_non_produced = ['M_l_c']
 
     subprocess.call(['mene', 'scope', '-d', DRAFT_PATH,
                         '-s', SEED_PATH,  '--output', 'test.json'])
@@ -90,6 +96,8 @@ def test_menescope_cli():
     assert set(results['scope']) == set(compounds)
     assert len(results['scope']) == scope
     assert set(results['produced_seeds']) == set(seeds_produced)
+    assert set(results['non_produced_seeds']) == set(seeds_non_produced)
+    assert set(results['absent_seeds']) == set(missing_seeds)
     os.remove('test.json')
 
 

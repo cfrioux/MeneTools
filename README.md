@@ -132,6 +132,14 @@ from menetools import run_menescope
 model = run_menescope(draft_sbml='required',seeds_sbml='required',output='optional')
 ```
 
+The outputs for menecope are
+
+- As a control: seeds that were provided but do not appear in the metabolic network.
+- The _scope_ i.e. compounds that are in the seeds and those that are produced from the seeds
+- Two subsets to distinguish seed status
+  - those that can be produced by the metabolic network. For such seeds, the organism would have the metabolic capability to renew the production in addition to what was available in the environement. 
+  - those that cannot be produced by the metabolic network. For such seeds, there is no alternative other than relying on the environmental composition.
+
 ### MENEACTI
 
 Meneacti is a python3 tool that retrieve the activable reactions from
@@ -296,4 +304,3 @@ model = run_menescope_inc(draft_sbml='required',seeds_sbml='required',targets_sb
 Many thanks to
 * [@Aluriak](https://github.com/Aluriak) for his awesome work with [Clyngor](https://github.com/Aluriak/clyngor).
 * [@mablt](https://github.com/mablt) for his contribution to MeneSeed.
-
