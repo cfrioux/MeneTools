@@ -245,7 +245,7 @@ def readSBMLspecies_clyngor(filename, speciestype) :
     model = get_model(sbml)
 
     listOfSpecies = get_listOfSpecies(model)
-    if listOfSpecies:
+    if listOfSpecies is not None:
         for e in listOfSpecies:
             if e.tag[0] == "{":
                 uri, tag = e.tag[1:].split("}")
