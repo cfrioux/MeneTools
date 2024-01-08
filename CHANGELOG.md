@@ -1,5 +1,17 @@
 # Changelog
 
+# MeneTools v3.4.0 (2024-01-08)
+
+## Add
+
+* `Mene scope_inc` identifies the number of steps needed either to produce targets or all producible compounds (computed with menescope) starting from nutrients
+
+## Modify
+
+* Filter the presence of seeds in the scope by removing seeds absent from the network (issue #15)
+* Modify if statement that will be deprecated in the future.
+* Update license year
+
 # MeneTools v3.3.0 (2023-01-05)
 
 ## Add
