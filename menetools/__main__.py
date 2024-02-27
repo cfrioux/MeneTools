@@ -14,9 +14,7 @@
 
 import argparse
 import logging
-import pkg_resources
 import sys
-import time
 
 logger = logging.getLogger('menetools')
 logger.setLevel(logging.DEBUG)
@@ -26,6 +24,7 @@ out_hdlr.setLevel(logging.DEBUG)
 logger.addHandler(out_hdlr)
 logger.propagate = True
 
+from menetools import __version__ as VERSION
 from menetools.menescope import run_menescope
 from menetools.meneacti import run_meneacti
 from menetools.menecheck import run_menecheck
@@ -36,7 +35,6 @@ from menetools.meneseed import run_meneseed
 from menetools.menescope_inc import run_menescope_inc
 from shutil import which
 
-VERSION = pkg_resources.get_distribution("menetools").version
 LICENSE = """Copyright (C) Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
