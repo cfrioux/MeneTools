@@ -22,6 +22,6 @@ from menetools.meneseed import run_meneseed
 from menetools.menescope_inc import run_menescope_inc
 
 
-__version__="3.3.0"
+__version__="3.4.0"
 """Define the version of the package.
 """
