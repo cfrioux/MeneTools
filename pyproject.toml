@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "MeneTools"
+dynamic = ["version"]
+authors = [{name = "Clemence Frioux", email = "clemence.frioux@inria.fr"}]
+readme = "README.md"
+description = "Metabolic Network Topology Analysis Tools"
+license = {text = "LGPL-3.0-or-later"}
+dependencies = [
+  'clyngor_with_clingo',
+  'clyngor'
+]
+
+classifiers =[
+  'Programming Language :: Python :: 3.6',
+  'Programming Language :: Python :: 3.7',
+  'Programming Language :: Python :: 3.8',
+  'Operating System :: MacOS :: MacOS X',
+  'Operating System :: Unix',
+]
+
+[project.scripts]
+mene = "menetools.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/cfrioux/MeneTools"
+Changelog = "https://github.com/cfrioux/MeneTools/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+packages = ['menetools']
+package-dir = {'menetools' = 'menetools'}
+package-data = {'menetools' = ['encodings/*.lp']}
+
+[tool.setuptools.dynamic]
+version = { attr = "menetools.__version__" }
+dependencies = {file = ["requirements.txt"]}

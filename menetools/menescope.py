@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #-*- coding: utf-8 -*-
 
-# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2024 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -62,6 +62,8 @@ def run_menescope(draft_sbml,seeds_sbml,output=None):
     model = query.get_scope(draftnet, seeds)
     scope = []
     produced_seeds = []
+    non_produced_seeds = []
+    absent_seeds = []
     for pred in model:
         if pred == 'dscope':
             for a in model[pred, 1]:
@@ -69,10 +71,22 @@ def run_menescope(draft_sbml,seeds_sbml,output=None):
         if pred == 'produced_seed':
             for a in model[pred, 1]:
                 produced_seeds.append(a[0])
+        if pred == 'non_produced_seed':
+            for a in model[pred, 1]:
+                non_produced_seeds.append(a[0])
+        if pred == 'absent_seed':
+            for a in model[pred, 1]:
+                absent_seeds.append(a[0])
     logger.info(' ' + str(len(scope)) + ' compounds on scope:')
     logger.info('\n'.join(scope))
+    logger.info(' ' + str(len(produced_seeds)) + ' seeds are producible:')
+    logger.info('\n'.join(produced_seeds))
+    logger.info(' ' + str(len(non_produced_seeds)) + ' seeds are not producible:')
+    logger.info('\n'.join(non_produced_seeds))
+    logger.info(' ' + str(len(absent_seeds)) + ' seeds that were provided as input are absent from the network:')
+    logger.info('\n'.join(absent_seeds))
 
-    results = {'scope': scope, 'produced_seeds': produced_seeds}
+    results = {'scope': scope, 'produced_seeds': produced_seeds, 'non_produced_seeds': non_produced_seeds, 'absent_seeds': absent_seeds}
     if output:
         with open(output, "w") as output_file:
             json.dump(results, output_file, indent=True, sort_keys=True)

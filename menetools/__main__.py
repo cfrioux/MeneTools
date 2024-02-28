@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2023 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
+# Copyright (C) 2017-2024 Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -14,9 +14,7 @@
 
 import argparse
 import logging
-import pkg_resources
 import sys
-import time
 
 logger = logging.getLogger('menetools')
 logger.setLevel(logging.DEBUG)
@@ -26,6 +24,7 @@ out_hdlr.setLevel(logging.DEBUG)
 logger.addHandler(out_hdlr)
 logger.propagate = True
 
+from menetools import __version__ as VERSION
 from menetools.menescope import run_menescope
 from menetools.meneacti import run_meneacti
 from menetools.menecheck import run_menecheck
@@ -36,7 +35,6 @@ from menetools.meneseed import run_meneseed
 from menetools.menescope_inc import run_menescope_inc
 from shutil import which
 
-VERSION = pkg_resources.get_distribution("menetools").version
 LICENSE = """Copyright (C) Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -217,7 +215,7 @@ def main():
 
     scope_parser = subparsers.add_parser(
         "scope",
-        help="Get producible metabolites in a metabolic network, starting from seeds.",
+        help="Get producible metabolites in a metabolic network, starting from seeds. The outputs for menecope are (i) As a control: seeds that were provided but do not appear in the metabolic network., (ii) The _scope_ i.e. compounds that are in the seeds and those that are produced from the seeds, (iii) Two subsets to distinguish seed status. (iii-a) those that can be produced by the metabolic network. For such seeds, the organism would have the metabolic capability to renew the production in addition to what was available in the environement. (iii-b) those that cannot be produced by the metabolic network. For such seeds, there is no alternative other than relying on the environmental composition.",
         parents=[
             parent_parser_d, parent_parser_s, parent_parser_o
         ]

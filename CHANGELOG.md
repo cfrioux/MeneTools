@@ -1,5 +1,15 @@
 # Changelog
 
+# MeneTools v3.4.0 (2024-02-28)
+
+## Modify
+
+* Filter the presence of seeds in the scope by removing seeds absent from the network (issue #15)
+* Modify if statement that will be deprecated in the future
+* Replace use of pkg_resources that will become deprecated
+* Move from `setup.py`/`setup.cfg` to `pyproject.toml`
+* Update license year
+
 # MeneTools v3.3.0 (2023-01-05)
 
 ## Add

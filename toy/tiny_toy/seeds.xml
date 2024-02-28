@@ -16,6 +16,8 @@
 </listOfCompartments>
 <listOfSpecies>
   <species id="M_S_c" name="M_S_c" compartment="C_c"/>
+  <species id="M_foo_c" name="M_foo_c" compartment="C_c"/>
+  <species id="M_l_c" name="M_l_c" compartment="C_c"/>
 </listOfSpecies>
 <listOfReactions>
 </listOfReactions>
