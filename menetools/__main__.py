@@ -96,7 +96,7 @@ def main():
         "-s",
         "--seeds",
         dest="seeds",
-        help="seeds in SBML format",
+        help="seeds in SBML format (by default) or flat list of compound identifiers (file extension .list).",
         required=True,
     )
     parent_parser_t = argparse.ArgumentParser(add_help=False)

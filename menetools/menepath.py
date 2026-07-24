@@ -18,6 +18,7 @@
 import json
 import logging
 import sys
+import os
 
 from clyngor.as_pyasp import TermSet, Atom
 from menetools import utils, query, sbml
@@ -26,12 +27,12 @@ from xml.etree.ElementTree import ParseError
 logger = logging.getLogger('menetools.menepath')
 
 
-def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=None,output=None):
+def run_menepath(draft_sbml,seeds_file,targets_sbml,min_size=None,enumeration=None,output=None):
     """Get production pathways of targets in metabolic networks, started from seeds
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_sbml (str): SBML seeds file
+        seeds_file (str): SBML or flat seeds file
         targets_sbml (str): SBML targets file
         min_size (bool, optional): Defaults to None. minimal size paths
         enumeration (bool, optional): Defaults to None. enumeration of all paths
@@ -51,7 +52,22 @@ def run_menepath(draft_sbml,seeds_sbml,targets_sbml,min_size=None,enumeration=No
         logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
 
-    logger.info(f'Reading seeds from {seeds_sbml}')
+    logger.info(f'Reading seeds from {seeds_file}')
+    if os.path.splitext(seeds_file)[1] == ".list":
+        seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
+    else:
+        seeds_sbml = seeds_file
+        logger.info(f"Reading seeds from {seeds_sbml}")
+        try:
+            seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, "seed")
+        except FileNotFoundError:
+            logger.critical(f"File not found: {seeds_sbml}")
+            sys.exit(1)
+        except ParseError:
+            logger.critical(f"Invalid syntax in SBML file: {seeds_sbml}")
+            sys.exit(1)
+
+
     try:
         seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
     except FileNotFoundError:

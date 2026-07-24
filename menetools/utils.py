@@ -18,6 +18,8 @@ import os
 import logging
 import tempfile
 
+from clyngor.as_pyasp import TermSet, Atom
+
 logger = logging.getLogger('menetools.utils')
 
 
@@ -56,3 +58,20 @@ def to_file(termset, outputfile=None):
         f.write(str(t) + '.\n')
     f.close()
     return outputfile
+
+
+def read_flat_atoms_clyngor(filename, predicatetype) :
+    """
+    Read a list of identifier at return lp facts, under predicate `predicatetype`.
+
+    Args:
+        filename (str): a filepath with a list of item, one item a row.
+        predicatetype (str): the atom type to create (e.g. "species" for species("CAMP") for instance).
+    """
+    all_atoms = set()
+    with open(filename, "r") as f:
+        for row in f:
+            item = row.strip()
+            all_atoms.add(Atom(predicatetype, ["\""+ item + "\""]))
+    lpfacts = TermSet(all_atoms)
+    return lpfacts

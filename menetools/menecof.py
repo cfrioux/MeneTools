@@ -19,8 +19,10 @@ import json
 import logging
 import re
 import sys
+import os
 
 from .utils import clean_up
+from . import utils
 from .query import get_unproducible, get_cofs_weighted, get_cofs, get_intersection_of_optimal_solutions_cof, get_union_of_optimal_solutions_cof, get_optimal_solutions_cof
 from .sbml import readSBMLspecies_clyngor, make_weighted_list_of_species, readSBMLnetwork_clyngor
 from clyngor.as_pyasp import TermSet, Atom
@@ -47,12 +49,12 @@ def convert_to_coded_id(uncoded):
     return uncoded
 
 
-def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumeration=None,output=None):
+def run_menecof(draft_sbml,seeds_file,targets_sbml,cofactors_txt=None,weights=None,suffix=None,enumeration=None,output=None):
     """propose cofactor whose producibility could unblock the producibility of targets
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_sbml (str): SBML seeds file
+        seeds_file (str): SBML or flat seeds file
         targets_sbml (str): SBML targets file
         cofactors_txt (str, optional): Defaults to None. Cofactors file, one per line
         weights (bool, optional): Defaults to None. True if cofactors_txt is weighted
@@ -73,6 +75,20 @@ def run_menecof(draft_sbml,seeds_sbml,targets_sbml,cofactors_txt=None,weights=No
     except ParseError:
         logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
+
+    if os.path.splitext(seeds_file)[1] == ".list":
+        seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
+    else:
+        seeds_sbml = seeds_file
+        logger.info(f"Reading seeds from {seeds_sbml}")
+        try:
+            seeds = readSBMLspecies_clyngor(seeds_sbml, "seed")
+        except FileNotFoundError:
+            logger.critical(f"File not found: {seeds_sbml}")
+            sys.exit(1)
+        except ParseError:
+            logger.critical(f"Invalid syntax in SBML file: {seeds_sbml}")
+            sys.exit(1)
 
     logger.info(f'Reading seeds from {seeds_sbml}')
     try:

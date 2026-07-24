@@ -18,6 +18,7 @@
 import json
 import logging
 import sys
+import os
 
 from menetools import utils, query, sbml
 from xml.etree.ElementTree import ParseError
@@ -25,7 +26,7 @@ from xml.etree.ElementTree import ParseError
 logger = logging.getLogger('menetools.menecheck')
 
 
-def run_menecheck(draft_sbml,seeds_sbml,targets_sbml,output=None):
+def run_menecheck(draft_sbml,seeds_file,targets_sbml,output=None):
     """checks the producibility of targets from seeds in a metabolic network
     
     Args:
@@ -47,15 +48,20 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml,output=None):
         logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
 
-    logger.info(f'Reading seeds from {seeds_sbml}')
-    try:
-        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
-    except FileNotFoundError:
-        logger.critical(f'File not found: {seeds_sbml}')
-        sys.exit(1)
-    except ParseError:
-        logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
-        sys.exit(1)
+    logger.info(f'Reading seeds from {seeds_file}')
+    if os.path.splitext(seeds_file)[1] == ".list":
+        seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
+    else:
+        seeds_sbml = seeds_file
+        logger.info(f"Reading seeds from {seeds_sbml}")
+        try:
+            seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, "seed")
+        except FileNotFoundError:
+            logger.critical(f"File not found: {seeds_sbml}")
+            sys.exit(1)
+        except ParseError:
+            logger.critical(f"Invalid syntax in SBML file: {seeds_sbml}")
+            sys.exit(1)
 
     logger.info(f'Reading targets from {targets_sbml}')
     try:
