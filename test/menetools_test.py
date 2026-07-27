@@ -7,6 +7,7 @@ import pytest
 import subprocess
 
 from menetools import run_menecof, run_menescope, run_menecheck, run_menepath, run_meneacti, run_menedead, run_meneseed, run_menescope_inc
+from menetools import sbml, utils
 
 DRAFT_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'draft.xml'])
 SEED_PATH = os.path.join(*['..', 'toy', 'tiny_toy', 'seeds.xml'])
@@ -16,6 +17,209 @@ MENEINC_DRAFT_PATH = os.path.join('mene_scope_inc', 'network.sbml')
 MENEINC_SEED_PATH = os.path.join('mene_scope_inc', 'seeds.sbml')
 MENEINC_UNCORRECT_SEED_PATH = os.path.join('mene_scope_inc', 'uncorrect_seeds.sbml')
 MENEINC_TARGETS_PATH = os.path.join('mene_scope_inc', 'targets.sbml')
+TEST_DIR = os.path.dirname(__file__)
+
+
+def _test_file_path(*parts):
+    return os.path.normpath(os.path.join(TEST_DIR, *parts))
+
+
+def _seed_atoms_to_compounds(seed_atoms):
+    return {atom.args()[0].strip('"') for atom in seed_atoms}
+
+
+def test_seed_parsing_tiny_toy_sbml_and_list():
+    expected_compounds = {'M_S_c', 'M_foo_c', 'M_l_c'}
+    tiny_toy_seed_sbml = _test_file_path('..', 'toy', 'tiny_toy', 'seeds.xml')
+    tiny_toy_seed_list = _test_file_path('..', 'toy', 'tiny_toy', 'seeds.list')
+
+    sbml_compounds = _seed_atoms_to_compounds(
+        sbml.readSBMLspecies_clyngor(tiny_toy_seed_sbml, 'seed')
+    )
+    list_compounds = _seed_atoms_to_compounds(
+        utils.read_flat_atoms_clyngor(tiny_toy_seed_list, 'seed')
+    )
+
+    assert sbml_compounds == expected_compounds
+    assert list_compounds == expected_compounds
+    assert list_compounds == sbml_compounds
+
+
+def test_seed_parsing_toy_sbml_and_list():
+    toy_seed_sbml = _test_file_path('..', 'toy', 'seeds.sbml')
+    toy_seed_list = _test_file_path('..', 'toy', 'seeds.list')
+
+    sbml_compounds = _seed_atoms_to_compounds(
+        sbml.readSBMLspecies_clyngor(toy_seed_sbml, 'seed')
+    )
+    list_compounds = _seed_atoms_to_compounds(
+        utils.read_flat_atoms_clyngor(toy_seed_list, 'seed')
+    )
+
+    assert list_compounds == sbml_compounds
+    assert 'ADP' in list_compounds
+    assert 'K+_CCO-BOUNDARY' in list_compounds
+
+
+def test_seed_parsing_toy_complete_compound_set():
+    expected_compounds = set("""
+        ADP
+        CPD-69_CCO-BOUNDARY
+        AMP_CCO-BOUNDARY
+        RHAMNOSE_CCO-BOUNDARY
+        GLN_CCO-BOUNDARY
+        GLYCOLLATE_CCO-BOUNDARY
+        TREHALOSE_CCO-BOUNDARY
+        AMMONIUM_CCO-BOUNDARY
+        DEOXYADENOSINE_CCO-BOUNDARY
+        CARNITINE_CCO-BOUNDARY
+        N-ACETYL-D-GLUCOSAMINE_CCO-BOUNDARY
+        S2O3_CCO-BOUNDARY
+        D-ALANINE_CCO-BOUNDARY
+        D-GALACTONATE_CCO-BOUNDARY
+        RIBOSE_CCO-BOUNDARY
+        DEOXYCYTIDINE_CCO-BOUNDARY
+        Glucose-6-phosphate_CCO-BOUNDARY
+        D-Galactose_CCO-BOUNDARY
+        GALACTITOL_CCO-BOUNDARY
+        OXYGEN-MOLECULE_CCO-BOUNDARY
+        SUC_CCO-BOUNDARY
+        BETAINE_CCO-BOUNDARY
+        ACETALD_CCO-BOUNDARY
+        NICOTINAMIDE_NUCLEOTIDE_CCO-BOUNDARY
+        GLYCERALD_CCO-BOUNDARY
+        THYMIDINE_CCO-BOUNDARY
+        LEU_CCO-BOUNDARY
+        GUANINE_CCO-BOUNDARY
+        URACIL_CCO-BOUNDARY
+        TARTRATE_CCO-BOUNDARY
+        L-ASPARTATE_CCO-BOUNDARY
+        ILE_CCO-BOUNDARY
+        2-KETOGLUTARATE_CCO-BOUNDARY
+        TYR_CCO-BOUNDARY
+        Alpha-lactose_CCO-BOUNDARY
+        D-SERINE_CCO-BOUNDARY
+        CARBON-DIOXIDE_CCO-BOUNDARY
+        XANTHINE_CCO-BOUNDARY
+        ARG_CCO-BOUNDARY
+        CADAVERINE_CCO-BOUNDARY
+        PUTRESCINE_CCO-BOUNDARY
+        SULFATE_CCO-BOUNDARY
+        3-KETOBUTYRATE_CCO-BOUNDARY
+        D-GALACTARATE_CCO-BOUNDARY
+        MALTOSE_CCO-BOUNDARY
+        MALTOTETRAOSE_CCO-BOUNDARY
+        GUANOSINE_CCO-BOUNDARY
+        TRP_CCO-BOUNDARY
+        TRIMETHYLAMINE_CCO-BOUNDARY
+        GLUCOSAMINE_CCO-BOUNDARY
+        L-LACTATE_CCO-BOUNDARY
+        CYTIDINE_CCO-BOUNDARY
+        SUCROSE_CCO-BOUNDARY
+        CYTOSINE_CCO-BOUNDARY
+        D-LACTATE_CCO-BOUNDARY
+        MET_CCO-BOUNDARY
+        CYS_CCO-BOUNDARY
+        COB-I-ALAMIN_CCO-BOUNDARY
+        HYPOXANTHINE_CCO-BOUNDARY
+        3-HYDROXYPHENYL-PROPIONATE_CCO-BOUNDARY
+        PALMITATE_CCO-BOUNDARY
+        MANNITOL_CCO-BOUNDARY
+        NITRITE_CCO-BOUNDARY
+        GAMMA-BUTYROBETAINE_CCO-BOUNDARY
+        ETOH_CCO-BOUNDARY
+        D-GLUCARATE_CCO-BOUNDARY
+        CHOLINE_CCO-BOUNDARY
+        PROPANE-1-2-DIOL_CCO-BOUNDARY
+        3-PHENYLPROPIONATE_CCO-BOUNDARY
+        NA+_CCO-BOUNDARY
+        MANNOSE_CCO-BOUNDARY
+        TRIMENTHLAMINE-N-O_CCO-BOUNDARY
+        MALTOPENTAOSE_CCO-BOUNDARY
+        Pi_CCO-BOUNDARY
+        GLY_CCO-BOUNDARY
+        NAD_CCO-BOUNDARY
+        L-IDONATE_CCO-BOUNDARY
+        CPD-218_CCO-BOUNDARY
+        DEOXYURIDINE_CCO-BOUNDARY
+        ACET_CCO-BOUNDARY
+        GLT_CCO-BOUNDARY
+        FRU_CCO-BOUNDARY
+        GLUCONATE_CCO-BOUNDARY
+        MALTOHEXAOSE_CCO-BOUNDARY
+        GLUCURONATE_CCO-BOUNDARY
+        PYRUVATE_CCO-BOUNDARY
+        Mannose-6-phosphate_CCO-BOUNDARY
+        GLYCEROL_CCO-BOUNDARY
+        INDOLE_CCO-BOUNDARY
+        D-GALACTURONATE_CCO-BOUNDARY
+        NITRATE_CCO-BOUNDARY
+        ADENOSINE_CCO-BOUNDARY
+        FUM_CCO-BOUNDARY
+        LYS_CCO-BOUNDARY
+        PHE_CCO-BOUNDARY
+        MELIBIOSE_CCO-BOUNDARY
+        THR_CCO-BOUNDARY
+        DIHYDROXYACETONE_CCO-BOUNDARY
+        DMSO_CCO-BOUNDARY
+        SER_CCO-BOUNDARY
+        ASN_CCO-BOUNDARY
+        WATER_CCO-BOUNDARY
+        ALLANTOIN_CCO-BOUNDARY
+        N-ACETYLNEURAMINATE_CCO-BOUNDARY
+        PANTOTHENATE_CCO-BOUNDARY
+        CPD-10797_CCO-BOUNDARY
+        XANTHOSINE_CCO-BOUNDARY
+        ADENINE_CCO-BOUNDARY
+        THIAMINE_CCO-BOUNDARY
+        URIDINE_CCO-BOUNDARY
+        FORMATE_CCO-BOUNDARY
+        BUTYRIC_ACID_CCO-BOUNDARY
+        L-ALPHA-ALANINE_CCO-BOUNDARY
+        CPD-488_CCO-BOUNDARY
+        DEOXYGUANOSINE_CCO-BOUNDARY
+        2-DEHYDRO-3-DEOXY-D-GLUCONATE_CCO-BOUNDARY
+        GLYCEROL-3P_CCO-BOUNDARY
+        CPD-7836_CCO-BOUNDARY
+        FE+2_CCO-BOUNDARY
+        SORBITOL_CCO-BOUNDARY
+        INOSINE_CCO-BOUNDARY
+        MALTOTRIOSE_CCO-BOUNDARY
+        HIS_CCO-BOUNDARY
+        PROTON_CCO-BOUNDARY
+        N-ACETYL-D-MANNOSAMINE_CCO-BOUNDARY
+        STEARIC_ACID_CCO-BOUNDARY
+        MAL_CCO-BOUNDARY
+        XYLOSE_CCO-BOUNDARY
+        4-AMINO-BUTYRATE_CCO-BOUNDARY
+        CPD-7670_CCO-BOUNDARY
+        L-ORNITHINE_CCO-BOUNDARY
+        CIT_CCO-BOUNDARY
+        DEOXYINOSINE_CCO-BOUNDARY
+        VAL_CCO-BOUNDARY
+        ALPHA-GLUCOSE_CCO-BOUNDARY
+        NIACINE_CCO-BOUNDARY
+        MESO-DIAMINOPIMELATE_CCO-BOUNDARY
+        SPERMIDINE_CCO-BOUNDARY
+        UREA_CCO-BOUNDARY
+        TAURINE_CCO-BOUNDARY
+        L-ARABINOSE_CCO-BOUNDARY
+        L-fucoses_CCO-BOUNDARY
+        PRO_CCO-BOUNDARY
+        K+_CCO-BOUNDARY
+    """.split())
+    toy_seed_sbml = _test_file_path('..', 'toy', 'seeds.sbml')
+    toy_seed_list = _test_file_path('..', 'toy', 'seeds.list')
+
+    sbml_compounds = _seed_atoms_to_compounds(
+        sbml.readSBMLspecies_clyngor(toy_seed_sbml, 'seed')
+    )
+    list_compounds = _seed_atoms_to_compounds(
+        utils.read_flat_atoms_clyngor(toy_seed_list, 'seed')
+    )
+
+    assert sbml_compounds == expected_compounds
+    assert list_compounds == expected_compounds
 
 
 def test_menecof():
