@@ -1,2 +1,1 @@
-clyngor>=0.3.31
 clingo>=5.5.1

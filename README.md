@@ -41,7 +41,6 @@ Aite* M, Chevallier* M, Frioux* C, Trottier* C, Got J, Cortés MP, et al. Tracea
 Requires **Python >= 3.10**
 
 Required packages:
-* [``Clyngor``](https://github.com/Aluriak/clyngor)
 * [``Clingo``](https://potassco.org/clingo/) Python module
 
 ```
@@ -89,7 +88,7 @@ subcommands:
                         either targets or all the producible compounds,
                         starting from seeds.
 
-Requires the clingo and clyngor packages: "pip install clingo clyngor"
+Requires the clingo package: "pip install clingo"
 
 ```
 

@@ -11,7 +11,6 @@ description = "Metabolic Network Topology Analysis Tools"
 license = {text = "LGPL-3.0-or-later"}
 requires-python = ">=3.10"
 dependencies = [
-  'clyngor>=0.3.31',
   'clingo>=5.5.1'
 ]
 

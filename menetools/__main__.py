@@ -52,7 +52,7 @@ MESSAGE = """
 Explore the producibility potential in a metabolic network using the network expansion algorithm.
 """
 REQUIRES = """
-Requires the clingo and clyngor packages: "pip install clingo clyngor"
+Requires the clingo package: "pip install clingo"
 """
 
 logger = logging.getLogger()
