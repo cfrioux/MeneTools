@@ -10,8 +10,6 @@
 % You should have received a copy of the GNU Lesser General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-#include <incmode>.
-
 #program base.
 
 % Set the seeds as compounds producible at step 0.
@@ -37,6 +35,7 @@ dscopeSize(ScopeSize, t) :- ScopeSize=#sum{1,M : dscope(M, t)}.
 % - either targets are given as input and the programm will check the number of step to produce these targets. WARNING if the targets are not producible, it will enter an infinite loop.
 % - or it will try to reach the same scope size as the one computed from a menescope (by using maxscope(MaxScope) given as input).
 #program check(t).
+#external query(t).
 :- target(F), query(t), not dscope(F, t).
 :- not dscopeSize(ScopeSize, t), query(t), maxscope(MaxScope), ScopeSize == MaxScope.
 

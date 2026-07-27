@@ -100,9 +100,7 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
                     scope.append(a[0])
         scope_size = len(scope)
         # Add the number of producible compounds as the maxscope to reach.
-        seeds.add(Atom('maxscope', [str(scope_size)]))
-        utils.to_file(draftnet, 'test.lp')
-        utils.to_file(seeds, 'test.lp')
+        seeds.add(Atom('maxscope', [scope_size]))
 
     # Compute incremental scope.
     logger.info('\nChecking draft network incremental scope')

@@ -33,7 +33,6 @@ from menetools.menepath import run_menepath
 from menetools.menedead import run_menedead
 from menetools.meneseed import run_meneseed
 from menetools.menescope_inc import run_menescope_inc
-from shutil import which
 
 LICENSE = """Copyright (C) Clémence Frioux & Arnaud Belcour - Inria Dyliss - Pleiade
 This program is free software: you can redistribute it and/or modify
@@ -53,18 +52,11 @@ MESSAGE = """
 Explore the producibility potential in a metabolic network using the network expansion algorithm.
 """
 REQUIRES = """
-Requires Clingo and clyngor package: "pip install clyngor clyngor-with-clingo"
+Requires the clingo and clyngor packages: "pip install clingo clyngor"
 """
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
-
-# Check ASP binaries.
-if not which('clingo'):
-    logger.critical('clingo is not in the Path, menetools can not work without it.')
-    logger.critical('You can install with: pip install clyngor-with-clingo')
-    sys.exit(1)
-
 
 def main():
     """Run programm.
