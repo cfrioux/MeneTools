@@ -23,7 +23,7 @@ import sys
 from .utils import clean_up
 from .query import get_unproducible, get_cofs_weighted, get_cofs, get_intersection_of_optimal_solutions_cof, get_union_of_optimal_solutions_cof, get_optimal_solutions_cof
 from .sbml import readSBMLspecies_clyngor, make_weighted_list_of_species, readSBMLnetwork_clyngor
-from clyngor.as_pyasp import TermSet, Atom
+from menetools.asp import TermSet, Atom
 from xml.etree.ElementTree import ParseError
 
 logger = logging.getLogger('menetools.menecof')

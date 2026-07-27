@@ -13,11 +13,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import os
+import shlex
 from collections import defaultdict
 from typing import Any, Dict, Iterator, List, Set, Tuple
 
 import clingo
-import clyngor
 import logging
 from menetools import utils
 
@@ -34,54 +34,6 @@ cof_w_prg = os.path.join(*[root, 'encodings', 'get_cofs_weighted.lp'])
 dead_prg = os.path.join(*[root, 'encodings', 'get_deadends.lp'])
 seed_prg = os.path.join(*[root, 'encodings', 'get_seeds.lp'])
 inc_scope_prg = os.path.join(*[root, 'encodings', 'get_incremental_scope.lp'])
-
-
-def _without_quotes(value: Any) -> Any:
-    """Remove ASP string delimiters from an already parsed clyngor model."""
-    if isinstance(value, str):
-        if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
-            return value[1:-1].replace('\\"', '"')
-        return value
-    if isinstance(value, dict):
-        return {
-            _without_quotes(key): _without_quotes(item)
-            for key, item in value.items()
-        }
-    if isinstance(value, tuple):
-        return tuple(_without_quotes(item) for item in value)
-    if isinstance(value, list):
-        return [_without_quotes(item) for item in value]
-    if isinstance(value, set):
-        return {_without_quotes(item) for item in value}
-    if isinstance(value, frozenset):
-        return frozenset(_without_quotes(item) for item in value)
-    return value
-
-
-class _NormalizedAnswers:
-    """Preserve clyngor's fluent API while normalizing yielded models."""
-
-    def __init__(self, answers: Any) -> None:
-        self._answers = answers
-
-    def __iter__(self) -> Iterator[Any]:
-        for answer in self._answers:
-            yield _without_quotes(answer)
-
-    def __getattr__(self, name: str) -> Any:
-        attribute = getattr(self._answers, name)
-        return self if attribute is self._answers else attribute
-
-
-def _solve(*args: Any, **kwargs: Any) -> _NormalizedAnswers:
-    """Solve through the official clingo Python module."""
-    clyngor.use_clingo_module()
-    answers = clyngor.solve(
-        *args,
-        use_clingo_module=True,
-        **kwargs,
-    )
-    return _NormalizedAnswers(answers)
 
 
 def _clingo_symbol_value(symbol: clingo.Symbol) -> Any:
@@ -113,6 +65,69 @@ def _model_by_arity(
         grouped[symbol.name, len(args)].add(args)
         grouped[f'{symbol.name}/{len(args)}'].add(args)
     return dict(grouped)
+
+
+class _ClingoAnswers:
+    """Fluent iterator over models produced by the clingo Python API."""
+
+    def __init__(
+        self,
+        files: List[str],
+        options: str = '',
+        nb_model: int = 0,
+    ) -> None:
+        self._files = files
+        self._options = options
+        self._nb_model = nb_model
+        self._include_optimization = False
+        self._include_optimality = False
+
+    @property
+    def discard_quotes(self) -> '_ClingoAnswers':
+        return self
+
+    @property
+    def by_arity(self) -> '_ClingoAnswers':
+        return self
+
+    @property
+    def with_optimization(self) -> '_ClingoAnswers':
+        self._include_optimization = True
+        return self
+
+    @property
+    def with_optimality(self) -> '_ClingoAnswers':
+        self._include_optimization = True
+        self._include_optimality = True
+        return self
+
+    def __iter__(self) -> Iterator[Any]:
+        control = clingo.Control(shlex.split(self._options))
+        for program in self._files:
+            control.load(program)
+        control.ground([('base', [])])
+        solve_configuration: Any = control.configuration.solve
+        solve_configuration.models = self._nb_model
+
+        with control.solve(yield_=True) as handle:
+            for model in handle:
+                answer = _model_by_arity(list(model.symbols(shown=True)))
+                optimization = tuple(model.cost)
+                if self._include_optimality:
+                    yield answer, optimization, model.optimality_proven
+                elif self._include_optimization:
+                    yield answer, optimization
+                else:
+                    yield answer
+
+
+def _solve(
+    files: List[str],
+    options: str = '',
+    nb_model: int = 0,
+) -> _ClingoAnswers:
+    """Prepare a clingo Python API solve operation."""
+    return _ClingoAnswers(files, options=options, nb_model=nb_model)
 
 
 def get_scope(draft, seeds) -> Any:
@@ -187,6 +202,7 @@ def get_union_of_paths(instance, optimum, min_bool):
         options = '--configuration jumpy --opt-strategy=usc,oll --enum-mode=brave --opt-mode=ignore '
     # solver = Gringo4Clasp(clasp_options=options)
     # union = solver.run(prg, collapseTerms=True, collapseAtoms=False)
+    best_model = None
     models = _solve(prg, options=options)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
@@ -202,6 +218,7 @@ def get_intersection_of_paths(instance, optimum, min_bool):
     else:
         prg = [path_prg, instance_f]
         options = '--configuration jumpy --opt-strategy=usc,oll --enum-mode cautious --opt-mode=ignore'
+    best_model = None
     models = _solve(prg, options=options)
     for model in models.discard_quotes.by_arity.with_optimization:
         best_model = model
@@ -223,7 +240,11 @@ def get_all_paths(instance, optimum, min_bool, nmodels=0):
     # models = solver.run(prg, collapseTerms=True, collapseAtoms=False)
     models = _solve(prg, options=options, nb_model=nmodels).by_arity
     if min_bool:
-        allmodels = clyngor.opt_models_from_clyngor_answers(models)
+        allmodels = (
+            model
+            for model, _, optimality_proven in models.with_optimality
+            if optimality_proven
+        )
     else:
         allmodels = models
     # allmodels = [model for model in models.by_arity.with_optimization]
@@ -351,6 +372,7 @@ def get_dead(draft):
 
     prg = [dead_prg, draft_f]
     options = ''
+    best_model = None
     models = _solve(prg, options=options)
     for model in models.discard_quotes.by_arity:
         best_model = model
@@ -361,6 +383,7 @@ def get_seed(draft):
     draft_f = utils.to_file(draft)
     prg = [seed_prg, draft_f]
     options = ''
+    best_model = None
     models = _solve(prg, options=options)
     for model in models.discard_quotes.by_arity:
         best_model = model

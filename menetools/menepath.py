@@ -19,7 +19,7 @@ import json
 import logging
 import sys
 
-from clyngor.as_pyasp import TermSet, Atom
+from menetools.asp import TermSet, Atom
 from menetools import utils, query, sbml
 from xml.etree.ElementTree import ParseError
 

@@ -20,7 +20,7 @@ import logging
 import sys
 
 from menetools import utils, query, sbml
-from  clyngor.as_pyasp import Atom
+from menetools.asp import Atom
 from xml.etree.ElementTree import ParseError
 
 
