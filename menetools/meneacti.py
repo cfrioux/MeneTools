@@ -31,7 +31,7 @@ def run_meneacti(draft_sbml,seeds_file,output=None):
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_file (str): SBML or flat seeds file
+        seeds_file (str): SBML or flat seeds file, if flat file is provided, a .list file extension is expected
         output (str): path to json output file
 
     Returns:

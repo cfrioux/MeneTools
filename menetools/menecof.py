@@ -54,7 +54,7 @@ def run_menecof(draft_sbml,seeds_file,targets_sbml,cofactors_txt=None,weights=No
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_file (str): SBML or flat seeds file
+        seeds_file (str): SBML or flat seeds file, if flat file is provided, a .list file extension is expected
         targets_sbml (str): SBML targets file
         cofactors_txt (str, optional): Defaults to None. Cofactors file, one per line
         weights (bool, optional): Defaults to None. True if cofactors_txt is weighted

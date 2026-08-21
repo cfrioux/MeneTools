@@ -1,5 +1,11 @@
 # Changelog
 
+# MeneTools [unreleased] ()
+
+## Add
+
+* seed and target inputs can be provided as flat files, when the input file extension is `.list`
+
 # MeneTools v3.4.0 (2024-02-28)
 
 ## Modify

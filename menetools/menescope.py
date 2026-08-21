@@ -32,7 +32,7 @@ def run_menescope(draft_sbml, seeds_file, output=None):
 
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_file (str): Either SBML seeds or flat list of compounds file
+        seeds_file (str): Either SBML seeds or flat list of compounds file, if flat file is provided, the a .list file extension is expected a .list file extension is expected.
         output (str): path to json output file
 
     Returns:
@@ -48,11 +48,11 @@ def run_menescope(draft_sbml, seeds_file, output=None):
         logger.critical(f"Invalid syntax in SBML file: {draft_sbml}")
         sys.exit(1)
 
+    logger.info(f"Reading seeds from {seeds_file}")
     if os.path.splitext(seeds_file)[1] == ".list":
         seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
     else:
         seeds_sbml = seeds_file
-        logger.info(f"Reading seeds from {seeds_sbml}")
         try:
             seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, "seed")
         except FileNotFoundError:

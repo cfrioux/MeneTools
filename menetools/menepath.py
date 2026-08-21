@@ -32,7 +32,7 @@ def run_menepath(draft_sbml,seeds_file,targets_sbml,min_size=None,enumeration=No
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_file (str): SBML or flat seeds file
+        seeds_file (str): SBML or flat seeds file, if flat file is provided, a .list file extension is expected
         targets_sbml (str): SBML targets file
         min_size (bool, optional): Defaults to None. minimal size paths
         enumeration (bool, optional): Defaults to None. enumeration of all paths
@@ -57,7 +57,6 @@ def run_menepath(draft_sbml,seeds_file,targets_sbml,min_size=None,enumeration=No
         seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
     else:
         seeds_sbml = seeds_file
-        logger.info(f"Reading seeds from {seeds_sbml}")
         try:
             seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, "seed")
         except FileNotFoundError:

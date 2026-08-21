@@ -96,7 +96,7 @@ def main():
         "-s",
         "--seeds",
         dest="seeds",
-        help="seeds in SBML format (by default) or flat list of compound identifiers (file extension .list).",
+        help="seeds in SBML format (by default) or flat list of compound identifiers (when the file extension is .list).",
         required=True,
     )
     parent_parser_t = argparse.ArgumentParser(add_help=False)
@@ -104,7 +104,7 @@ def main():
         "-t",
         "--targets",
         dest="targets",
-        help="targets in SBML format",
+        help="targets in SBML format (by default) or flat list of compound identifiers (when the file extension is .list)",
         required=False,
     )
     parent_parser_o = argparse.ArgumentParser(add_help=False)
