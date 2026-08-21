@@ -33,8 +33,8 @@ def run_menescope_inc(draft_sbml,seeds_file,targets_file,output=None):
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_file (str): SBML or flat seeds file, if flat file is provided, the a .list file extension is expected
-        targets_sbml (str): SBML or flat targets file, if flat file is provided, the a .list file extension is expected
+        seeds_file (str): SBML or flat seeds file, if flat file is provided, a .list file extension is expected
+        targets_sbml (str): SBML or flat targets file, if flat file is provided, a .list file extension is expected
         output (str): path to json output file
     
     Returns:
