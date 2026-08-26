@@ -6,6 +6,10 @@
 
 * seed and target inputs can be provided as flat files, when the input file extension is `.list`
 
+## Fix
+
+- error in order of parameter for `query.get_unproducible` in `Mene scope_inc` (issue #24)
+
 # MeneTools v3.4.0 (2024-02-28)
 
 ## Modify
