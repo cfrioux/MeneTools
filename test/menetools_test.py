@@ -493,6 +493,19 @@ def test_menescope_inc():
         assert set(step_production[step]) == set(results['step_produced'][step])
 
 
+def test_menescope_inc_without_targets():
+    scope_step = {"M_A_c": 0, "M_C_c": 0,
+                "M_B_c": 1, "M_D_c": 1,
+                "M_E_c": 2,
+                "M_F_c": 3,
+                "M_G_c": 4, "M_H_c": 4
+                }
+
+    results = run_menescope_inc(MENEINC_DRAFT_PATH, MENEINC_SEED_PATH, None)
+
+    assert results['incremental_scope'] == scope_step
+
+
 def test_menescope_inc_unproducible_targets():
     print("*** test menescope_inc unproducible targets ***")
 

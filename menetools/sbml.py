@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import sys
-from clyngor.as_pyasp import TermSet, Atom
+from menetools.asp import TermSet, Atom
 import xml.etree.ElementTree as etree
 import logging
 

@@ -2,7 +2,7 @@
 
 # MeneTools
 
-MeneTools are Python (3.6 and higher) tools to explore the producibility potential in a metabolic network using the network expansion algorithm. The MeneTools can:
+MeneTools are Python (3.10 and higher) tools to explore the producibility potential in a metabolic network using the network expansion algorithm. The MeneTools can:
 * assess whether targets are producible starting from nutrients (`Mene check`)
 * get all compounds that are producible starting from nutrients (`Mene scope`)
 * get all reactions that are activable from nutrients (`Mene acti`)
@@ -38,10 +38,10 @@ Aite* M, Chevallier* M, Frioux* C, Trottier* C, Got J, Cortés MP, et al. Tracea
 
 ## Install
 
-Requires **Python >= 3.6**
+Requires **Python >= 3.10**
 
-Required package (starting from version 2.0 of the package):
-* [``Clyngor``](https://github.com/Aluriak/clyngor) or [``Clyngor_with_clingo``](https://github.com/Aluriak/clyngor-with-clingo) that includes the solvers
+Required packages:
+* [``Clingo``](https://potassco.org/clingo/) Python module
 
 ```
 python setup.py install
@@ -88,7 +88,7 @@ subcommands:
                         either targets or all the producible compounds,
                         starting from seeds.
 
-Requires Clingo and clyngor package: "pip install clyngor clyngor-with-clingo"
+Requires the clingo package: "pip install clingo"
 
 ```
 

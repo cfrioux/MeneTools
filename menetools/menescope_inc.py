@@ -21,7 +21,7 @@ import sys
 import os
 
 from menetools import utils, query, sbml
-from  clyngor.as_pyasp import Atom
+from menetools.asp import Atom
 from xml.etree.ElementTree import ParseError
 
 
@@ -109,9 +109,7 @@ def run_menescope_inc(draft_sbml,seeds_file,targets_file,output=None):
                     scope.append(a[0])
         scope_size = len(scope)
         # Add the number of producible compounds as the maxscope to reach.
-        seeds.add(Atom('maxscope', [str(scope_size)]))
-        utils.to_file(draftnet, 'test.lp')
-        utils.to_file(seeds, 'test.lp')
+        seeds.add(Atom('maxscope', [scope_size]))
 
     # Compute incremental scope.
     logger.info('\nChecking draft network incremental scope')
