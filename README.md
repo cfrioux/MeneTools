@@ -99,22 +99,21 @@ Menecheck is a python3 tool to get the topologically producibility status of tar
 ```
 usage: mene check [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--output OUTPUT]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  -d DRAFTNET, --draftnet DRAFTNET
+  -d, --draftnet DRAFTNET
                         metabolic network in SBML format
-  -s SEEDS, --seeds SEEDS
-                        seeds in SBML format
-  -t TARGETS, --targets TARGETS
-                        targets in SBML format
-  --output OUTPUT       output file for instance
+  -s, --seeds SEEDS     seeds in SBML format (by default) or flat list of compound identifiers (when the file extension is .list).
+  -t, --targets TARGETS
+                        targets in SBML format (by default) or flat list of compound identifiers (when the file extension is .list)
+  --output OUTPUT       json output file
 ```
 
 
 ```python
 from menetools import run_menecheck
 
-model = run_menecheck(draft_sbml='required',seeds_sbml='required',targets_sbml='required',output='optional')
+model = run_menecheck(draft_sbml='required',seeds_file='required',targets_file='required',output='optional')
 ```
 
 ### MENESCOPE
@@ -125,19 +124,18 @@ seeds in a metabolic network.
 ```
 usage: mene scope [-h] -d DRAFTNET -s SEEDS [--output OUTPUT]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  -d DRAFTNET, --draftnet DRAFTNET
+  -d, --draftnet DRAFTNET
                         metabolic network in SBML format
-  -s SEEDS, --seeds SEEDS
-                        seeds in SBML format
-  --output OUTPUT       output file for instance
+  -s, --seeds SEEDS     seeds in SBML format (by default) or flat list of compound identifiers (when the file extension is .list).
+  --output OUTPUT       json output file
 ```
 
 ```python
 from menetools import run_menescope
 
-model = run_menescope(draft_sbml='required',seeds_sbml='required',output='optional')
+model = run_menescope(draft_sbml='required',seeds_file='required',output='optional')
 ```
 
 The outputs for menecope are
@@ -156,19 +154,19 @@ seeds in a metabolic network.
 ```
 usage: mene acti [-h] -d DRAFTNET -s SEEDS [--output OUTPUT]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  -d DRAFTNET, --draftnet DRAFTNET
+  -d, --draftnet DRAFTNET
                         metabolic network in SBML format
-  -s SEEDS, --seeds SEEDS
-                        seeds in SBML format
-  --output OUTPUT       output file for instance
+  -s, --seeds SEEDS     seeds in SBML format (by default) 
+                        or flat list of compound identifiers (when the file extension is .list).
+  --output OUTPUT       json output file
 ```
 
 ```python
 from menetools import run_menescope
 
-model = run_mene_acti(draft_sbml='required',seeds_sbml='required',output='optional')
+model = run_mene_acti(draft_sbml='required',seeds_file='required',output='optional')
 ```
 
 ### MENEPATH
@@ -177,26 +175,24 @@ Menepath is a python3 tool to get the topologically essential reactions with
 respects to individual targets in metabolic networks.
 
 ```
-usage: mene path [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--enumerate] [--min]
-                 [--output OUTPUT]
+usage: mene path [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--enumerate] [--min] [--output OUTPUT]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  -d DRAFTNET, --draftnet DRAFTNET
+  -d, --draftnet DRAFTNET
                         metabolic network in SBML format
-  -s SEEDS, --seeds SEEDS
-                        seeds in SBML format
-  -t TARGETS, --targets TARGETS
-                        targets in SBML format
+  -s, --seeds SEEDS     seeds in SBML format (by default) or flat list of compound identifiers (when the file extension is .list).
+  -t, --targets TARGETS
+                        targets in SBML format (by default) or flat list of compound identifiers (when the file extension is .list)
   --enumerate           enumerates all cofactors solutions
   --min                 call this option to obtain minimal-size paths
-  --output OUTPUT       output file for instance
+  --output OUTPUT       json output file
 ```
 
 ```python
 from menetools import run_menepath
 
-model = run_menepath(draft_sbml='required',seeds_sbml='required',targets_sbml='required',min_size='optional',enumeration='optional',output='optional')
+model = run_menepath(draft_sbml='required',seeds_file='required',targets_file='required',min_size='optional',enumeration='optional',output='optional')
 ```
 
 ### MENECOF
@@ -206,35 +202,29 @@ maximize the number f producible targets. Study of the metabolic network is made
 topologically using reachable compounds from seeds.
 
 ```
-usage: mene cof [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [-c COFACTORS]
-                [--weight] [--suffix SUFFIX] [--enumerate] [--output OUTPUT]
+usage: mene cof [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [-c COFACTORS] [--weight] [--suffix SUFFIX] [--enumerate] [--output OUTPUT]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  -d DRAFTNET, --draftnet DRAFTNET
+  -d, --draftnet DRAFTNET
                         metabolic network in SBML format
-  -s SEEDS, --seeds SEEDS
-                        seeds in SBML format
-  -t TARGETS, --targets TARGETS
-                        targets in SBML format
-  -c COFACTORS, --cofactors COFACTORS
+  -s, --seeds SEEDS     seeds in SBML format (by default) or flat list of compound identifiers (when the file extension is .list).
+  -t, --targets TARGETS
+                        targets in SBML format (by default) or flat list of compound identifiers (when the file extension is .list)
+  -c, --cofactors COFACTORS
                         cofactors, in one-per-line text file format
-  --weight              call this option if cofactors are weighted according
-                        to their occurrence frequency in database. If so,
-                        cofactors file must be tabulated with per line
-                        compound' 'occurrence
-  --suffix SUFFIX       suffix to be added to the compounds of the database.
-                        It can be the suffix for the cytosolic compartment or
-                        external one. Cytosolic one is prefered to ensure the
+  --weight              call this option if cofactors are weighted according to their occurrence frequency in database. If so, cofactors file must be tabulated with per line compound'
+                        'occurrence
+  --suffix SUFFIX       suffix to be added to the compounds of the database. It can be the suffix for the cytosolic compartment or external one. Cytosolic one is prefered to ensure the
                         impact of the added cofactors. Default = None
   --enumerate           enumerates all cofactors solutions
-  --output OUTPUT       output file for instance
+  --output OUTPUT       json output file
 ```
 
 ```python
 from menetools import run_menecof
 
-model = run_menecof(draft_sbml='required',seeds_sbml='required',targets_sbml='required',cofactors_txt='optional',weights='optional',suffix='optional',enumeration='optional',output='optional')
+model = run_menecof(draft_sbml='required',seeds_file='required',targets_file='required',cofactors_txt='optional',weights='optional',suffix='optional',enumeration='optional',output='optional')
 ```
 
 ### MENEDEAD
@@ -290,21 +280,20 @@ The results are for each step, the producible metabolites.
 ```
 usage: mene scope_inc [-h] -d DRAFTNET -s SEEDS [-t TARGETS] [--output OUTPUT]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  -d DRAFTNET, --draftnet DRAFTNET
+  -d, --draftnet DRAFTNET
                         metabolic network in SBML format
-  -s SEEDS, --seeds SEEDS
-                        seeds in SBML format
-  -t TARGETS, --targets TARGETS
-                        targets in SBML format
+  -s, --seeds SEEDS     seeds in SBML format (by default) or flat list of compound identifiers (when the file extension is .list).
+  -t, --targets TARGETS
+                        targets in SBML format (by default) or flat list of compound identifiers (when the file extension is .list)
   --output OUTPUT       json output file
 ```
 
 ```python
 from menetools import run_menescope_inc
 
-model = run_menescope_inc(draft_sbml='required',seeds_sbml='required',targets_sbml='optional',output='optional')
+model = run_menescope_inc(draft_sbml='required',seeds_file='required',targets_file='optional',output='optional')
 ```
 
 ## Acknowledgements

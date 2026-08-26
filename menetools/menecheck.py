@@ -18,6 +18,7 @@
 import json
 import logging
 import sys
+import os
 
 from menetools import utils, query, sbml
 from xml.etree.ElementTree import ParseError
@@ -25,13 +26,13 @@ from xml.etree.ElementTree import ParseError
 logger = logging.getLogger('menetools.menecheck')
 
 
-def run_menecheck(draft_sbml,seeds_sbml,targets_sbml,output=None):
+def run_menecheck(draft_sbml,seeds_file,targets_file,output=None):
     """checks the producibility of targets from seeds in a metabolic network
     
     Args:
         draft_sbml (str): metabolic network SBML file
-        seeds_sbml (str): SBML file
-        targets_sbml (str): SBML file
+        seeds_file (str): SBML file of flat file, if flat file is provided, a .list file extension is expected
+        targets_file (str): SBML file or flat file, if flat file is provided, a .list file extension is expected
         output (str): path to json output file
 
     Returns:
@@ -47,25 +48,34 @@ def run_menecheck(draft_sbml,seeds_sbml,targets_sbml,output=None):
         logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
 
-    logger.info(f'Reading seeds from {seeds_sbml}')
-    try:
-        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
-    except FileNotFoundError:
-        logger.critical(f'File not found: {seeds_sbml}')
-        sys.exit(1)
-    except ParseError:
-        logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
-        sys.exit(1)
+    logger.info(f'Reading seeds from {seeds_file}')
+    if os.path.splitext(seeds_file)[1] == ".list":
+        seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
+    else:
+        seeds_sbml = seeds_file
+        logger.info(f"Reading seeds from {seeds_sbml}")
+        try:
+            seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, "seed")
+        except FileNotFoundError:
+            logger.critical(f"File not found: {seeds_sbml}")
+            sys.exit(1)
+        except ParseError:
+            logger.critical(f"Invalid syntax in SBML file: {seeds_sbml}")
+            sys.exit(1)
 
-    logger.info(f'Reading targets from {targets_sbml}')
-    try:
-        targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
-    except FileNotFoundError:
-        logger.critical(f"File not found: {targets_sbml}")
-        sys.exit(1)
-    except ParseError:
-        logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
-        sys.exit(1)
+    logger.info(f'Reading targets from {targets_file}')
+    if os.path.splitext(seeds_file)[1] == ".list":
+        targets = utils.read_flat_atoms_clyngor(targets_file, "target")
+    else:
+        targets_sbml = targets_file
+        try:
+            targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
+        except FileNotFoundError:
+            logger.critical(f"File not found: {targets_file}")
+            sys.exit(1)
+        except ParseError:
+            logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
+            sys.exit(1)
 
     logger.info('\nChecking draftnet for unproducible targets')
     print(f'Number of targets: {len(targets)}')

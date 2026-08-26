@@ -18,6 +18,7 @@
 import json
 import logging
 import sys
+import os
 
 from menetools import utils, query, sbml
 from  clyngor.as_pyasp import Atom
@@ -27,13 +28,13 @@ from xml.etree.ElementTree import ParseError
 logger = logging.getLogger('menetools.menescope_inc')
 
 
-def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
+def run_menescope_inc(draft_sbml,seeds_file,targets_file,output=None):
     """identifies the number of steps needed by the expansion algorithm to reach either (1) specific targets or (2) all producible compounds.
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_sbml (str): SBML seeds file
-        targets_sbml (str): SBML targets file
+        seeds_file (str): SBML or flat seeds file, if flat file is provided, a .list file extension is expected
+        targets_sbml (str): SBML or flat targets file, if flat file is provided, a .list file extension is expected
         output (str): path to json output file
     
     Returns:
@@ -49,27 +50,35 @@ def run_menescope_inc(draft_sbml,seeds_sbml,targets_sbml,output=None):
         logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
 
-    logger.info(f'Reading seeds from {seeds_sbml}')
-    try:
-        seeds = sbml.readSBMLspecies_clyngor(seeds_sbml,'seed')
-    except FileNotFoundError:
-        logger.critical(f'File not found: {seeds_sbml}')
-        sys.exit(1)
-    except ParseError:
-        logger.critical(f'Invalid syntax in SBML file: {seeds_sbml}')
-        sys.exit(1)
-
-    # If targets are given, menescope_inc will output the number of steps needed to produce them.
-    if targets_sbml:
-        logger.info(f'Reading targets from {targets_sbml}')
+        logger.info(f"Reading seeds from {seeds_file}")
+    if os.path.splitext(seeds_file)[1] == ".list":
+        seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
+    else:
+        seeds_sbml = seeds_file
         try:
-            targets = sbml.readSBMLspecies_clyngor(targets_sbml, 'target')
+            seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, "seed")
         except FileNotFoundError:
-            logger.critical(f"File not found: {targets_sbml}")
+            logger.critical(f"File not found: {seeds_sbml}")
             sys.exit(1)
         except ParseError:
-            logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
+            logger.critical(f"Invalid syntax in SBML file: {seeds_sbml}")
             sys.exit(1)
+
+    # If targets are given, menescope_inc will output the number of steps needed to produce them.
+    if targets_file:
+        logger.info(f'Reading targets from {targets_file}')
+        if os.path.splitext(targets_file)[1] == ".list":
+            targets = utils.read_flat_atoms_clyngor(targets_file, "target")
+        else:
+            targets_sbml = targets_file
+            try:
+                targets = sbml.readSBMLspecies_clyngor(targets_sbml, "target")
+            except FileNotFoundError:
+                logger.critical(f"File not found: {targets_sbml}")
+                sys.exit(1)
+            except ParseError:
+                logger.critical(f"Invalid syntax in SBML file: {targets_sbml}")
+                sys.exit(1)
 
         # Check if all targets are producible, if not stop the script.
         # As the incremental scope will never end if there is unproducible targets.

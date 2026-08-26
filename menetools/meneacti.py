@@ -18,19 +18,20 @@
 import json
 import logging
 import sys
+import os
 
-from menetools import query, sbml
+from menetools import query, sbml, utils
 from xml.etree.ElementTree import ParseError
 
 logger = logging.getLogger('menetools.meneacti')
 
 
-def run_meneacti(draft_sbml,seeds_sbml,output=None):
+def run_meneacti(draft_sbml,seeds_file,output=None):
     """get activable reactions in a metabolic network, starting from seeds
     
     Args:
         draft_sbml (str): SBML metabolic network file
-        seeds_sbml (str): SBML seeds file
+        seeds_file (str): SBML or flat seeds file, if flat file is provided, a .list file extension is expected
         output (str): path to json output file
 
     Returns:
@@ -45,6 +46,22 @@ def run_meneacti(draft_sbml,seeds_sbml,output=None):
     except ParseError:
         logger.critical(f'Invalid syntax in SBML file: {draft_sbml}')
         sys.exit(1)
+
+    if os.path.splitext(seeds_file)[1] == ".list":
+        seeds = utils.read_flat_atoms_clyngor(seeds_file, "seed")
+    else:
+        seeds_sbml = seeds_file
+        logger.info(f"Reading seeds from {seeds_sbml}")
+        try:
+            seeds = sbml.readSBMLspecies_clyngor(seeds_sbml, "seed")
+        except FileNotFoundError:
+            logger.critical(f"File not found: {seeds_sbml}")
+            sys.exit(1)
+        except ParseError:
+            logger.critical(f"Invalid syntax in SBML file: {seeds_sbml}")
+            sys.exit(1)
+
+
 
     logger.info(f'Reading seeds from {seeds_sbml}')
     try:
