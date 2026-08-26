@@ -84,7 +84,7 @@ def run_menescope_inc(draft_sbml,seeds_file,targets_file,output=None):
         # As the incremental scope will never end if there is unproducible targets.
         logger.info('\nChecking network for unproducible targets')
         sys.stdout.flush()
-        model = query.get_unproducible(draftnet, targets, seeds)
+        model = query.get_unproducible(draftnet, seeds, targets)
 
         unproducible_targets_lst = []
         for pred in model :
